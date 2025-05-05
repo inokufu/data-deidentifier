@@ -28,7 +28,7 @@ class PresidioTextAnalyzer(TextAnalyzerContract):
         self.logger.debug("Presidio Analyzer initialized successfully")
 
     @override
-    def analyze_text(
+    def analyze(
         self,
         text: str,
         language: str,

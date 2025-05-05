@@ -76,7 +76,7 @@ async def anonymize_text(
             default_entity_types=config.get_default_entity_types(),
         )
 
-        analysis_result = analyze_service.analyze_text(
+        analysis_result = analyze_service.analyze(
             text=query.text,
             language=query.language,
             min_score=query.min_score,
@@ -86,7 +86,7 @@ async def anonymize_text(
         entities = analysis_result.entities
 
     # Anonymize the text
-    result = anonymize_service.anonymize_text(
+    result = anonymize_service.anonymize(
         text=text,
         entities=entities,
         operator=query.operator,

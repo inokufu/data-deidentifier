@@ -29,7 +29,7 @@ class PresidioTextAnonymizer(TextAnonymizerContract):
         self.logger.debug("Presidio Anonymizer initialized successfully")
 
     @override
-    def anonymize_text(
+    def anonymize(
         self,
         text: str,
         entities: list[Entity],

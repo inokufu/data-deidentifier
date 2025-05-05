@@ -55,7 +55,7 @@ async def analyze_text(
         default_entity_types=config.get_default_entity_types(),
     )
 
-    analysis_result = service.analyze_text(
+    analysis_result = service.analyze(
         text=query.text,
         language=query.language,
         min_score=query.min_score,

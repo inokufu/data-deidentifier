@@ -33,7 +33,7 @@ class TextAnalysisService:
         self.default_min_score = default_min_score
         self.default_entity_types = default_entity_types
 
-    def analyze_text(
+    def analyze(
         self,
         text: str,
         language: str | None = None,
@@ -63,7 +63,7 @@ class TextAnalysisService:
         )
 
         # Analyze the text
-        entities = self.analyzer.analyze_text(
+        entities = self.analyzer.analyze(
             text=text,
             language=effective_language,
             min_score=effective_min_score,

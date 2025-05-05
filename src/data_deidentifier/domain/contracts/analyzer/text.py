@@ -7,7 +7,7 @@ class TextAnalyzerContract(ABC):
     """Abstract base class defining the analyzer interface."""
 
     @abstractmethod
-    def analyze_text(
+    def analyze(
         self,
         text: str,
         language: str,

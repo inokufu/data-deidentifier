@@ -31,7 +31,7 @@ class TextAnonymizationService:
         self.validator = validator
         self.default_operator = default_operator
 
-    def anonymize_text(
+    def anonymize(
         self,
         text: str,
         entities: list[Entity],
@@ -56,7 +56,7 @@ class TextAnonymizationService:
         )
 
         # Anonymize the text
-        anonymized_text = self.anonymizer.anonymize_text(
+        anonymized_text = self.anonymizer.anonymize(
             text=text,
             entities=entities,
             operator=effective_operator,

@@ -8,7 +8,7 @@ class TextAnonymizerContract(ABC):
     """Abstract base class defining the anonymizer interface."""
 
     @abstractmethod
-    def anonymize_text(
+    def anonymize(
         self,
         text: str,
         entities: list[Entity],
