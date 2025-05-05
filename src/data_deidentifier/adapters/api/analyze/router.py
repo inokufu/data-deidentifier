@@ -3,15 +3,15 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from src.data_deidentifier.adapters.api.dependencies import (
-    get_analyzer,
     get_config,
+    get_text_analyzer,
     get_validator,
 )
 from src.data_deidentifier.adapters.api.mapper import ApiEntityMapper
 from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
-from src.data_deidentifier.domain.contracts.analyzer import AnalyzerContract
+from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
-from src.data_deidentifier.domain.services.analyze import AnalyzeService
+from src.data_deidentifier.domain.services.analyze.text import TextAnalysisService
 
 from .schemas import (
     AnalyzeTextRequest,
@@ -29,7 +29,7 @@ router = APIRouter(prefix="/analyze")
 )
 async def analyze_text(
     query: AnalyzeTextRequest,
-    analyzer: Annotated[AnalyzerContract, Depends(get_analyzer)],
+    analyzer: Annotated[TextAnalyzerContract, Depends(get_text_analyzer)],
     validator: Annotated[EntityTypeValidatorContract, Depends(get_validator)],
     config: Annotated[ConfigContract, Depends(get_config)],
 ) -> AnalyzeTextResponse:
@@ -40,14 +40,14 @@ async def analyze_text(
 
     Args:
         query: The request query model containing the text to analyze
-        analyzer: The analyzer implementation
+        analyzer: The text analyzer implementation
         validator: The validator implementation
         config: The application configuration
 
     Returns:
         Analysis results containing the detected entities and statistics
     """
-    service = AnalyzeService(
+    service = TextAnalysisService(
         analyzer=analyzer,
         validator=validator,
         default_language=config.get_default_language(),

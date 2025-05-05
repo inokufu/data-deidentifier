@@ -4,7 +4,7 @@ from src.data_deidentifier.domain.types.entity import Entity
 from src.data_deidentifier.domain.types.operators import AnonymizationOperator
 
 
-class AnonymizerContract(ABC):
+class TextAnonymizerContract(ABC):
     """Abstract base class defining the anonymizer interface."""
 
     @abstractmethod

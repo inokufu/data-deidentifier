@@ -5,13 +5,15 @@ from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
 
 from src.data_deidentifier.adapters.presidio.mapper import PresidioEntityMapper
-from src.data_deidentifier.domain.contracts.anonymizer import AnonymizerContract
+from src.data_deidentifier.domain.contracts.anonymizer.text import (
+    TextAnonymizerContract,
+)
 from src.data_deidentifier.domain.exceptions import AnonymizationError
 from src.data_deidentifier.domain.types.entity import Entity
 from src.data_deidentifier.domain.types.operators import AnonymizationOperator
 
 
-class PresidioAnonymizer(AnonymizerContract):
+class PresidioTextAnonymizer(TextAnonymizerContract):
     """Implementation of anonymizer contract using Microsoft Presidio."""
 
     def __init__(self, logger: LoggerContract) -> None:

@@ -6,7 +6,7 @@ class AnalyzeError(DataDeidentifierError):
     """Base class for all analysis-related exceptions."""
 
 
-class AnalyzationError(AnalyzeError):
+class AnalysisError(AnalyzeError):
     """Raised when an error occurs during the analysis process."""
 
 

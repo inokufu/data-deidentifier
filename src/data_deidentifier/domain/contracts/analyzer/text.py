@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from src.data_deidentifier.domain.types.entity import Entity
 
 
-class AnalyzerContract(ABC):
+class TextAnalyzerContract(ABC):
     """Abstract base class defining the analyzer interface."""
 
     @abstractmethod

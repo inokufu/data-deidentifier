@@ -1,9 +1,9 @@
-from src.data_deidentifier.domain.contracts.analyzer import AnalyzerContract
+from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
 from src.data_deidentifier.domain.types.analysis_result import AnalysisResult
 
 
-class AnalyzeService:
+class TextAnalysisService:
     """Service for analyzing text to detect personally identifiable information.
 
     This service orchestrates the text analysis process, manages default values,
@@ -12,13 +12,13 @@ class AnalyzeService:
 
     def __init__(
         self,
-        analyzer: AnalyzerContract,
+        analyzer: TextAnalyzerContract,
         validator: EntityTypeValidatorContract,
         default_language: str,
         default_min_score: float,
         default_entity_types: list[str],
     ) -> None:
-        """Initialize the analyzer service.
+        """Initialize the text analyzer service.
 
         Args:
             analyzer: Implementation of the analyzer contract

@@ -3,18 +3,22 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from src.data_deidentifier.adapters.api.dependencies import (
-    get_analyzer,
-    get_anonymizer,
     get_config,
+    get_text_analyzer,
+    get_text_anonymizer,
     get_validator,
 )
 from src.data_deidentifier.adapters.api.mapper import ApiEntityMapper
 from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
-from src.data_deidentifier.domain.contracts.analyzer import AnalyzerContract
-from src.data_deidentifier.domain.contracts.anonymizer import AnonymizerContract
+from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
+from src.data_deidentifier.domain.contracts.anonymizer.text import (
+    TextAnonymizerContract,
+)
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
-from src.data_deidentifier.domain.services.analyze import AnalyzeService
-from src.data_deidentifier.domain.services.anonymization import AnonymizationService
+from src.data_deidentifier.domain.services.analyze.text import TextAnalysisService
+from src.data_deidentifier.domain.services.anonymize.text import (
+    TextAnonymizationService,
+)
 
 from .schemas import (
     AnonymizeTextRequest,
@@ -32,8 +36,8 @@ router = APIRouter(prefix="/anonymize")
 )
 async def anonymize_text(
     query: AnonymizeTextRequest,
-    anonymizer: Annotated[AnonymizerContract, Depends(get_anonymizer)],
-    analyzer: Annotated[AnalyzerContract, Depends(get_analyzer)],
+    anonymizer: Annotated[TextAnonymizerContract, Depends(get_text_anonymizer)],
+    analyzer: Annotated[TextAnalyzerContract, Depends(get_text_analyzer)],
     validator: Annotated[EntityTypeValidatorContract, Depends(get_validator)],
     config: Annotated[ConfigContract, Depends(get_config)],
 ) -> AnonymizeTextResponse:
@@ -43,15 +47,15 @@ async def anonymize_text(
 
     Args:
         query: The request containing text to anonymize
-        anonymizer: The anonymizer implementation
-        analyzer: The analyzer implementation, needed if entities are not provided
+        anonymizer: The text anonymizer implementation
+        analyzer: The text analyzer implementation, needed if entities are not provided
         validator: The validator implementation
         config: The application configuration
 
     Returns:
         Anonymized text and information about the entities that were anonymized
     """
-    anonymize_service = AnonymizationService(
+    anonymize_service = TextAnonymizationService(
         anonymizer=anonymizer,
         validator=validator,
         default_operator=config.get_default_anonymization_operator(),
@@ -64,7 +68,7 @@ async def anonymize_text(
         entities = [ApiEntityMapper.adapter_to_domain(e) for e in query.entities]
     else:
         # Retrieve entities via analyze service
-        analyze_service = AnalyzeService(
+        analyze_service = TextAnalysisService(
             analyzer=analyzer,
             validator=validator,
             default_language=config.get_default_language(),

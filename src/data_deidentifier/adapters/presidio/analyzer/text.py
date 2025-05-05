@@ -4,12 +4,12 @@ from logger import LoggerContract
 from presidio_analyzer import AnalyzerEngine
 
 from src.data_deidentifier.adapters.presidio.mapper import PresidioEntityMapper
-from src.data_deidentifier.domain.contracts.analyzer import AnalyzerContract
-from src.data_deidentifier.domain.exceptions import AnalyzationError
+from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
+from src.data_deidentifier.domain.exceptions import AnalysisError
 from src.data_deidentifier.domain.types.entity import Entity
 
 
-class PresidioAnalyzer(AnalyzerContract):
+class PresidioTextAnalyzer(TextAnalyzerContract):
     """Implementation of the analyzer contract using Microsoft Presidio.
 
     This class uses the Presidio Analyzer to detect PII entities in text.
@@ -60,7 +60,7 @@ class PresidioAnalyzer(AnalyzerContract):
                 e,
                 logger_context,
             )
-            raise AnalyzationError(msg) from e
+            raise AnalysisError(msg) from e
 
         # Convert results to our format
         results = [

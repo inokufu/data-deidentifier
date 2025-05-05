@@ -4,13 +4,15 @@ from fastapi import Depends, Request
 from logger import LoggerContract
 
 from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
-from src.data_deidentifier.adapters.presidio.analyzer.analyzer import PresidioAnalyzer
-from src.data_deidentifier.adapters.presidio.anonymizer.anonymizer import (
-    PresidioAnonymizer,
+from src.data_deidentifier.adapters.presidio.analyzer.text import PresidioTextAnalyzer
+from src.data_deidentifier.adapters.presidio.anonymizer.text import (
+    PresidioTextAnonymizer,
 )
 from src.data_deidentifier.adapters.presidio.validator import PresidioValidator
-from src.data_deidentifier.domain.contracts.analyzer import AnalyzerContract
-from src.data_deidentifier.domain.contracts.anonymizer import AnonymizerContract
+from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
+from src.data_deidentifier.domain.contracts.anonymizer.text import (
+    TextAnonymizerContract,
+)
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
 
 
@@ -38,10 +40,10 @@ async def get_logger(request: Request) -> LoggerContract:
     return request.state.logger
 
 
-async def get_analyzer(
+async def get_text_analyzer(
     logger: Annotated[LoggerContract, Depends(get_logger)],
-) -> AnalyzerContract:
-    """Create and return an analyzer instance.
+) -> TextAnalyzerContract:
+    """Create and return a text analyzer instance.
 
     Args:
         logger: The logger instance obtained via dependency injection
@@ -49,15 +51,15 @@ async def get_analyzer(
     Returns:
         An implementation of the analyzer contract
     """
-    return PresidioAnalyzer(
+    return PresidioTextAnalyzer(
         logger=logger,
     )
 
 
-async def get_anonymizer(
+async def get_text_anonymizer(
     logger: Annotated[LoggerContract, Depends(get_logger)],
-) -> AnonymizerContract:
-    """Create and return an anonymizer instance.
+) -> TextAnonymizerContract:
+    """Create and return a text anonymizer instance.
 
     Args:
         logger: The logger instance
@@ -65,7 +67,7 @@ async def get_anonymizer(
     Returns:
         An implementation of the anonymizer contract
     """
-    return PresidioAnonymizer(
+    return PresidioTextAnonymizer(
         logger=logger,
     )
 

@@ -1,11 +1,13 @@
-from src.data_deidentifier.domain.contracts.anonymizer import AnonymizerContract
+from src.data_deidentifier.domain.contracts.anonymizer.text import (
+    TextAnonymizerContract,
+)
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
 from src.data_deidentifier.domain.types.anonymization_result import AnonymizationResult
 from src.data_deidentifier.domain.types.entity import Entity
 from src.data_deidentifier.domain.types.operators import AnonymizationOperator
 
 
-class AnonymizationService:
+class TextAnonymizationService:
     """Service for anonymizing personally identifiable information in text.
 
     This service orchestrates the text anonymization process, manages default values,
@@ -14,7 +16,7 @@ class AnonymizationService:
 
     def __init__(
         self,
-        anonymizer: AnonymizerContract,
+        anonymizer: TextAnonymizerContract,
         validator: EntityTypeValidatorContract,
         default_operator: AnonymizationOperator,
     ) -> None:
