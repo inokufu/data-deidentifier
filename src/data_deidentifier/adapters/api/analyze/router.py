@@ -4,16 +4,25 @@ from fastapi import APIRouter, Depends
 
 from src.data_deidentifier.adapters.api.dependencies import (
     get_config,
+    get_structured_analyzer,
     get_text_analyzer,
     get_validator,
 )
 from src.data_deidentifier.adapters.api.mapper import ApiEntityMapper
 from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
+from src.data_deidentifier.domain.contracts.analyzer.structured import (
+    StructuredAnalyzerContract,
+)
 from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
+from src.data_deidentifier.domain.services.analyze.structured import (
+    StructuredAnalysisService,
+)
 from src.data_deidentifier.domain.services.analyze.text import TextAnalysisService
 
 from .schemas import (
+    AnalyzeStructuredDataRequest,
+    AnalyzeStructuredDataResponse,
     AnalyzeTextRequest,
     AnalyzeTextResponse,
 )
@@ -72,5 +81,53 @@ async def analyze_text(
             "language": analysis_result.language,
             "min_score": analysis_result.min_score,
             "entities": analysis_result.entity_stats,
+        },
+    )
+
+
+@router.post(
+    "/structured",
+    tags=["Structured data anonymization"],
+    summary="Analyze structured data for PII entities",
+    status_code=200,
+)
+async def analyze_structured(
+    query: AnalyzeStructuredDataRequest,
+    analyzer: Annotated[StructuredAnalyzerContract, Depends(get_structured_analyzer)],
+    validator: Annotated[EntityTypeValidatorContract, Depends(get_validator)],
+    config: Annotated[ConfigContract, Depends(get_config)],
+) -> AnalyzeStructuredDataResponse:
+    """Analyze structured data for PII entities.
+
+    This endpoint analyzes the structured data to detect personally identifiable
+    information (PII) entities such as names, email addresses, phone numbers, etc.
+
+    Args:
+        query: The request query model containing the structured data to analyze
+        analyzer: The structured analyzer implementation
+        validator: The validator implementation
+        config: The application configuration
+
+    Returns:
+        Analysis results containing the entity mapping and statistics
+    """
+    service = StructuredAnalysisService(
+        analyzer=analyzer,
+        validator=validator,
+        default_language=config.get_default_language(),
+        default_entity_types=config.get_default_entity_types(),
+    )
+
+    analysis_result = service.analyze(
+        data=query.data,
+        language=query.language,
+        entity_types=query.entity_types,
+    )
+
+    return AnalyzeStructuredDataResponse(
+        entities=analysis_result.entity_mapping,
+        meta={
+            "language": analysis_result.language,
+            "entity_types": analysis_result.entity_stats,
         },
     )

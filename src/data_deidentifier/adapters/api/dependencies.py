@@ -4,11 +4,17 @@ from fastapi import Depends, Request
 from logger import LoggerContract
 
 from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
+from src.data_deidentifier.adapters.presidio.analyzer.structured import (
+    PresidioStructuredAnalyzer,
+)
 from src.data_deidentifier.adapters.presidio.analyzer.text import PresidioTextAnalyzer
 from src.data_deidentifier.adapters.presidio.anonymizer.text import (
     PresidioTextAnonymizer,
 )
 from src.data_deidentifier.adapters.presidio.validator import PresidioValidator
+from src.data_deidentifier.domain.contracts.analyzer.structured import (
+    StructuredAnalyzerContract,
+)
 from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
 from src.data_deidentifier.domain.contracts.anonymizer.text import (
     TextAnonymizerContract,
@@ -84,5 +90,21 @@ async def get_validator(
         An implementation of the entity type validator contract
     """
     return PresidioValidator(
+        logger=logger,
+    )
+
+
+async def get_structured_analyzer(
+    logger: Annotated[LoggerContract, Depends(get_logger)],
+) -> StructuredAnalyzerContract:
+    """Create and return a structured analyzer instance.
+
+    Args:
+        logger: The logger instance obtained via dependency injection
+
+    Returns:
+        An implementation of the structured analyzer contract
+    """
+    return PresidioStructuredAnalyzer(
         logger=logger,
     )

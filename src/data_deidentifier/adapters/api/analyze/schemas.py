@@ -47,3 +47,40 @@ class AnalyzeTextResponse(BaseModel):
         default_factory=dict,
         description="Statistics about the analysis",
     )
+
+
+class AnalyzeStructuredDataRequest(BaseModel):
+    """Request model for analyzing structured data.
+
+    This model defines the input parameters for the structured data analysis endpoint.
+    """
+
+    data: Any = Field(..., description="The structured data to analyze")
+
+    language: str | None = Field(
+        default=None,
+        description="Language code of the text (e.g., 'en', 'fr', 'es')",
+    )
+
+    entity_types: list[str] | None = Field(
+        default=None,
+        description="Types of entities to detect (defaults to all supported types)",
+    )
+
+
+class AnalyzeStructuredDataResponse(BaseModel):
+    """Response model for structured data analysis.
+
+    This model defines the structure of the response
+    returned by the structured data analysis endpoint.
+    """
+
+    entities: dict[str, str] = Field(
+        ...,
+        description="The entities found in the content",
+    )
+
+    meta: dict[str, Any] | None = Field(
+        default_factory=dict,
+        description="Statistics about the analysis",
+    )

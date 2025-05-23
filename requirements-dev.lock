@@ -154,6 +154,7 @@ nodeenv==1.9.1
     # via pre-commit
 numpy==2.2.4
     # via blis
+    # via pandas
     # via spacy
     # via thinc
 packaging==24.2
@@ -165,6 +166,8 @@ packaging==24.2
     # via weasel
 paginate==0.5.7
     # via mkdocs-material
+pandas==2.2.3
+    # via presidio-structured
 pathspec==0.12.1
     # via mkdocs
 phonenumbers==8.13.55
@@ -183,7 +186,11 @@ preshed==3.0.9
     # via thinc
 presidio-analyzer==2.2.358
     # via data-deidentifier
+    # via presidio-structured
 presidio-anonymizer==2.2.358
+    # via data-deidentifier
+    # via presidio-structured
+presidio-structured==0.0.5a0
     # via data-deidentifier
 pycparser==2.22
     # via cffi
@@ -212,9 +219,12 @@ pytest-cov==6.0.0
 pytest-mock==3.14.0
 python-dateutil==2.9.0.post0
     # via ghp-import
+    # via pandas
 python-dotenv==1.1.0
     # via pydantic-settings
     # via uvicorn
+pytz==2025.2
+    # via pandas
 pyyaml==6.0.2
     # via mkdocs
     # via mkdocs-get-deps
@@ -281,6 +291,8 @@ typing-extensions==4.13.1
     # via typing-inspection
 typing-inspection==0.4.0
     # via pydantic
+tzdata==2025.2
+    # via pandas
 urllib3==2.3.0
     # via requests
 uvicorn==0.34.0
