@@ -4,7 +4,7 @@ from src.data_deidentifier.domain.types.entity import Entity
 
 
 class TextAnalyzerContract(ABC):
-    """Abstract base class defining the analyzer interface."""
+    """Abstract base class defining the text analyzer interface."""
 
     @abstractmethod
     def analyze(

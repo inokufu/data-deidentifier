@@ -5,7 +5,7 @@ from src.data_deidentifier.domain.types.operators import AnonymizationOperator
 
 
 class TextAnonymizerContract(ABC):
-    """Abstract base class defining the anonymizer interface."""
+    """Abstract base class defining the text anonymizer interface."""
 
     @abstractmethod
     def anonymize(

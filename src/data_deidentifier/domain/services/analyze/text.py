@@ -21,7 +21,7 @@ class TextAnalysisService:
         """Initialize the text analyzer service.
 
         Args:
-            analyzer: Implementation of the analyzer contract
+            analyzer: Implementation of the text analyzer contract
             validator: Implementation of the validator contract
             default_language: Default language code to use if not specified
             default_min_score: Default minimum confidence score to use if not specified

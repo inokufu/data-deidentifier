@@ -20,10 +20,10 @@ class TextAnonymizationService:
         validator: EntityTypeValidatorContract,
         default_operator: AnonymizationOperator,
     ) -> None:
-        """Initialize the anonymizer service.
+        """Initialize the text anonymization service.
 
         Args:
-            anonymizer: Implementation of the anonymizer contract
+            anonymizer: Implementation of the text anonymization contract
             validator: Implementation of the validator contract
             default_operator: Default anonymization operator if not specified
         """
