@@ -17,7 +17,7 @@ class PresidioTextAnonymizer(TextAnonymizerContract):
     """Implementation of anonymizer contract using Microsoft Presidio."""
 
     def __init__(self, logger: LoggerContract) -> None:
-        """Initialize the Presidio anonymizer.
+        """Initialize the Presidio text anonymizer.
 
         Args:
             logger: Logger for logging events

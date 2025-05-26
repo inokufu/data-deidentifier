@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from logger import LoggerContract
 from presidio_structured import StructuredAnalysis
+from presidio_structured.data.data_processors import DataProcessorBase
 
 from src.data_deidentifier.domain.types.structured_data import StructuredData
 
@@ -47,5 +48,14 @@ class StructuredTypeAnalyzer(ABC):
 
         Raises:
             ValueError: If the data cannot be properly analyzed.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_data_processor(self) -> DataProcessorBase:
+        """Get the appropriate DataProcessor for this data type.
+
+        Returns:
+            DataProcessor instance for this analyzer's data type.
         """
         raise NotImplementedError

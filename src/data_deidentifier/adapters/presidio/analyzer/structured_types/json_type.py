@@ -5,6 +5,10 @@ from presidio_structured import (
     JsonAnalysisBuilder,
     StructuredAnalysis,
 )
+from presidio_structured.data.data_processors import (
+    DataProcessorBase,
+    JsonDataProcessor,
+)
 
 from .structured_type import StructuredTypeAnalyzer
 
@@ -37,3 +41,7 @@ class JsonAnalyzer(StructuredTypeAnalyzer):
             data=data,
             language=language,
         )
+
+    @override
+    def get_data_processor(self) -> DataProcessorBase:
+        return JsonDataProcessor()

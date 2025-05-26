@@ -1,14 +1,14 @@
 from src.data_deidentifier.domain.contracts.analyzer.structured import (
-    StructuredAnalyzerContract,
+    StructuredDataAnalyzerContract,
 )
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
 from src.data_deidentifier.domain.types.structured_analysis_result import (
-    StructuredAnalysisResult,
+    StructuredDataAnalysisResult,
 )
 from src.data_deidentifier.domain.types.structured_data import StructuredData
 
 
-class StructuredAnalysisService:
+class StructuredDataAnalysisService:
     """Service for analyzing structured data to detect PII.
 
     This service orchestrates the text analysis process, manages default values,
@@ -17,7 +17,7 @@ class StructuredAnalysisService:
 
     def __init__(
         self,
-        analyzer: StructuredAnalyzerContract,
+        analyzer: StructuredDataAnalyzerContract,
         validator: EntityTypeValidatorContract,
         default_language: str,
         default_entity_types: list[str],
@@ -40,7 +40,7 @@ class StructuredAnalysisService:
         data: StructuredData,
         language: str | None = None,
         entity_types: list[str] | None = None,
-    ) -> StructuredAnalysisResult:
+    ) -> StructuredDataAnalysisResult:
         """Analyze structured data to detect PII entities.
 
         Args:
@@ -49,11 +49,11 @@ class StructuredAnalysisService:
             entity_types: Entity types to detect
 
         Returns:
-            A StructuredAnalysisResult containing the entity mapping
+            A StructuredAnalysisResult containing the entity mapping and metadata
         """
         effective_language = language or self.default_language
 
-        # Validate data
+        # Validate entity types
         raw_entity_types = entity_types or self.default_entity_types
         effective_entity_types = self.validator.validate_entity_types(
             entity_types=raw_entity_types,
@@ -72,7 +72,7 @@ class StructuredAnalysisService:
             entity_type = field.entity_type
             entity_stats[entity_type] = entity_stats.get(entity_type, 0) + 1
 
-        return StructuredAnalysisResult(
+        return StructuredDataAnalysisResult(
             fields=fields,
             language=effective_language,
             entity_stats=entity_stats,

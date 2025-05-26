@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 
 from src.data_deidentifier.domain.types.structured_analysis_result import (
-    StructuredAnalysisField,
+    StructuredDataAnalysisField,
 )
 from src.data_deidentifier.domain.types.structured_data import StructuredData
 
 
-class StructuredAnalyzerContract(ABC):
+class StructuredDataAnalyzerContract(ABC):
     """Abstract base class defining the structured analyzer interface."""
 
     @abstractmethod
@@ -15,7 +15,7 @@ class StructuredAnalyzerContract(ABC):
         data: StructuredData,
         language: str,
         entity_types: list[str] | None = None,
-    ) -> list[StructuredAnalysisField]:
+    ) -> list[StructuredDataAnalysisField]:
         """Analyze structured data to detect PII entities.
 
         Args:

@@ -11,12 +11,12 @@ from src.data_deidentifier.adapters.api.dependencies import (
 from src.data_deidentifier.adapters.api.mapper import ApiEntityMapper
 from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
 from src.data_deidentifier.domain.contracts.analyzer.structured import (
-    StructuredAnalyzerContract,
+    StructuredDataAnalyzerContract,
 )
 from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
 from src.data_deidentifier.domain.services.analyze.structured import (
-    StructuredAnalysisService,
+    StructuredDataAnalysisService,
 )
 from src.data_deidentifier.domain.services.analyze.text import TextAnalysisService
 
@@ -93,7 +93,10 @@ async def analyze_text(
 )
 async def analyze_structured(
     query: AnalyzeStructuredDataRequest,
-    analyzer: Annotated[StructuredAnalyzerContract, Depends(get_structured_analyzer)],
+    analyzer: Annotated[
+        StructuredDataAnalyzerContract,
+        Depends(get_structured_analyzer),
+    ],
     validator: Annotated[EntityTypeValidatorContract, Depends(get_validator)],
     config: Annotated[ConfigContract, Depends(get_config)],
 ) -> AnalyzeStructuredDataResponse:
@@ -111,7 +114,7 @@ async def analyze_structured(
     Returns:
         Analysis results containing the entity mapping and statistics
     """
-    service = StructuredAnalysisService(
+    service = StructuredDataAnalysisService(
         analyzer=analyzer,
         validator=validator,
         default_language=config.get_default_language(),

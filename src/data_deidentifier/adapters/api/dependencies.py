@@ -5,17 +5,23 @@ from logger import LoggerContract
 
 from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
 from src.data_deidentifier.adapters.presidio.analyzer.structured import (
-    PresidioStructuredAnalyzer,
+    PresidioStructuredDataAnalyzer,
 )
 from src.data_deidentifier.adapters.presidio.analyzer.text import PresidioTextAnalyzer
+from src.data_deidentifier.adapters.presidio.anonymizer.structured import (
+    PresidioStructuredDataAnonymizer,
+)
 from src.data_deidentifier.adapters.presidio.anonymizer.text import (
     PresidioTextAnonymizer,
 )
 from src.data_deidentifier.adapters.presidio.validator import PresidioValidator
 from src.data_deidentifier.domain.contracts.analyzer.structured import (
-    StructuredAnalyzerContract,
+    StructuredDataAnalyzerContract,
 )
 from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
+from src.data_deidentifier.domain.contracts.anonymizer.structured import (
+    StructuredDataAnonymizerContract,
+)
 from src.data_deidentifier.domain.contracts.anonymizer.text import (
     TextAnonymizerContract,
 )
@@ -96,15 +102,31 @@ async def get_validator(
 
 async def get_structured_analyzer(
     logger: Annotated[LoggerContract, Depends(get_logger)],
-) -> StructuredAnalyzerContract:
-    """Create and return a structured analyzer instance.
+) -> StructuredDataAnalyzerContract:
+    """Create and return a structured data analyzer instance.
 
     Args:
         logger: The logger instance obtained via dependency injection
 
     Returns:
-        An implementation of the structured analyzer contract
+        An implementation of the structured data analyzer contract
     """
-    return PresidioStructuredAnalyzer(
+    return PresidioStructuredDataAnalyzer(
+        logger=logger,
+    )
+
+
+async def get_structured_anonymizer(
+    logger: Annotated[LoggerContract, Depends(get_logger)],
+) -> StructuredDataAnonymizerContract:
+    """Create and return a structured data anonymizer instance.
+
+    Args:
+        logger: The logger instance obtained via dependency injection
+
+    Returns:
+        An implementation of the structured data anonymizer contract
+    """
+    return PresidioStructuredDataAnonymizer(
         logger=logger,
     )

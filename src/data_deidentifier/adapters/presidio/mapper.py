@@ -3,8 +3,7 @@ from presidio_structured import StructuredAnalysis as PresidioStructuredAnalysis
 
 from src.data_deidentifier.domain.types.entity import Entity
 from src.data_deidentifier.domain.types.structured_analysis_result import (
-    StructuredAnalysisField,
-    StructuredAnalysisResult,
+    StructuredDataAnalysisField,
 )
 
 
@@ -61,7 +60,7 @@ class PresidioStructuredMapper:
     @staticmethod
     def presidio_result_to_domain(
         analysis: PresidioStructuredAnalysis,
-    ) -> list[StructuredAnalysisField]:
+    ) -> list[StructuredDataAnalysisField]:
         """Convert a Presidio StructuredAnalysis to list of domain fields.
 
         Args:
@@ -71,7 +70,7 @@ class PresidioStructuredMapper:
             StructuredAnalysisResult object with detected fields and their entity types.
         """
         return [
-            StructuredAnalysisField(
+            StructuredDataAnalysisField(
                 field_name=field_name,
                 entity_type=entity_type,
             )
@@ -80,14 +79,15 @@ class PresidioStructuredMapper:
 
     @staticmethod
     def domain_to_presidio_result(
-        result: StructuredAnalysisResult,
+        fields: list[StructuredDataAnalysisField],
     ) -> PresidioStructuredAnalysis:
         """Convert our domain StructuredAnalysisResult to Presidio's format.
 
         Args:
-            result: Domain structured result object containing detected fields.
+            fields: List of domain fields with their entity types.
 
         Returns:
             Presidio's StructuredAnalysis object with entity mapping.
         """
-        return PresidioStructuredAnalysis(entity_mapping=result.entity_mapping)
+        entity_mapping = {field.field_name: field.entity_type for field in fields}
+        return PresidioStructuredAnalysis(entity_mapping=entity_mapping)

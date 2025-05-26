@@ -6,6 +6,10 @@ from presidio_structured import (
     PandasAnalysisBuilder,
     StructuredAnalysis,
 )
+from presidio_structured.data.data_processors import (
+    DataProcessorBase,
+    PandasDataProcessor,
+)
 
 from .structured_type import StructuredTypeAnalyzer
 
@@ -42,3 +46,7 @@ class DataFrameAnalyzer(StructuredTypeAnalyzer):
             df=data,
             language=language,
         )
+
+    @override
+    def get_data_processor(self) -> DataProcessorBase:
+        return PandasDataProcessor()

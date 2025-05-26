@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 
 from src.data_deidentifier.adapters.api.response import EntityResponse
 from src.data_deidentifier.domain.types.operators import AnonymizationOperator
+from src.data_deidentifier.domain.types.structured_data import StructuredData
 
 
 class AnonymizeTextRequest(BaseModel):
@@ -54,4 +55,52 @@ class AnonymizeTextResponse(BaseModel):
     meta: dict[str, Any] | None = Field(
         default_factory=dict,
         description="Statistics about anonymized entity types",
+    )
+
+
+class AnonymizeStructuredDataRequest(BaseModel):
+    """Request model for anonymizing structured data.
+
+    This model defines the input parameters
+    for the structured data anonymization endpoint.
+    """
+
+    data: StructuredData = Field(..., description="The structured data to anonymize")
+
+    entities: dict[str, str] | None = Field(
+        default=None,
+        description="Pre-identified entities (if empty, text will be analyzed first)",
+    )
+
+    operator: AnonymizationOperator | None = Field(
+        default=None,
+        description="Anonymization method",
+    )
+
+    language: str | None = Field(
+        default=None,
+        description="Language code of the data (e.g., 'en', 'fr', 'es')",
+    )
+
+    entity_types: list[str] | None = Field(
+        default=None,
+        description="Types of entities to detect (defaults to all supported types)",
+    )
+
+
+class AnonymizeStructuredDataResponse(BaseModel):
+    """Response model for structured data anonymization.
+
+    This model defines the structure of the response
+    returned by the structured data anonymization endpoint.
+    """
+
+    anonymized_data: StructuredData = Field(
+        ...,
+        description="The anonymized structured data",
+    )
+
+    meta: dict[str, Any] | None = Field(
+        default_factory=dict,
+        description="Statistics about the anonymization operation",
     )

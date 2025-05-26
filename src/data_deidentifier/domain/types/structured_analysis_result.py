@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class StructuredAnalysisField:
+class StructuredDataAnalysisField:
     """Represents a field/column with detected PII entity information.
 
     This model captures information about a field or column in structured data
@@ -18,7 +18,7 @@ class StructuredAnalysisField:
 
 
 @dataclass
-class StructuredAnalysisResult:
+class StructuredDataAnalysisResult:
     """Result of a structured data analysis operation.
 
     This class encapsulates information about PII entities detected
@@ -30,7 +30,7 @@ class StructuredAnalysisResult:
         entity_stats: Statistics of detected entity types and their counts
     """
 
-    fields: list[StructuredAnalysisField]
+    fields: list[StructuredDataAnalysisField]
     language: str | None = None
     entity_stats: dict[str, int] | None = None
 

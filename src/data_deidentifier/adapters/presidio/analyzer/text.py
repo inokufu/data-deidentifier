@@ -10,13 +10,13 @@ from src.data_deidentifier.domain.types.entity import Entity
 
 
 class PresidioTextAnalyzer(TextAnalyzerContract):
-    """Implementation of the analyzer contract using Microsoft Presidio.
+    """Implementation of the text analyzer contract using Microsoft Presidio.
 
     This class uses the Presidio Analyzer to detect PII entities in text.
     """
 
     def __init__(self, logger: LoggerContract) -> None:
-        """Initialize the Presidio analyzer.
+        """Initialize the Presidio text analyzer.
 
         Args:
             logger: Logger for logging events

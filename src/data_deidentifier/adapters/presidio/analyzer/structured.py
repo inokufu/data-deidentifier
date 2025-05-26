@@ -7,15 +7,15 @@ from src.data_deidentifier.adapters.presidio.analyzer.structured_types.factory i
 )
 from src.data_deidentifier.adapters.presidio.mapper import PresidioStructuredMapper
 from src.data_deidentifier.domain.contracts.analyzer.structured import (
-    StructuredAnalyzerContract,
+    StructuredDataAnalyzerContract,
 )
 from src.data_deidentifier.domain.exceptions import AnalysisError
 from src.data_deidentifier.domain.types.structured_analysis_result import (
-    StructuredAnalysisField,
+    StructuredDataAnalysisField,
 )
 
 
-class PresidioStructuredAnalyzer(StructuredAnalyzerContract):
+class PresidioStructuredDataAnalyzer(StructuredDataAnalyzerContract):
     """Implementation of the structured analyzer contract using Presidio-structured.
 
     This class uses the Presidio Analyzer to detect PII entities in structured data.
@@ -28,7 +28,9 @@ class PresidioStructuredAnalyzer(StructuredAnalyzerContract):
             logger: Logger for logging events
         """
         self.logger = logger
+
         self.analyzer_factory = StructuredDataAnalyzerFactory(logger)
+
         self.logger.debug("Presidio Structured Analyzer initialized successfully")
 
     @override
@@ -37,7 +39,7 @@ class PresidioStructuredAnalyzer(StructuredAnalyzerContract):
         data: Any,
         language: str,
         entity_types: list[str] | None = None,
-    ) -> list[StructuredAnalysisField]:
+    ) -> list[StructuredDataAnalysisField]:
         language = language.lower()
 
         logger_context = {
@@ -49,7 +51,7 @@ class PresidioStructuredAnalyzer(StructuredAnalyzerContract):
 
         try:
             # Get the appropriate analyzer for this data type
-            analyzer = self.analyzer_factory.get_analyzer(data)
+            analyzer = self.analyzer_factory.get_analyzer(data=data)
 
             # Use the analyzer to process the data
             presidio_analysis = analyzer.analyze(
