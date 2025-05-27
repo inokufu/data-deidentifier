@@ -24,3 +24,17 @@ class Entity:
     score: float
     text: str | None = None
     path: str | None = None  # For JSON data, dot notation path to the field
+
+    def __post_init__(self) -> None:
+        """Validate entity constraints."""
+        if self.start < 0:
+            raise ValueError(f"entity start position cannot be negative: {self.start}")
+
+        if self.end < 0:
+            raise ValueError(f"entity end position cannot be negative: {self.end}")
+
+        if self.start > self.end:
+            raise ValueError(
+                f"entity start position ({self.start}) cannot be greater than "
+                f"end position ({self.end})",
+            )

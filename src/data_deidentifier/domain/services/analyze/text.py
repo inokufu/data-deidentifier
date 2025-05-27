@@ -1,5 +1,6 @@
 from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
+from src.data_deidentifier.domain.exceptions import TextAnalysisError
 from src.data_deidentifier.domain.types.analysis_result import AnalysisResult
 
 
@@ -50,7 +51,13 @@ class TextAnalysisService:
 
         Returns:
             An AnalysisResult containing the detected entities and analysis metadata
+
+        Raises:
+            TextAnalysisError
         """
+        if len(text.strip()) == 0:
+            raise TextAnalysisError("Text cannot be empty")
+
         effective_language = language or self.default_language
         effective_min_score = (
             min_score if min_score is not None else self.default_min_score

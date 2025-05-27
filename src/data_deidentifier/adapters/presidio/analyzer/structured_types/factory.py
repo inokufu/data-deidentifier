@@ -1,5 +1,6 @@
 from logger import LoggerContract
 
+from src.data_deidentifier.domain.exceptions import UnsupportedStructuredDataError
 from src.data_deidentifier.domain.types.structured_data import StructuredData
 
 from .dataframe import DataFrameAnalyzer
@@ -55,11 +56,14 @@ class StructuredDataAnalyzerFactory:
             An appropriate analyzer instance for the data.
 
         Raises:
-            ValueError: If no registered analyzer can handle the data type.
+            UnsupportedStructuredDataError:
+                If no registered analyzer can handle the data type.
         """
         for analyzer in self.analyzers:
             if analyzer.can_handle(data):
                 return analyzer
 
         # If we get here, no analyzer could handle the data
-        raise ValueError(f"Unsupported data type: {type(data).__name__}")
+        raise UnsupportedStructuredDataError(
+            f"Unsupported data type: {type(data).__name__}",
+        )

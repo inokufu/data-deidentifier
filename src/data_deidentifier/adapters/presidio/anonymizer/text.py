@@ -8,7 +8,7 @@ from src.data_deidentifier.adapters.presidio.mapper import PresidioEntityMapper
 from src.data_deidentifier.domain.contracts.anonymizer.text import (
     TextAnonymizerContract,
 )
-from src.data_deidentifier.domain.exceptions import AnonymizationError
+from src.data_deidentifier.domain.exceptions import TextAnonymizationError
 from src.data_deidentifier.domain.types.entity import Entity
 from src.data_deidentifier.domain.types.operators import AnonymizationOperator
 
@@ -66,7 +66,7 @@ class PresidioTextAnonymizer(TextAnonymizerContract):
         except Exception as e:
             msg = "Unexpected error during text anonymization"
             self.logger.exception(msg, e, logger_context)
-            raise AnonymizationError(msg) from e
+            raise TextAnonymizationError(msg) from e
 
         self.logger.info("Text anonymization completed successfully", logger_context)
 

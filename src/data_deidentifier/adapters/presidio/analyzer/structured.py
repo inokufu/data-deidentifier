@@ -9,7 +9,7 @@ from src.data_deidentifier.adapters.presidio.mapper import PresidioStructuredMap
 from src.data_deidentifier.domain.contracts.analyzer.structured import (
     StructuredDataAnalyzerContract,
 )
-from src.data_deidentifier.domain.exceptions import AnalysisError
+from src.data_deidentifier.domain.exceptions import StructuredDataAnalysisError
 from src.data_deidentifier.domain.types.structured_analysis_result import (
     StructuredDataAnalysisField,
 )
@@ -49,20 +49,19 @@ class PresidioStructuredDataAnalyzer(StructuredDataAnalyzerContract):
         }
         self.logger.debug("Starting structured data analysis", logger_context)
 
-        try:
-            # Get the appropriate analyzer for this data type
-            analyzer = self.analyzer_factory.get_analyzer(data=data)
+        # Get the appropriate analyzer for this data type
+        analyzer = self.analyzer_factory.get_analyzer(data=data)
 
+        try:
             # Use the analyzer to process the data
             presidio_analysis = analyzer.analyze(
                 data=data,
                 language=language,
             )
-
         except Exception as e:
             msg = "Unexpected error during structured data analysis"
             self.logger.exception(msg, e, logger_context)
-            raise AnalysisError(msg) from e
+            raise StructuredDataAnalysisError(msg) from e
 
         # Convert to domain model
         fields = PresidioStructuredMapper.presidio_result_to_domain(

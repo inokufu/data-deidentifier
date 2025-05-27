@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field
 
 
 class EntityResponse(BaseModel):
@@ -28,12 +28,3 @@ class EntityResponse(BaseModel):
         None,
         description="The path to the field containing the entity (for JSON data)",
     )
-
-    @model_validator(mode="after")
-    def validate_positions(self) -> "EntityResponse":
-        """Validate that end position is greater than or equal to start position."""
-        if self.end < self.start:
-            raise ValueError(
-                "end position must be greater than or equal to start position",
-            )
-        return self

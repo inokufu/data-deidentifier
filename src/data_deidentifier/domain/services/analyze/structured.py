@@ -2,6 +2,7 @@ from src.data_deidentifier.domain.contracts.analyzer.structured import (
     StructuredDataAnalyzerContract,
 )
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
+from src.data_deidentifier.domain.exceptions import StructuredDataAnalysisError
 from src.data_deidentifier.domain.types.structured_analysis_result import (
     StructuredDataAnalysisResult,
 )
@@ -51,6 +52,9 @@ class StructuredDataAnalysisService:
         Returns:
             A StructuredAnalysisResult containing the entity mapping and metadata
         """
+        if not data:
+            raise StructuredDataAnalysisError("Data cannot be empty")
+
         effective_language = language or self.default_language
 
         # Validate entity types

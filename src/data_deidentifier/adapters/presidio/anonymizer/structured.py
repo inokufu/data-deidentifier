@@ -11,7 +11,7 @@ from src.data_deidentifier.adapters.presidio.mapper import PresidioStructuredMap
 from src.data_deidentifier.domain.contracts.anonymizer.structured import (
     StructuredDataAnonymizerContract,
 )
-from src.data_deidentifier.domain.exceptions import AnonymizationError
+from src.data_deidentifier.domain.exceptions import StructuredDataAnonymizationError
 from src.data_deidentifier.domain.types.operators import AnonymizationOperator
 from src.data_deidentifier.domain.types.structured_analysis_result import (
     StructuredDataAnalysisField,
@@ -76,7 +76,7 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
         except Exception as e:
             msg = "Unexpected error during structured data anonymization"
             self.logger.exception(msg, e, logger_context)
-            raise AnonymizationError(msg) from e
+            raise StructuredDataAnonymizationError(msg) from e
 
         self.logger.info(
             "Structured data anonymization completed successfully",

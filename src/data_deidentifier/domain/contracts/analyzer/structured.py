@@ -27,6 +27,6 @@ class StructuredDataAnalyzerContract(ABC):
             List of fields with detected PII entities
 
         Raises:
-            AnalysisError: If analysis fails
+            AnalyzeError: If analysis fails
         """
         raise NotImplementedError

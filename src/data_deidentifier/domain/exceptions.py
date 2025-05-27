@@ -6,13 +6,29 @@ class AnalyzeError(DataDeidentifierError):
     """Base class for all analysis-related exceptions."""
 
 
-class AnalysisError(AnalyzeError):
-    """Raised when an error occurs during the analysis process."""
+class AnonymizationError(DataDeidentifierError):
+    """Base class for all anonymization-related exceptions."""
 
 
-class EntityTypeValidationError(AnalyzeError):
+class TextAnalysisError(AnalyzeError):
+    """Raised when an error occurs during the text analysis process."""
+
+
+class EntityTypeValidationError(DataDeidentifierError):
     """Raised when entity types validation fails."""
 
 
-class AnonymizationError(DataDeidentifierError):
-    """Raised when an error occurs during the anonymization process."""
+class TextAnonymizationError(AnonymizationError):
+    """Raised when an error occurs during the text anonymization process."""
+
+
+class StructuredDataAnalysisError(AnalyzeError):
+    """Raised when an error occurs during the structured data analysis process."""
+
+
+class StructuredDataAnonymizationError(AnonymizationError):
+    """Raised when an error occurs during the structured data anonymization process."""
+
+
+class UnsupportedStructuredDataError(DataDeidentifierError):
+    """Raised when the data type is not supported."""

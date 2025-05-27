@@ -5,7 +5,7 @@ from presidio_analyzer import AnalyzerEngine
 
 from src.data_deidentifier.adapters.presidio.mapper import PresidioEntityMapper
 from src.data_deidentifier.domain.contracts.analyzer.text import TextAnalyzerContract
-from src.data_deidentifier.domain.exceptions import AnalysisError
+from src.data_deidentifier.domain.exceptions import TextAnalysisError
 from src.data_deidentifier.domain.types.entity import Entity
 
 
@@ -55,12 +55,8 @@ class PresidioTextAnalyzer(TextAnalyzerContract):
             )
         except Exception as e:
             msg = "Unexpected error during entity recognition"
-            self.logger.exception(
-                "Unexpected error during entity recognition",
-                e,
-                logger_context,
-            )
-            raise AnalysisError(msg) from e
+            self.logger.exception(msg, e, logger_context)
+            raise TextAnalysisError(msg) from e
 
         # Convert results to our format
         results = [
