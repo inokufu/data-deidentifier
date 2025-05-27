@@ -2,7 +2,10 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from src.data_deidentifier.adapters.api.response import EntityResponse
+from src.data_deidentifier.adapters.api.response import (
+    EntityResponse,
+    StructuredFieldResponse,
+)
 from src.data_deidentifier.domain.types.operators import AnonymizationOperator
 from src.data_deidentifier.domain.types.structured_data import StructuredData
 
@@ -67,9 +70,9 @@ class AnonymizeStructuredDataRequest(BaseModel):
 
     data: StructuredData = Field(..., description="The structured data to anonymize")
 
-    entities: dict[str, str] | None = Field(
+    fields: list[StructuredFieldResponse] | None = Field(
         default=None,
-        description="Pre-identified entities (if empty, text will be analyzed first)",
+        description="Pre-identified fields (if empty, text will be analyzed first)",
     )
 
     operator: AnonymizationOperator | None = Field(

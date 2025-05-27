@@ -2,7 +2,10 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from src.data_deidentifier.adapters.api.response import EntityResponse
+from src.data_deidentifier.adapters.api.response import (
+    EntityResponse,
+    StructuredFieldResponse,
+)
 
 
 class AnalyzeTextRequest(BaseModel):
@@ -75,9 +78,9 @@ class AnalyzeStructuredDataResponse(BaseModel):
     returned by the structured data analysis endpoint.
     """
 
-    entities: dict[str, str] = Field(
+    fields: list[StructuredFieldResponse] = Field(
         ...,
-        description="The entities found in the content",
+        description="List of fields with detected PII entities",
     )
 
     meta: dict[str, Any] | None = Field(

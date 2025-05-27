@@ -12,7 +12,10 @@ from src.data_deidentifier.adapters.api.dependencies import (
     get_text_anonymizer,
     get_validator,
 )
-from src.data_deidentifier.adapters.api.mapper import ApiEntityMapper
+from src.data_deidentifier.adapters.api.mapper import (
+    ApiEntityMapper,
+    ApiStructuredDataMapper,
+)
 from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
 from src.data_deidentifier.domain.contracts.anonymizer.structured import (
     StructuredDataAnonymizerContract,
@@ -30,9 +33,6 @@ from src.data_deidentifier.domain.services.anonymize.structured import (
 )
 from src.data_deidentifier.domain.services.anonymize.text import (
     TextAnonymizationService,
-)
-from src.data_deidentifier.domain.types.structured_analysis_result import (
-    StructuredDataAnalysisField,
 )
 
 from .schemas import (
@@ -159,14 +159,11 @@ async def anonymize_structured(
 
     data = query.data
 
-    if query.entities:
-        # Use provided entity mapping to create fields
+    if query.fields:
+        # Convert provided API entities to domain entities
         fields = [
-            StructuredDataAnalysisField(
-                field_name=field_name,
-                entity_type=entity_type,
-            )
-            for field_name, entity_type in query.entities.items()
+            ApiStructuredDataMapper.adapter_to_domain(field_response=f)
+            for f in query.fields
         ]
     else:
         # Retrieve fields via analyze service

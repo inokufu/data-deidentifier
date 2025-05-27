@@ -8,7 +8,10 @@ from src.data_deidentifier.adapters.api.dependencies import (
     get_text_analyzer,
     get_validator,
 )
-from src.data_deidentifier.adapters.api.mapper import ApiEntityMapper
+from src.data_deidentifier.adapters.api.mapper import (
+    ApiEntityMapper,
+    ApiStructuredDataMapper,
+)
 from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
 from src.data_deidentifier.domain.contracts.analyzer.structured import (
     StructuredDataAnalyzerContract,
@@ -71,6 +74,7 @@ async def analyze_text(
         entity_types=query.entity_types,
     )
 
+    # Convert domain fields to API responses
     entities = [
         ApiEntityMapper.domain_to_adapter(entity=e) for e in analysis_result.entities
     ]
@@ -127,8 +131,14 @@ async def analyze_structured(
         entity_types=query.entity_types,
     )
 
+    # Convert domain fields to API responses
+    fields = [
+        ApiStructuredDataMapper.domain_to_adapter(field=f)
+        for f in analysis_result.fields
+    ]
+
     return AnalyzeStructuredDataResponse(
-        entities=analysis_result.entity_mapping,
+        fields=fields,
         meta={
             "language": analysis_result.language,
             "entity_types": analysis_result.entity_stats,
