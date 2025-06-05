@@ -61,20 +61,20 @@ class StructuredDataAnonymizationService:
         )
 
         # Filter fields to only include validated entity types
-        validated_fields = [
+        effective_fields = [
             field for field in fields if field.entity_type in effective_entity_types
         ]
 
         # Anonymize the data
         anonymized_data = self.anonymizer.anonymize(
             data=data,
-            fields=validated_fields,
+            fields=effective_fields,
             operator=effective_operator,
         )
 
         # Build stats
         entity_stats = {}
-        for field in validated_fields:
+        for field in effective_fields:
             entity_type = field.entity_type
             entity_stats[entity_type] = entity_stats.get(entity_type, 0) + 1
 

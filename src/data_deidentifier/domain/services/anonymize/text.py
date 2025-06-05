@@ -55,10 +55,15 @@ class TextAnonymizationService:
             entity_types=entity_types,
         )
 
+        # Filter entities to only include validated entity types
+        effective_entities = [
+            entity for entity in entities if entity.type in effective_entity_types
+        ]
+
         # Anonymize the text
         anonymized_text = self.anonymizer.anonymize(
             text=text,
-            entities=entities,
+            entities=effective_entities,
             operator=effective_operator,
         )
 
