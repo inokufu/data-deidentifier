@@ -5,7 +5,7 @@ class EntityTypeValidatorContract(ABC):
     """Contract for validating entity types."""
 
     @abstractmethod
-    def validate_entity_types(self, entity_types: list[str] | None) -> list[str]:
+    def validate_entity_types(self, entity_types: list[str]) -> list[str]:
         """Validate entity types and return normalized valid types.
 
         Args:

@@ -32,7 +32,7 @@ class PresidioValidator(EntityTypeValidatorContract):
             )
         return self._supported_entities
 
-    def validate_entity_types(self, entity_types: list[str] | None) -> list[str]:
+    def validate_entity_types(self, entity_types: list[str]) -> list[str]:
         """Validate and normalize entity types.
 
         Args:
@@ -47,12 +47,8 @@ class PresidioValidator(EntityTypeValidatorContract):
         if not entity_types:
             return []
 
-        normalized_types = [e_type.upper() for e_type in entity_types]
-        unsupported = [
-            e_type
-            for e_type in normalized_types
-            if e_type not in self.supported_entities
-        ]
+        normalized_types = {e_type.upper() for e_type in entity_types}
+        unsupported = normalized_types - self.supported_entities
 
         if unsupported:
             self.logger.warning(
@@ -63,4 +59,4 @@ class PresidioValidator(EntityTypeValidatorContract):
                 f"Unsupported entity types: {', '.join(unsupported)}",
             )
 
-        return normalized_types
+        return list(normalized_types)
