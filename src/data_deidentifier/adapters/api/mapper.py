@@ -28,6 +28,7 @@ class ApiEntityMapper(EntityMapperContract[EntityResponse]):
             end=entity.end,
             score=entity.score,
             text=entity.text,
+            path=entity.path,
         )
 
     @staticmethod
@@ -39,6 +40,7 @@ class ApiEntityMapper(EntityMapperContract[EntityResponse]):
             end=entity_response.end,
             score=entity_response.score,
             text=entity_response.text,
+            path=entity_response.path,
         )
 
 
