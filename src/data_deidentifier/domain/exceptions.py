@@ -44,3 +44,7 @@ class StructuredDataPseudonymizationError(PseudonymizationError):
 
 class PseudonymEnrichmentError(DataDeidentifierError):
     """Raised when an error occurs during pseudonym enrichment process."""
+
+
+class UnknownPseudonymizationMethodError(PseudonymizationError):
+    """Raised when pseudonymization method is unknown."""

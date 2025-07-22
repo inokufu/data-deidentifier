@@ -75,7 +75,7 @@ lint.extend-unfixable = [
 
 [tool.pytest.ini_options]
 pythonpath = [".", "src"]
-addopts = "--cov=src --cov-report=term --cov-report=xml"
+addopts = "--cov=src --cov-report=term --cov-report=xml --import-mode=importlib"
 
 [tool.coverage.report]
 exclude_lines = [

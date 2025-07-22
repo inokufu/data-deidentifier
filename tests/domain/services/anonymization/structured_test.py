@@ -26,10 +26,10 @@ class TestStructuredDataAnonymizationServiceSuccess:
 
     def test_anonymize_data_success(
         self,
-        mock_structured_data_anonymization_service: StructuredDataAnonymizationService,
-        mock_structured_data_anonymizer: StructuredDataAnonymizerContract,
+        mock_data_anonymization_service: StructuredDataAnonymizationService,
+        mock_data_anonymizer: StructuredDataAnonymizerContract,
         mock_entity_validator: EntityTypeValidatorContract,
-        sample_structured_data_anonymization_result: StructuredDataAnonymizationResult,
+        sample_data_anonymization_result: StructuredDataAnonymizationResult,
     ) -> None:
         """Should successfully anonymize structured data with valid inputs."""
         # Arrange
@@ -39,12 +39,10 @@ class TestStructuredDataAnonymizationServiceSuccess:
         entity_types = ["PERSON", "EMAIL"]
 
         mock_entity_validator.validate_entity_types.return_value = entity_types
-        mock_structured_data_anonymizer.anonymize.return_value = (
-            sample_structured_data_anonymization_result
-        )
+        mock_data_anonymizer.anonymize.return_value = sample_data_anonymization_result
 
         # Act
-        result = mock_structured_data_anonymization_service.anonymize(
+        result = mock_data_anonymization_service.anonymize(
             data=data,
             operator=operator,
             language=language,
@@ -52,13 +50,13 @@ class TestStructuredDataAnonymizationServiceSuccess:
         )
 
         # Assert
-        assert result == sample_structured_data_anonymization_result
+        assert result == sample_data_anonymization_result
 
         # Verify dependencies called correctly
         mock_entity_validator.validate_entity_types.assert_called_once_with(
             entity_types=entity_types,
         )
-        mock_structured_data_anonymizer.anonymize.assert_called_once_with(
+        mock_data_anonymizer.anonymize.assert_called_once_with(
             data=data,
             operator=operator,
             language=language,
@@ -68,21 +66,19 @@ class TestStructuredDataAnonymizationServiceSuccess:
 
     def test_anonymize_data_with_empty_entity_types(
         self,
-        mock_structured_data_anonymization_service: StructuredDataAnonymizationService,
-        mock_structured_data_anonymizer: StructuredDataAnonymizerContract,
+        mock_data_anonymization_service: StructuredDataAnonymizationService,
+        mock_data_anonymizer: StructuredDataAnonymizerContract,
         mock_entity_validator: EntityTypeValidatorContract,
-        sample_structured_data_anonymization_result: StructuredDataAnonymizationResult,
+        sample_data_anonymization_result: StructuredDataAnonymizationResult,
     ) -> None:
         """Should handle empty entity types list."""
         # Arrange
         data = {"message": "Hello world", "count": 42}
         mock_entity_validator.validate_entity_types.return_value = []
-        mock_structured_data_anonymizer.anonymize.return_value = (
-            sample_structured_data_anonymization_result
-        )
+        mock_data_anonymizer.anonymize.return_value = sample_data_anonymization_result
 
         # Act
-        result = mock_structured_data_anonymization_service.anonymize(
+        result = mock_data_anonymization_service.anonymize(
             data=data,
             operator=AnonymizationOperator.REDACT,
             language=SupportedLanguage.ENGLISH,
@@ -90,16 +86,16 @@ class TestStructuredDataAnonymizationServiceSuccess:
         )
 
         # Assert
-        assert result == sample_structured_data_anonymization_result
+        assert result == sample_data_anonymization_result
         mock_entity_validator.validate_entity_types.assert_called_once_with(
             entity_types=[],
         )
-        mock_structured_data_anonymizer.anonymize.assert_called_once()
+        mock_data_anonymizer.anonymize.assert_called_once()
 
     def test_anonymize_data_with_no_pii_detected(
         self,
-        mock_structured_data_anonymization_service: StructuredDataAnonymizationService,
-        mock_structured_data_anonymizer: StructuredDataAnonymizerContract,
+        mock_data_anonymization_service: StructuredDataAnonymizationService,
+        mock_data_anonymizer: StructuredDataAnonymizerContract,
     ) -> None:
         """Should handle data with no PII entities detected."""
         # Arrange
@@ -108,10 +104,10 @@ class TestStructuredDataAnonymizationServiceSuccess:
             anonymized_data=data,
             detected_fields=[],
         )
-        mock_structured_data_anonymizer.anonymize.return_value = result_no_pii
+        mock_data_anonymizer.anonymize.return_value = result_no_pii
 
         # Act
-        result = mock_structured_data_anonymization_service.anonymize(
+        result = mock_data_anonymization_service.anonymize(
             data=data,
             operator=AnonymizationOperator.REPLACE,
             language=SupportedLanguage.ENGLISH,
@@ -135,12 +131,12 @@ class TestStructuredDataAnonymizationServiceInputValidation:
     )
     def test_anonymize_various_empty_data_raise_error(
         self,
-        mock_structured_data_anonymization_service: StructuredDataAnonymizationService,
+        mock_data_anonymization_service: StructuredDataAnonymizationService,
         invalid_data: dict | None,
     ) -> None:
         """Should raise InvalidInputDataError for various empty data."""
         with pytest.raises(InvalidInputDataError, match="Data cannot be empty"):
-            mock_structured_data_anonymization_service.anonymize(
+            mock_data_anonymization_service.anonymize(
                 data=invalid_data,
                 operator=AnonymizationOperator.REPLACE,
                 language=SupportedLanguage.ENGLISH,
@@ -153,9 +149,9 @@ class TestStructuredDataAnonymizationServiceErrorHandling:
 
     def test_anonymize_when_validator_fails_chains_exception(
         self,
-        mock_structured_data_anonymization_service: StructuredDataAnonymizationService,
+        mock_data_anonymization_service: StructuredDataAnonymizationService,
         mock_entity_validator: EntityTypeValidatorContract,
-        mock_structured_data_anonymizer: StructuredDataAnonymizerContract,
+        mock_data_anonymizer: StructuredDataAnonymizerContract,
     ) -> None:
         """Should chain exception when validator fails."""
         # Arrange
@@ -165,7 +161,7 @@ class TestStructuredDataAnonymizationServiceErrorHandling:
 
         # Act & Assert
         with pytest.raises(EntityTypeValidationError):
-            mock_structured_data_anonymization_service.anonymize(
+            mock_data_anonymization_service.anonymize(
                 data={"name": "John"},
                 operator=AnonymizationOperator.REPLACE,
                 language=SupportedLanguage.ENGLISH,
@@ -173,24 +169,22 @@ class TestStructuredDataAnonymizationServiceErrorHandling:
             )
 
         # Anonymizer should not be called
-        mock_structured_data_anonymizer.anonymize.assert_not_called()
+        mock_data_anonymizer.anonymize.assert_not_called()
 
     def test_anonymize_when_anonymizer_fails_chains_exception(
         self,
-        mock_structured_data_anonymization_service: StructuredDataAnonymizationService,
-        mock_structured_data_anonymizer: StructuredDataAnonymizerContract,
+        mock_data_anonymization_service: StructuredDataAnonymizationService,
+        mock_data_anonymizer: StructuredDataAnonymizerContract,
     ) -> None:
         """Should chain exception when anonymizer fails."""
         # Arrange
-        mock_structured_data_anonymizer.anonymize.side_effect = (
-            StructuredDataAnonymizationError(
-                "Anonymization processing failed",
-            )
+        mock_data_anonymizer.anonymize.side_effect = StructuredDataAnonymizationError(
+            "Anonymization processing failed",
         )
 
         # Act & Assert
         with pytest.raises(StructuredDataAnonymizationError):
-            mock_structured_data_anonymization_service.anonymize(
+            mock_data_anonymization_service.anonymize(
                 data={"name": "John"},
                 operator=AnonymizationOperator.REPLACE,
                 language=SupportedLanguage.ENGLISH,
@@ -203,9 +197,9 @@ class TestStructuredDataAnonymizationServiceEdgeCases:
 
     def test_anonymize_with_deeply_nested_data(
         self,
-        mock_structured_data_anonymization_service: StructuredDataAnonymizationService,
-        mock_structured_data_anonymizer: StructuredDataAnonymizerContract,
-        sample_structured_data_anonymization_result: StructuredDataAnonymizationResult,
+        mock_data_anonymization_service: StructuredDataAnonymizationService,
+        mock_data_anonymizer: StructuredDataAnonymizerContract,
+        sample_data_anonymization_result: StructuredDataAnonymizationResult,
     ) -> None:
         """Should handle deeply nested data structures."""
         # Arrange
@@ -223,12 +217,10 @@ class TestStructuredDataAnonymizationServiceEdgeCases:
             },
             "metadata": {"version": "1.0"},
         }
-        mock_structured_data_anonymizer.anonymize.return_value = (
-            sample_structured_data_anonymization_result
-        )
+        mock_data_anonymizer.anonymize.return_value = sample_data_anonymization_result
 
         # Act
-        result = mock_structured_data_anonymization_service.anonymize(
+        result = mock_data_anonymization_service.anonymize(
             data=nested_data,
             operator=AnonymizationOperator.REPLACE,
             language=SupportedLanguage.ENGLISH,
@@ -236,5 +228,5 @@ class TestStructuredDataAnonymizationServiceEdgeCases:
         )
 
         # Assert
-        assert result == sample_structured_data_anonymization_result
-        mock_structured_data_anonymizer.anonymize.assert_called_once()
+        assert result == sample_data_anonymization_result
+        mock_data_anonymizer.anonymize.assert_called_once()
