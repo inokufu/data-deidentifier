@@ -11,6 +11,7 @@ import pytest
 from logger import LoggerContract
 
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
+from src.data_deidentifier.domain.types.entity import Entity
 from src.data_deidentifier.domain.types.structured_anonymization_result import (
     StructuredDataAnalysisField,
 )
@@ -38,3 +39,9 @@ def sample_structured_fields() -> list[StructuredDataAnalysisField]:
         StructuredDataAnalysisField("email", "EMAIL"),
         StructuredDataAnalysisField("user.address.city", "LOCATION"),
     ]
+
+
+@pytest.fixture
+def sample_entity() -> Entity:
+    """Sample entity for testing."""
+    return Entity(type="PERSON", start=0, end=4, score=0.95, text="John")

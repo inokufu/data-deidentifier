@@ -1,3 +1,4 @@
+import hashlib
 import threading
 from typing import Any, override
 
@@ -31,13 +32,12 @@ class CounterPseudonymizationMethod(PseudonymizationMethodContract):
         self._counters: dict[str, int] = {}
 
         # Configuration
-        self._start_number = self.params.get(
-            self.PARAM_START_NUMBER,
-            self.DEFAULT_START_NUMBER,
-        )
-        if self._start_number is not None and not isinstance(self._start_number, int):
+        self._start_number = self.params.get(self.PARAM_START_NUMBER)
+        if self._start_number is None:
+            self._start_number = self.DEFAULT_START_NUMBER
+        elif not isinstance(self._start_number, int):
             raise ValueError("start_number must be an integer")
-        if self._start_number is not None and self._start_number < 0:
+        elif self._start_number < 0:
             raise ValueError("start_number must be positive")
 
         # Thread safety for concurrent access
@@ -45,7 +45,7 @@ class CounterPseudonymizationMethod(PseudonymizationMethodContract):
 
     @override
     def generate_pseudonym(self, entity: Entity) -> str:
-        cache_key = entity.text
+        cache_key = hashlib.sha256(entity.text.encode()).hexdigest()[:16]
         entity_type = entity.type
 
         with self._lock:

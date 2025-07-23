@@ -26,12 +26,6 @@ from src.data_deidentifier.domain.types.text_anonymization_result import (
 
 
 @pytest.fixture
-def sample_entity() -> Entity:
-    """Sample entity for testing."""
-    return Entity(type="PERSON", start=0, end=4, score=0.95, text="John")
-
-
-@pytest.fixture
 def sample_text_anonymization_result(sample_entity: Entity) -> TextAnonymizationResult:
     """Sample text anonymization result for testing."""
     return TextAnonymizationResult(
