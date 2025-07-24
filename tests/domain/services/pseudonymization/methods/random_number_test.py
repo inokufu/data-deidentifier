@@ -21,8 +21,8 @@ class TestRandomNumberPseudonymizationMethodCreation:
         method = RandomNumberPseudonymizationMethod(params={}, logger=mock_logger)
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
-        assert re.match(r"<PERSON_\d+>", pseudonym)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
+        assert re.match(pattern=r"<PERSON_\d+>", string=pseudonym)
 
     def test_create_with_any_params(
         self,
@@ -37,8 +37,8 @@ class TestRandomNumberPseudonymizationMethodCreation:
         )
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
-        assert re.match(r"<PERSON_\d+>", pseudonym)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
+        assert re.match(pattern=r"<PERSON_\d+>", string=pseudonym)
 
 
 class TestRandomNumberPseudonymizationMethodGeneration:
@@ -57,9 +57,9 @@ class TestRandomNumberPseudonymizationMethodGeneration:
         bob = Entity(type="PERSON", start=20, end=23, score=0.88, text="Bob")
 
         # Act
-        john_pseudonym = method.generate_pseudonym(john)
-        jane_pseudonym = method.generate_pseudonym(jane)
-        bob_pseudonym = method.generate_pseudonym(bob)
+        john_pseudonym = method.generate_pseudonym(entity=john)
+        jane_pseudonym = method.generate_pseudonym(entity=jane)
+        bob_pseudonym = method.generate_pseudonym(entity=bob)
 
         # Assert
         assert john_pseudonym != jane_pseudonym
@@ -84,12 +84,12 @@ class TestRandomNumberPseudonymizationMethodGeneration:
         phone = Entity(type="PHONE", start=30, end=42, score=0.92, text="+33123456789")
 
         # Act
-        email_pseudonym = method.generate_pseudonym(email)
-        phone_pseudonym = method.generate_pseudonym(phone)
+        email_pseudonym = method.generate_pseudonym(entity=email)
+        phone_pseudonym = method.generate_pseudonym(entity=phone)
 
         # Assert
-        assert re.match(r"<EMAIL_\d+>", email_pseudonym)
-        assert re.match(r"<PHONE_\d+>", phone_pseudonym)
+        assert re.match(pattern=r"<EMAIL_\d+>", string=email_pseudonym)
+        assert re.match(pattern=r"<PHONE_\d+>", string=phone_pseudonym)
 
     def test_generate_pseudonym_consistency_same_entity_text(
         self,
@@ -103,8 +103,8 @@ class TestRandomNumberPseudonymizationMethodGeneration:
         entity2 = Entity(type="PERSON", start=5, end=9, score=0.92, text="John")
 
         # Act
-        pseudonym1 = method.generate_pseudonym(entity1)
-        pseudonym2 = method.generate_pseudonym(entity2)
+        pseudonym1 = method.generate_pseudonym(entity=entity1)
+        pseudonym2 = method.generate_pseudonym(entity=entity2)
 
         # Assert
         assert pseudonym1 == pseudonym2
@@ -124,8 +124,8 @@ class TestRandomNumberPseudonymizationMethodEdgeCases:
         entity2 = Entity(type="PERSON", start=7, end=13, score=0.95, text="José 🎭")
 
         # Act
-        pseudonym1 = method.generate_pseudonym(entity1)
-        pseudonym2 = method.generate_pseudonym(entity2)
+        pseudonym1 = method.generate_pseudonym(entity=entity1)
+        pseudonym2 = method.generate_pseudonym(entity=entity2)
 
         # Assert
         assert pseudonym1 == pseudonym2
@@ -142,8 +142,8 @@ class TestRandomNumberPseudonymizationMethodEdgeCases:
         entity2 = Entity(type="PERSON", start=0, end=10000, score=0.90, text=long_text)
 
         # Act
-        pseudonym1 = method.generate_pseudonym(entity1)
-        pseudonym2 = method.generate_pseudonym(entity2)
+        pseudonym1 = method.generate_pseudonym(entity=entity1)
+        pseudonym2 = method.generate_pseudonym(entity=entity2)
 
         # Assert
         assert pseudonym1 == pseudonym2

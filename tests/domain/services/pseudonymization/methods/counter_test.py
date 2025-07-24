@@ -20,7 +20,7 @@ class TestCounterPseudonymizationMethodCreation:
         method = CounterPseudonymizationMethod(params={}, logger=mock_logger)
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
         assert pseudonym == "<PERSON_1>"
 
     def test_create_with_any_params(
@@ -36,7 +36,7 @@ class TestCounterPseudonymizationMethodCreation:
         )
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
         assert pseudonym == "<PERSON_1>"
 
     def test_create_with_custom_start_number(
@@ -52,7 +52,7 @@ class TestCounterPseudonymizationMethodCreation:
         )
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
         assert pseudonym == "<PERSON_100>"
 
     def test_create_with_negative_start_number_raises_error(
@@ -94,7 +94,7 @@ class TestCounterPseudonymizationMethodCreation:
         )
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
         assert pseudonym == "<PERSON_1>"
 
 
@@ -111,14 +111,14 @@ class TestCounterPseudonymizationMethodGeneration:
         method = CounterPseudonymizationMethod(params={}, logger=mock_logger)
 
         # Act
-        pseudonym = method.generate_pseudonym(sample_entity)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
 
         # Assert
         assert pseudonym == "<PERSON_1>"
 
         # Test that next entity gets incremented number
         next_entity = Entity(type="PERSON", start=10, end=14, score=0.92, text="Jane")
-        next_pseudonym = method.generate_pseudonym(next_entity)
+        next_pseudonym = method.generate_pseudonym(entity=next_entity)
         assert next_pseudonym == "<PERSON_2>"
 
     def test_generate_sequential_pseudonyms_same_type(
@@ -137,9 +137,9 @@ class TestCounterPseudonymizationMethodGeneration:
         entity3 = Entity(type="PERSON", start=10, end=13, score=0.88, text="Bob")
 
         # Act
-        pseudonym1 = method.generate_pseudonym(entity1)
-        pseudonym2 = method.generate_pseudonym(entity2)
-        pseudonym3 = method.generate_pseudonym(entity3)
+        pseudonym1 = method.generate_pseudonym(entity=entity1)
+        pseudonym2 = method.generate_pseudonym(entity=entity2)
+        pseudonym3 = method.generate_pseudonym(entity=entity3)
 
         # Assert
         assert pseudonym1 == "<PERSON_10>"
@@ -168,9 +168,9 @@ class TestCounterPseudonymizationMethodGeneration:
         phone = Entity(type="PHONE", start=30, end=42, score=0.92, text="+33123456789")
 
         # Act
-        person_pseudonym = method.generate_pseudonym(person)
-        email_pseudonym = method.generate_pseudonym(email)
-        phone_pseudonym = method.generate_pseudonym(phone)
+        person_pseudonym = method.generate_pseudonym(entity=person)
+        email_pseudonym = method.generate_pseudonym(entity=email)
+        phone_pseudonym = method.generate_pseudonym(entity=phone)
 
         # Assert
         assert person_pseudonym == "<PERSON_5>"
@@ -189,8 +189,8 @@ class TestCounterPseudonymizationMethodGeneration:
         entity2 = Entity(type="PERSON", start=5, end=9, score=0.92, text="John")
 
         # Act
-        pseudonym1 = method.generate_pseudonym(entity1)
-        pseudonym2 = method.generate_pseudonym(entity2)
+        pseudonym1 = method.generate_pseudonym(entity=entity1)
+        pseudonym2 = method.generate_pseudonym(entity=entity2)
 
         # Assert
         assert pseudonym1 == "<PERSON_1>"
@@ -211,8 +211,8 @@ class TestCounterPseudonymizationMethodEdgeCases:
         entity2 = Entity(type="PERSON", start=7, end=13, score=0.95, text="José 🎭")
 
         # Act
-        pseudonym1 = method.generate_pseudonym(entity1)
-        pseudonym2 = method.generate_pseudonym(entity2)
+        pseudonym1 = method.generate_pseudonym(entity=entity1)
+        pseudonym2 = method.generate_pseudonym(entity=entity2)
 
         # Assert - Test Unicode handling and caching
         assert pseudonym1 == "<PERSON_1>"

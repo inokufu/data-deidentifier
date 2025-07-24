@@ -23,8 +23,8 @@ class TestCryptoHashPseudonymizationMethodCreation:
         method = CryptoHashPseudonymizationMethod(params={}, logger=mock_logger)
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
-        assert re.match(r"<PERSON_[A-F0-9]{16}>", pseudonym)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
+        assert re.match(pattern=r"<PERSON_[A-F0-9]{16}>", string=pseudonym)
 
     def test_create_with_any_params(
         self,
@@ -39,8 +39,8 @@ class TestCryptoHashPseudonymizationMethodCreation:
         )
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
-        assert re.match(r"<PERSON_[A-F0-9]{16}>", pseudonym)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
+        assert re.match(pattern=r"<PERSON_[A-F0-9]{16}>", string=pseudonym)
 
     def test_create_with_valid_salt(
         self,
@@ -55,8 +55,8 @@ class TestCryptoHashPseudonymizationMethodCreation:
         )
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
-        assert re.match(r"<PERSON_[A-F0-9]{16}>", pseudonym)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
+        assert re.match(pattern=r"<PERSON_[A-F0-9]{16}>", string=pseudonym)
 
     def test_create_with_empty_salt(
         self,
@@ -71,8 +71,8 @@ class TestCryptoHashPseudonymizationMethodCreation:
         )
 
         # Assert
-        pseudonym = method.generate_pseudonym(sample_entity)
-        assert re.match(r"<PERSON_[A-F0-9]{16}>", pseudonym)
+        pseudonym = method.generate_pseudonym(entity=sample_entity)
+        assert re.match(pattern=r"<PERSON_[A-F0-9]{16}>", string=pseudonym)
 
     @pytest.mark.parametrize("invalid_salt", [123, 1.5, [], {}, None])
     def test_create_with_invalid_salt_types_raises_error(
@@ -103,12 +103,12 @@ class TestCryptoHashPseudonymizationMethodGeneration:
         entity2 = Entity(type="PERSON", start=5, end=9, score=0.92, text="John")
 
         # Act
-        pseudonym1 = method.generate_pseudonym(entity1)
-        pseudonym2 = method.generate_pseudonym(entity2)
+        pseudonym1 = method.generate_pseudonym(entity=entity1)
+        pseudonym2 = method.generate_pseudonym(entity=entity2)
 
         # Assert
         assert pseudonym1 == pseudonym2
-        assert re.match(r"<PERSON_[A-F0-9]{16}>", pseudonym1)
+        assert re.match(pattern=r"<PERSON_[A-F0-9]{16}>", string=pseudonym1)
 
     def test_generate_different_pseudonyms_different_texts(
         self,
@@ -123,9 +123,9 @@ class TestCryptoHashPseudonymizationMethodGeneration:
         bob = Entity(type="PERSON", start=20, end=23, score=0.88, text="Bob")
 
         # Act
-        john_pseudonym = method.generate_pseudonym(john)
-        jane_pseudonym = method.generate_pseudonym(jane)
-        bob_pseudonym = method.generate_pseudonym(bob)
+        john_pseudonym = method.generate_pseudonym(entity=john)
+        jane_pseudonym = method.generate_pseudonym(entity=jane)
+        bob_pseudonym = method.generate_pseudonym(entity=bob)
 
         # Assert
         assert john_pseudonym != jane_pseudonym
@@ -152,9 +152,9 @@ class TestCryptoHashPseudonymizationMethodGeneration:
         )
 
         # Act
-        person_pseudonym = method.generate_pseudonym(person)
-        location_pseudonym = method.generate_pseudonym(location)
-        ip_pseudonym = method.generate_pseudonym(ip)
+        person_pseudonym = method.generate_pseudonym(entity=person)
+        location_pseudonym = method.generate_pseudonym(entity=location)
+        ip_pseudonym = method.generate_pseudonym(entity=ip)
 
         # Assert
         assert person_pseudonym != location_pseudonym
@@ -179,8 +179,8 @@ class TestCryptoHashPseudonymizationMethodGeneration:
         entity = Entity(type="PERSON", start=0, end=4, score=0.95, text="John")
 
         # Act
-        pseudonym1 = method1.generate_pseudonym(entity)
-        pseudonym2 = method2.generate_pseudonym(entity)
+        pseudonym1 = method1.generate_pseudonym(entity=entity)
+        pseudonym2 = method2.generate_pseudonym(entity=entity)
 
         # Assert
         assert pseudonym1 != pseudonym2
@@ -198,9 +198,9 @@ class TestCryptoHashPseudonymizationMethodGeneration:
         )
 
         # Act - Generate multiple times
-        pseudonym1 = method.generate_pseudonym(sample_entity)
-        pseudonym2 = method.generate_pseudonym(sample_entity)
-        pseudonym3 = method.generate_pseudonym(sample_entity)
+        pseudonym1 = method.generate_pseudonym(entity=sample_entity)
+        pseudonym2 = method.generate_pseudonym(entity=sample_entity)
+        pseudonym3 = method.generate_pseudonym(entity=sample_entity)
 
         # Assert
         assert pseudonym1 == pseudonym2 == pseudonym3
@@ -225,7 +225,7 @@ class TestCryptoHashPseudonymizationMethodGeneration:
         expected_pseudonym = f"<PERSON_{expected_hash}>"
 
         # Act
-        actual_pseudonym = method.generate_pseudonym(entity)
+        actual_pseudonym = method.generate_pseudonym(entity=entity)
 
         # Assert
         assert actual_pseudonym == expected_pseudonym
@@ -245,12 +245,12 @@ class TestCryptoHashPseudonymizationMethodEdgeCases:
         entity2 = Entity(type="PERSON", start=7, end=13, score=0.95, text="José 🎭")
 
         # Act
-        pseudonym1 = method.generate_pseudonym(entity1)
-        pseudonym2 = method.generate_pseudonym(entity2)
+        pseudonym1 = method.generate_pseudonym(entity=entity1)
+        pseudonym2 = method.generate_pseudonym(entity=entity2)
 
         # Assert - Test Unicode handling and caching
         assert pseudonym1 == pseudonym2
-        assert re.match(r"<PERSON_[A-F0-9]{16}>", pseudonym1)
+        assert re.match(pattern=r"<PERSON_[A-F0-9]{16}>", string=pseudonym1)
 
     def test_generate_pseudonym_with_very_long_text(
         self,
@@ -264,12 +264,12 @@ class TestCryptoHashPseudonymizationMethodEdgeCases:
         entity2 = Entity(type="PERSON", start=0, end=10000, score=0.90, text=long_text)
 
         # Act
-        pseudonym1 = method.generate_pseudonym(entity1)
-        pseudonym2 = method.generate_pseudonym(entity2)
+        pseudonym1 = method.generate_pseudonym(entity=entity1)
+        pseudonym2 = method.generate_pseudonym(entity=entity2)
 
         # Assert
         assert pseudonym1 == pseudonym2
-        assert re.match(r"<PERSON_[A-F0-9]{16}>", pseudonym1)
+        assert re.match(pattern=r"<PERSON_[A-F0-9]{16}>", string=pseudonym1)
 
     def test_generate_pseudonym_salt_with_special_characters(
         self,
@@ -285,7 +285,7 @@ class TestCryptoHashPseudonymizationMethodEdgeCases:
         entity = Entity(type="PERSON", start=0, end=4, score=0.95, text="John")
 
         # Act
-        pseudonym = method.generate_pseudonym(entity)
+        pseudonym = method.generate_pseudonym(entity=entity)
 
         # Assert
-        assert re.match(r"<PERSON_[A-F0-9]{16}>", pseudonym)
+        assert re.match(pattern=r"<PERSON_[A-F0-9]{16}>", string=pseudonym)
