@@ -10,6 +10,7 @@ from unittest.mock import Mock
 import pytest
 from logger import LoggerContract
 
+from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
 from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
 from src.data_deidentifier.domain.types.entity import Entity
 from src.data_deidentifier.domain.types.structured_anonymization_result import (
@@ -29,6 +30,12 @@ def mock_entity_validator() -> Mock:
 def mock_logger() -> Mock:
     """Mock logger contract."""
     return Mock(spec=LoggerContract)
+
+
+@pytest.fixture
+def mock_config() -> Mock:
+    """Mock config contract."""
+    return Mock(spec=ConfigContract)
 
 
 @pytest.fixture
