@@ -22,8 +22,9 @@ class DataFrameAnalyzer(StructuredTypeAnalyzer):
     Presidio's PandasAnalysisBuilder.
     """
 
+    @staticmethod
     @override
-    def can_handle(self, data: Any) -> bool:
+    def can_handle(data: Any) -> bool:
         return isinstance(data, pd.DataFrame)
 
     @override
@@ -42,4 +43,6 @@ class DataFrameAnalyzer(StructuredTypeAnalyzer):
 
     @override
     def get_data_processor(self) -> DataProcessorBase:
-        return PandasDataProcessor()
+        if self._data_processor is None:
+            self._data_processor = PandasDataProcessor()
+        return self._data_processor

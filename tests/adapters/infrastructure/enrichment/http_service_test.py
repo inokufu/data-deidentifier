@@ -349,9 +349,7 @@ class TestHttpPseudonymEnricherRequestBuilding:
         assert result is None
 
 
-@patch(
-    "src.data_deidentifier.adapters.infrastructure.http.client.BaseHttpClient.request",
-)
+@patch.object(target=BaseHttpClient, attribute="request")
 class TestHttpPseudonymEnricherGetEnrichment:
     """Test get_enrichment method."""
 
@@ -495,9 +493,7 @@ class TestHttpPseudonymEnricherGetEnrichment:
             enricher.get_enrichment(sample_entity)
 
 
-@patch(
-    "src.data_deidentifier.adapters.infrastructure.http.client.BaseHttpClient.request",
-)
+@patch.object(target=BaseHttpClient, attribute="request")
 class TestHttpPseudonymEnricherIntegration:
     """Test integration scenarios."""
 

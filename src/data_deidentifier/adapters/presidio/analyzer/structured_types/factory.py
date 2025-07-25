@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from logger import LoggerContract
 
 from src.data_deidentifier.domain.exceptions import UnsupportedStructuredDataError
@@ -16,20 +18,22 @@ class StructuredDataAnalyzerFactory:
 
     Attributes:
         logger: Logger instance for logging messages.
-        analyzers: List of registered analyzer instances.
+        _analyzer_cache: List of registered analyzer instances cached.
     """
 
+    _ANALYZER_CLASSES: ClassVar[list[type[StructuredTypeAnalyzer]]] = [
+        JsonAnalyzer,
+        DataFrameAnalyzer,
+    ]
+
     def __init__(self, logger: LoggerContract) -> None:
-        """Initialize the factory with default analyzers.
+        """Initialize the analyzer factory.
 
         Args:
             logger: Logger instance for logging events.
         """
         self.logger = logger
-        self.analyzers: list[StructuredTypeAnalyzer] = [
-            JsonAnalyzer(logger=self.logger),
-            DataFrameAnalyzer(logger=self.logger),
-        ]
+        self._analyzer_cache: dict[type, StructuredTypeAnalyzer] = {}
 
     def get_analyzer(self, data: StructuredData) -> StructuredTypeAnalyzer:
         """Get the appropriate analyzer for the data type.
@@ -47,9 +51,13 @@ class StructuredDataAnalyzerFactory:
             UnsupportedStructuredDataError:
                 If no registered analyzer can handle the data type.
         """
-        for analyzer in self.analyzers:
-            if analyzer.can_handle(data):
-                return analyzer
+        for analyzer_class in self._ANALYZER_CLASSES:
+            if analyzer_class.can_handle(data):
+                if analyzer_class not in self._analyzer_cache:
+                    self._analyzer_cache[analyzer_class] = analyzer_class(
+                        logger=self.logger,
+                    )
+                return self._analyzer_cache[analyzer_class]
 
         # If we get here, no analyzer could handle the data
         raise UnsupportedStructuredDataError(
