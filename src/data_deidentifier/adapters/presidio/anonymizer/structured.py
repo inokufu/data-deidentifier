@@ -36,7 +36,7 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
         """
         self.logger = logger
 
-        self.analyzer = PresidioStructuredDataAnalyzer(logger=self.logger)
+        self._analyzer = PresidioStructuredDataAnalyzer(logger=self.logger)
 
         self.logger.debug("Presidio Structured Anonymizer initialized successfully")
 
@@ -51,7 +51,7 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
     ) -> StructuredDataAnonymizationResult:
         try:
             # Use the analyzer to process the data
-            analyzer_results, data_processor = self.analyzer.analyze(
+            analyzer_results, data_processor = self._analyzer.analyze(
                 data=data,
                 language=language,
                 entity_types=entity_types,

@@ -41,7 +41,7 @@ class HttpPseudonymEnricher(PseudonymEnricherContract):
     def __init__(self, params: dict[str, Any], logger: LoggerContract) -> None:
         super().__init__(params=params, logger=logger)
 
-        self.http_client = BaseHttpClient(logger)
+        self._http_client = BaseHttpClient(logger)
 
     @override
     def get_enrichment(self, entity: Entity) -> str | None:
@@ -52,7 +52,7 @@ class HttpPseudonymEnricher(PseudonymEnricherContract):
         self.logger.debug("Starting pseudonym enrichment via HTTP", logger_context)
 
         try:
-            response = self.http_client.request(
+            response = self._http_client.request(
                 url=self.get_service_url(entity),
                 method=self.get_http_method(),
                 data=self.build_request_data(entity=entity),

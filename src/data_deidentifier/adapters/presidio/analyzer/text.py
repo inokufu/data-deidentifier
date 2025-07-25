@@ -17,7 +17,7 @@ class PresidioTextAnalyzer:
         """
         self.logger = logger
 
-        self.presidio_analyzer = PresidioEngineFactory.get_analyzer_engine()
+        self._presidio_analyzer = PresidioEngineFactory.get_analyzer_engine()
 
         self.logger.debug("Presidio Analyzer initialized successfully")
 
@@ -54,7 +54,7 @@ class PresidioTextAnalyzer:
 
         try:
             # Analyze text
-            presidio_results = self.presidio_analyzer.analyze(
+            presidio_results = self._presidio_analyzer.analyze(
                 text=text,
                 language=language,
                 score_threshold=min_score,

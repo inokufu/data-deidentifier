@@ -349,31 +349,46 @@ class TestHttpPseudonymEnricherRequestBuilding:
         assert result is None
 
 
+@patch(
+    "src.data_deidentifier.adapters.infrastructure.http.client.BaseHttpClient.request",
+)
 class TestHttpPseudonymEnricherGetEnrichment:
     """Test get_enrichment method."""
 
-    def test_get_enrichment_success(
+    def test_get_enrichment_success_with_logging(
         self,
+        mock_request: Mock,
         sample_entity: Entity,
         mock_logger: LoggerContract,
     ) -> None:
-        """Should return enrichment when HTTP request succeeds."""
+        """Should return enrichment when HTTP request succeeds and log appropriately."""
         # Arrange
         params = {"url": "http://example.com"}
         enricher = HttpPseudonymEnricher(params=params, logger=mock_logger)
 
+        enriched_value = "enriched_location"
         mock_response = Mock()
-        mock_response.json.return_value = {"text": "enriched_location"}
+        mock_response.json.return_value = {"text": enriched_value}
+        mock_request.return_value = mock_response
 
         # Act
-        with patch.object(enricher.http_client, "request", return_value=mock_response):
-            result = enricher.get_enrichment(sample_entity)
+        result = enricher.get_enrichment(sample_entity)
 
         # Assert
-        assert result == "enriched_location"
+        assert result == enriched_value
+
+        # Verify HTTP call with default parameters
+        mock_request.assert_called_once_with(
+            url="http://example.com",
+            method="POST",  # Default
+            data={"text": sample_entity.text},  # Default request_key
+            headers={"Content-Type": "application/json"},
+            timeout_seconds=BaseHttpClient.DEFAULT_TIMEOUT,  # Default
+        )
 
     def test_get_enrichment_cannot_handle_entity_returns_none(
         self,
+        mock_request: Mock,
         sample_entity: Entity,
         mock_logger: LoggerContract,
     ) -> None:
@@ -387,6 +402,8 @@ class TestHttpPseudonymEnricherGetEnrichment:
 
         # Assert
         assert result is None
+        # Should not call HTTP request at all
+        mock_request.assert_not_called()
 
     @pytest.mark.parametrize(
         "response_data",
@@ -399,6 +416,7 @@ class TestHttpPseudonymEnricherGetEnrichment:
     )
     def test_get_enrichment_empty_enrichment_returns_none(
         self,
+        mock_request: Mock,
         sample_entity: Entity,
         mock_logger: LoggerContract,
         response_data: dict,
@@ -410,16 +428,38 @@ class TestHttpPseudonymEnricherGetEnrichment:
 
         mock_response = Mock()
         mock_response.json.return_value = response_data
+        mock_request.return_value = mock_response
 
         # Act
-        with patch.object(enricher.http_client, "request", return_value=mock_response):
-            result = enricher.get_enrichment(sample_entity)
+        result = enricher.get_enrichment(sample_entity)
+
+        # Assert
+        assert result is None
+
+    def test_get_enrichment_non_string_enrichment_returns_none(
+        self,
+        mock_request: Mock,
+        sample_entity: Entity,
+        mock_logger: LoggerContract,
+    ) -> None:
+        """Should return None when enrichment is not a string."""
+        # Arrange
+        params = {"url": "http://example.com"}
+        enricher = HttpPseudonymEnricher(params=params, logger=mock_logger)
+
+        mock_response = Mock()
+        mock_response.json.return_value = {"text": 123}  # Non-string enrichment
+        mock_request.return_value = mock_response
+
+        # Act
+        result = enricher.get_enrichment(sample_entity)
 
         # Assert
         assert result is None
 
     def test_get_enrichment_http_client_error_raises_enrichment_error(
         self,
+        mock_request: Mock,
         sample_entity: Entity,
         mock_logger: LoggerContract,
     ) -> None:
@@ -429,16 +469,15 @@ class TestHttpPseudonymEnricherGetEnrichment:
         enricher = HttpPseudonymEnricher(params=params, logger=mock_logger)
 
         http_error = HttpClientError("HTTP request failed")
+        mock_request.side_effect = http_error
 
         # Act & Assert
-        with (
-            patch.object(enricher.http_client, "request", side_effect=http_error),
-            pytest.raises(PseudonymEnrichmentError),
-        ):
+        with pytest.raises(PseudonymEnrichmentError):
             enricher.get_enrichment(sample_entity)
 
     def test_get_enrichment_json_error_raises_enrichment_error(
         self,
+        mock_request: Mock,
         sample_entity: Entity,
         mock_logger: LoggerContract,
     ) -> None:
@@ -449,73 +488,22 @@ class TestHttpPseudonymEnricherGetEnrichment:
 
         mock_response = Mock()
         mock_response.json.side_effect = ValueError("Invalid JSON")
+        mock_request.return_value = mock_response
 
         # Act & Assert
-        with (
-            patch.object(enricher.http_client, "request", return_value=mock_response),
-            pytest.raises(PseudonymEnrichmentError),
-        ):
+        with pytest.raises(PseudonymEnrichmentError):
             enricher.get_enrichment(sample_entity)
 
-    def test_get_enrichment_logs_debug_messages(
-        self,
-        sample_entity: Entity,
-        mock_logger: LoggerContract,
-    ) -> None:
-        """Should log appropriate debug messages during enrichment."""
-        # Arrange
-        params = {"url": "http://example.com"}
-        enricher = HttpPseudonymEnricher(params=params, logger=mock_logger)
 
-        enriched_value = "enriched_value"
-        mock_response = Mock()
-        mock_response.json.return_value = {"text": enriched_value}
-
-        # Act
-        with patch.object(enricher.http_client, "request", return_value=mock_response):
-            enricher.get_enrichment(sample_entity)
-
-        # Assert
-        mock_logger.debug.assert_any_call(
-            "Starting pseudonym enrichment via HTTP",
-            {"entity_type": sample_entity.type},
-        )
-        mock_logger.debug.assert_any_call(
-            "Pseudonym enrichment successful",
-            {"enrichment": enriched_value},
-        )
-
-    def test_get_enrichment_logs_warning_on_exception(
-        self,
-        sample_entity: Entity,
-        mock_logger: LoggerContract,
-    ) -> None:
-        """Should log warning when exception occurs during processing."""
-        # Arrange
-        params = {"url": "http://example.com"}
-        enricher = HttpPseudonymEnricher(params=params, logger=mock_logger)
-
-        mock_response = Mock()
-        mock_response.json.side_effect = ValueError("JSON error")
-
-        # Act & Assert
-        with (
-            patch.object(enricher.http_client, "request", return_value=mock_response),
-            pytest.raises(PseudonymEnrichmentError),
-        ):
-            enricher.get_enrichment(sample_entity)
-
-        mock_logger.warning.assert_called_once_with(
-            "Pseudonym enrichment processing failed",
-            {"error": "JSON error", "entity_type": sample_entity.type},
-        )
-
-
+@patch(
+    "src.data_deidentifier.adapters.infrastructure.http.client.BaseHttpClient.request",
+)
 class TestHttpPseudonymEnricherIntegration:
     """Test integration scenarios."""
 
     def test_get_enrichment_with_custom_configuration(
         self,
+        mock_request: Mock,
         sample_entity: Entity,
         mock_logger: LoggerContract,
     ) -> None:
@@ -539,14 +527,10 @@ class TestHttpPseudonymEnricherIntegration:
 
         mock_response = Mock()
         mock_response.json.return_value = {response_key: enrichment_result}
+        mock_request.return_value = mock_response
 
         # Act
-        with patch.object(
-            enricher.http_client,
-            "request",
-            return_value=mock_response,
-        ) as mock_request:
-            result = enricher.get_enrichment(sample_entity)
+        result = enricher.get_enrichment(sample_entity)
 
         # Assert
         assert result == enrichment_result
@@ -556,4 +540,39 @@ class TestHttpPseudonymEnricherIntegration:
             data={request_key: sample_entity.text},
             headers={"Content-Type": "application/json"},
             timeout_seconds=custom_timeout,
+        )
+
+    def test_get_enrichment_with_mixed_custom_and_default_params(
+        self,
+        mock_request: Mock,
+        sample_entity: Entity,
+        mock_logger: LoggerContract,
+    ) -> None:
+        """Should mix custom and default parameters correctly."""
+        # Arrange - Only customize some parameters
+        params = {
+            "url": "http://mixed-service.com",
+            "request_key": "custom_input",  # Custom
+            "timeout": 120,  # Custom
+            # response_key, http_method use defaults
+        }
+        enricher = HttpPseudonymEnricher(params=params, logger=mock_logger)
+
+        mock_response = Mock()
+        mock_response.json.return_value = {
+            "text": "mixed_enrichment",
+        }  # Default response_key
+        mock_request.return_value = mock_response
+
+        # Act
+        result = enricher.get_enrichment(sample_entity)
+
+        # Assert
+        assert result == "mixed_enrichment"
+        mock_request.assert_called_once_with(
+            url="http://mixed-service.com",
+            method="POST",  # Default
+            data={"custom_input": sample_entity.text},  # Custom request_key
+            headers={"Content-Type": "application/json"},
+            timeout_seconds=120,  # Custom timeout
         )

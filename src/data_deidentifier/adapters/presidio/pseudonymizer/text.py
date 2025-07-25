@@ -43,7 +43,7 @@ class PresidioTextPseudonymizer(TextPseudonymizerContract):
         self.config = config
         self.logger = logger
 
-        self.anonymizer = PresidioTextAnonymizer(logger=self.logger)
+        self._anonymizer = PresidioTextAnonymizer(logger=self.logger)
 
         self.logger.debug("Presidio text Pseudonymizer initialized successfully")
 
@@ -64,7 +64,7 @@ class PresidioTextPseudonymizer(TextPseudonymizerContract):
 
         # Delegate to anonymizer with our custom operator
         try:
-            anonymization_result = self.anonymizer.anonymize(
+            anonymization_result = self._anonymizer.anonymize(
                 text=text,
                 operator=AnonymizationOperator.PSEUDONYMIZE,
                 language=language,
