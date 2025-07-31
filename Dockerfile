@@ -16,8 +16,8 @@ COPY gunicorn.conf.py pyproject.toml ./
 ## Dev with mounted volumes and dev deps
 FROM base AS dev
 COPY requirements-dev.lock ./
-COPY src ./src
 RUN uv pip install --system -r requirements-dev.lock
+COPY src ./src
 CMD ["gunicorn", "data_deidentifier.adapters.api.main:app"]
 
 # Standalone dev with code included
@@ -29,9 +29,7 @@ VOLUME ["/app/src", "/app/tests"]
 FROM base AS prod
 COPY requirements.lock ./
 RUN uv pip install --system --no-deps --no-compile -r requirements.lock
-
 COPY src ./src
-RUN uv pip install --system --no-deps --no-compile .
 
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
