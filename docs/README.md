@@ -18,7 +18,13 @@
     * [Supported Entity Types](#supported-entity-types)
     * [Available Methods and Operators](#available-methods-and-operators)
   * [Setup and installation](#setup-and-installation)
-    * [Prerequisites](#prerequisites)
+    * [With Docker](#with-docker)
+      * [Prerequisites](#prerequisites)
+      * [Development Environment](#development-environment)
+      * [Quick Start (Without volumes or Traefik)](#quick-start-without-volumes-or-traefik)
+      * [Production Environment](#production-environment)
+    * [With Rye](#with-rye)
+    * [Prerequisites](#prerequisites-1)
     * [Installation](#installation)
   * [Usage](#usage)
     * [Text Anonymization](#text-anonymization)
@@ -75,6 +81,66 @@ with configurable operators and methods.
 
 ## Setup and installation
 
+You can run the application either directly with **Rye** or using **Docker**.
+
+1. Clone the repository
+2. Set up environment variables:
+   Create a `.env` file in the project root by copying `.env.default`:
+   ```
+   cp .env.default .env
+   ```
+   You can then modify the variables in `.env` as needed.
+
+### With Docker
+
+The application is containerized using Docker, with a robust and flexible
+deployment strategy that leverages:
+
+- Docker for containerization with a multi-environment support (dev and prod)
+  using Docker Compose profiles
+- Traefik as a reverse proxy and load balancer, with built-in SSL/TLS support
+  via Let's Encrypt, and a dashboard in dev environment.
+- Gunicorn as the production-grade WSGI HTTP server, with configurable worker
+  processes and threads, and dynamic scaling based on system resources.
+
+#### Prerequisites
+
+- Docker and Docker Compose installed on your machine.
+
+#### Development Environment
+
+Build and run the development environment:
+
+```
+docker compose --profile dev up --build
+```
+
+The API will be available at : `http://ddi.localhost`
+
+Traefik Dashboard will be available at : `http://traefik.ddi.localhost`
+
+#### Quick Start (Without volumes or Traefik)
+
+For a quick test without full stack:
+
+```
+docker build --target dev-standalone -t ddi:dev-standalone .
+docker run --env-file .env -p 8005:8005 ddi:dev-standalone
+```
+
+Note: This version won't reflect source code changes in real-time.
+
+#### Production Environment
+
+Configure production-specific settings, then build and run the production
+environment:
+
+```
+docker compose --profile prod up --build
+```
+
+### With Rye
+
 ### Prerequisites
 
 - Python 3.13 or higher
@@ -82,20 +148,14 @@ with configurable operators and methods.
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone [repository-url]
-   cd [project_directory]
-   ```
+1. Install Rye, see https://rye.astral.sh/guide/installation/
 
 2. **Install dependencies**
    ```bash
    make init
    ```
 
-3. You can then modify the **environment variables** in `.env` as needed.
-
-4. **Start the server**
+3. **Start the server**
    ```bash
    make start
    ```
@@ -290,13 +350,31 @@ make docs-serve        # Serve project documentation locally
 
 ### Environment Variables
 
-| Variable                          | Description                        | Required | Default Value   | Possible Values                                |
-|-----------------------------------|------------------------------------|----------|-----------------|------------------------------------------------|
-| `DEFAULT_LANGUAGE`                | Default language for text analysis | No       | `en`            | `en`                                           |
-| `DEFAULT_MINIMUM_SCORE`           | Default confidence threshold       | No       | `0.5`           | `0.0` to `1.0`                                 |
-| `DEFAULT_ANONYMIZATION_OPERATOR`  | Default anonymization method       | No       | `replace`       | `replace`, `redact`, `mask`, `hash`, `encrypt` |
-| `DEFAULT_PSEUDONYMIZATION_METHOD` | Default pseudonymization method    | No       | `random_number` | `random_number`, `counter`, `crypto_hash`      |
-| `ENRICHMENT_CONFIGURATIONS`       | Entity enrichment service configs  | No       | `{}`            | JSON object                                    |
+| Variable                               | Description                                                   | Required | Default Value      | Possible Values                                 |
+|----------------------------------------|---------------------------------------------------------------|----------|--------------------|-------------------------------------------------|
+| **Application Configuration**          |                                                               |          |                    |                                                 |
+| `DEFAULT_LANGUAGE`                     | Default language for text analysis                            | No       | `en`               | `en`                                            |
+| `DEFAULT_MINIMUM_SCORE`                | Default confidence threshold                                  | No       | `0.5`              | `0.0` to `1.0`                                  |
+| `DEFAULT_ANONYMIZATION_OPERATOR`       | Default anonymization method                                  | No       | `replace`          | `replace`, `redact`, `mask`, `hash`, `encrypt`  |
+| `DEFAULT_PSEUDONYMIZATION_METHOD`      | Default pseudonymization method                               | No       | `random_number`    | `random_number`, `counter`, `crypto_hash`       |
+| `ENRICHMENT_CONFIGURATIONS`            | Entity enrichment service configs                             | No       | `{}`               | JSON object                                     |
+| **Environment Configuration**          |                                                               |          |                    |                                                 |
+| `ENVIRONMENT`                          | Affects error handling and logging throughout the application | No       | `development`      | `development`, `production`                     |
+| `LOG_LEVEL`                            | Minimum logging level                                         | No       | `info`             | `debug`, `info`, `warning`, `error`, `critical` |
+| **Internal Application Configuration** |                                                               |          |                    |                                                 |
+| `APP_INTERNAL_HOST`                    | Host for internal application binding                         | No       | `0.0.0.0`          | Valid host/IP                                   |
+| `APP_INTERNAL_PORT`                    | Port for internal application binding                         | No       | `8005`             | Any valid port                                  |
+| **External Routing Configuration**     |                                                               |          |                    |                                                 |
+| `APP_EXTERNAL_HOST`                    | External hostname for the application                         | Yes      | `ddi.localhost`    | Valid hostname                                  |
+| `APP_EXTERNAL_PORT`                    | External port for routing (dev env only)                      | No       | `80`               | Any valid port                                  |
+| **Traefik Configuration**              |                                                               |          |                    |                                                 |
+| `TRAEFIK_RELEASE`                      | Traefik image version                                         | No       | `v3.4.4`           | Valid Traefik version                           |
+| `LETS_ENCRYPT_EMAIL`                   | Email for Let's Encrypt certificate                           | Yes      | `test@example.com` | Valid email                                     |
+| **Performance Configuration**          |                                                               |          |                    |                                                 |
+| `WORKERS_COUNT`                        | Number of worker processes                                    | No       | `4`                | Positive integer                                |
+| `THREADS_PER_WORKER`                   | Number of threads per worker                                  | No       | `2`                | Positive integer                                |
+
+Refer to `.env.default` for a complete list of configurable environment variables and their default values.
 
 ### Architecture
 

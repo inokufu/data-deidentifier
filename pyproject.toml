@@ -18,8 +18,8 @@ dependencies = [
     "uvicorn[standard]~=0.35.0",
     "gunicorn~=23.0.0",
     "fastapi~=0.115.14",
-    "logger @ git+https://github.com/inokufu/python-logger",
-    "configcore @ git+https://github.com/inokufu/python-config",
+    "logger @ git+https://github.com/inokufu/python-logger@v0.2.0",
+    "configcore @ git+https://github.com/inokufu/python-config@v0.2.0",
     "httpx~=0.28.1",
     "tenacity~=9.1.2",
 ]
