@@ -21,8 +21,9 @@ class JsonAnalyzer(StructuredTypeAnalyzer):
     using Presidio's JsonAnalysisBuilder.
     """
 
+    @staticmethod
     @override
-    def can_handle(self, data: Any) -> bool:
+    def can_handle(data: Any) -> bool:
         return isinstance(data, dict)
 
     @override
@@ -37,4 +38,6 @@ class JsonAnalyzer(StructuredTypeAnalyzer):
 
     @override
     def get_data_processor(self) -> DataProcessorBase:
-        return JsonDataProcessor()
+        if self._data_processor is None:
+            self._data_processor = JsonDataProcessor()
+        return self._data_processor

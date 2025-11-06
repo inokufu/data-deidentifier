@@ -31,8 +31,8 @@ class PresidioTextAnonymizer(TextAnonymizerContract):
         """
         self.logger = logger
 
-        self.presidio_anonymizer = PresidioEngineFactory.get_text_anonymizer_engine()
-        self.analyzer = PresidioTextAnalyzer(logger=self.logger)
+        self._presidio_anonymizer = PresidioEngineFactory.get_text_anonymizer_engine()
+        self._analyzer = PresidioTextAnalyzer(logger=self.logger)
 
         self.logger.debug("Presidio Anonymizer initialized successfully")
 
@@ -48,7 +48,7 @@ class PresidioTextAnonymizer(TextAnonymizerContract):
     ) -> TextAnonymizationResult:
         # Analyze to detect PII entities in text
         try:
-            analyzer_results = self.analyzer.analyze(
+            analyzer_results = self._analyzer.analyze(
                 text=text,
                 language=language,
                 min_score=min_score,
@@ -72,7 +72,7 @@ class PresidioTextAnonymizer(TextAnonymizerContract):
 
         try:
             # Anonymize the text
-            presidio_results = self.presidio_anonymizer.anonymize(
+            presidio_results = self._presidio_anonymizer.anonymize(
                 text=text,
                 analyzer_results=analyzer_results,
                 operators={

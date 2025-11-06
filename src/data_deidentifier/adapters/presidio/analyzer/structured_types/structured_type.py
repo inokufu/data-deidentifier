@@ -23,9 +23,11 @@ class StructuredTypeAnalyzer(ABC):
             logger: Logger instance for logging events.
         """
         self.logger = logger
+        self._data_processor = None  # lazy loading
 
+    @staticmethod
     @abstractmethod
-    def can_handle(self, data: StructuredData) -> bool:
+    def can_handle(data: StructuredData) -> bool:
         """Check if this analyzer can handle the provided data type.
 
         Args:

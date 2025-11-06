@@ -22,7 +22,7 @@ class StructuredDataAnonymizationError(AnonymizationError):
     """Raised when an error occurs during the structured data anonymization process."""
 
 
-class InvalidInputDataError(StructuredDataAnonymizationError):
+class InvalidInputDataError(DataDeidentifierError):
     """Raised when data to anonymize is invalid."""
 
 
@@ -38,9 +38,13 @@ class TextPseudonymizationError(PseudonymizationError):
     """Raised when an error occurs during the text pseudonymization process."""
 
 
-class StructuredDataPseudonymizationError(AnonymizationError):
+class StructuredDataPseudonymizationError(PseudonymizationError):
     """Raised when an error occurs during the data pseudonymization process."""
 
 
 class PseudonymEnrichmentError(DataDeidentifierError):
     """Raised when an error occurs during pseudonym enrichment process."""
+
+
+class UnknownPseudonymizationMethodError(PseudonymizationError):
+    """Raised when pseudonymization method is unknown."""

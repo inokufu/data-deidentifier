@@ -16,7 +16,7 @@ class PresidioValidator(EntityTypeValidatorContract):
         """
         self.logger = logger
 
-        self.analyzer_engine = PresidioEngineFactory.get_analyzer_engine()
+        self._analyzer_engine = PresidioEngineFactory.get_analyzer_engine()
         self._supported_entities = None  # Lazy loading
 
     @property
@@ -28,7 +28,7 @@ class PresidioValidator(EntityTypeValidatorContract):
         """
         if self._supported_entities is None:
             self._supported_entities = set(
-                self.analyzer_engine.get_supported_entities(),
+                self._analyzer_engine.get_supported_entities(),
             )
         return self._supported_entities
 

@@ -23,6 +23,8 @@ class EnrichmentFactory(PseudonymEnrichmentManagerContract):
     to integrate with the domain layer.
     """
 
+    PARAM_TYPE = "type"
+
     # Mapping between enrichment types and implementation classes
     _TYPE_MAPPING: ClassVar[dict[EnrichmentType, type[PseudonymEnricherContract]]] = {
         EnrichmentType.HTTP: HttpPseudonymEnricher,
@@ -90,7 +92,7 @@ class EnrichmentFactory(PseudonymEnrichmentManagerContract):
         Raises:
             PseudonymEnrichmentError: If enrichment type is not supported
         """
-        enrichment_type_str = enrichment_config.get("type")
+        enrichment_type_str = enrichment_config.get(cls.PARAM_TYPE)
         if not enrichment_type_str:
             raise PseudonymEnrichmentError(
                 f"Missing 'type' in enrichment config for entity type '{entity_type}'",

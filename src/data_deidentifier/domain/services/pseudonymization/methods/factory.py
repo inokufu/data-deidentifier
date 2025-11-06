@@ -5,7 +5,7 @@ from logger import LoggerContract
 from src.data_deidentifier.domain.contracts.pseudonymizer.method import (
     PseudonymizationMethodContract,
 )
-from src.data_deidentifier.domain.exceptions import TextPseudonymizationError
+from src.data_deidentifier.domain.exceptions import UnknownPseudonymizationMethodError
 from src.data_deidentifier.domain.types.pseudonymization_method import (
     PseudonymizationMethod,
 )
@@ -45,10 +45,10 @@ class PseudonymizationMethodFactory:
             A method instance implementing PseudonymizationMethodContract
 
         Raises:
-            TextPseudonymizationError: If method is not supported
+            UnknownPseudonymizationMethodError: If method is not supported
         """
         if method not in cls._METHOD_MAPPING:
-            raise TextPseudonymizationError(
+            raise UnknownPseudonymizationMethodError(
                 f"Unsupported pseudonymization method: {method}. "
                 f"Supported methods: {cls.get_supported_methods()}",
             )

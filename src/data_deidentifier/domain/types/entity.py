@@ -32,8 +32,18 @@ class Entity:
         if self.end < 0:
             raise ValueError(f"entity end position cannot be negative: {self.end}")
 
-        if self.start > self.end:
+        if self.start >= self.end:
             raise ValueError(
-                f"entity start position ({self.start}) cannot be greater than "
+                f"entity start position ({self.start}) must be less than "
                 f"end position ({self.end})",
             )
+
+        if self.text is not None:
+            if self.text == "":
+                raise ValueError("entity text cannot be empty string")
+
+            if len(self.text) != (self.end - self.start):
+                raise ValueError("entity text length must match position range")
+
+        if self.path is not None and self.path == "":
+            raise ValueError("entity path cannot be empty string")

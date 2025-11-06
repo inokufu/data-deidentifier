@@ -24,7 +24,7 @@ class PresidioStructuredDataAnalyzer:
         """
         self.logger = logger
 
-        self.analyzer_factory = (
+        self._analyzer_factory = (
             PresidioEngineFactory.get_structured_data_analyzer_factory(
                 logger=self.logger,
             )
@@ -52,7 +52,7 @@ class PresidioStructuredDataAnalyzer:
         Raises:
             StructuredDataAnalysisError: If analysis fails
         """
-        analyzer = self.analyzer_factory.get_analyzer(data=data)
+        analyzer = self._analyzer_factory.get_analyzer(data=data)
 
         language = language.lower()
 

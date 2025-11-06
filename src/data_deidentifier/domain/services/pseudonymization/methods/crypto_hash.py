@@ -28,7 +28,7 @@ class CryptoHashPseudonymizationMethod(PseudonymizationMethodContract):
 
         # Optional salt for security
         self._salt = self.params.get(self.PARAM_SALT, "")
-        if self._salt and not isinstance(self._salt, str):
+        if self.PARAM_SALT in self.params and not isinstance(self._salt, str):
             raise ValueError("Salt must be a string")
 
         # Cache by entity type and text

@@ -44,7 +44,7 @@ class PresidioStructuredDataPseudonymizer(StructuredDataPseudonymizerContract):
         self.config = config
         self.logger = logger
 
-        self.anonymizer = PresidioStructuredDataAnonymizer(logger=self.logger)
+        self._anonymizer = PresidioStructuredDataAnonymizer(logger=self.logger)
 
         self.logger.debug("Presidio data Pseudonymizer initialized successfully")
 
@@ -64,7 +64,7 @@ class PresidioStructuredDataPseudonymizer(StructuredDataPseudonymizerContract):
 
         # Delegate to anonymizer with our custom operator
         try:
-            anonymization_result = self.anonymizer.anonymize(
+            anonymization_result = self._anonymizer.anonymize(
                 data=data,
                 operator=AnonymizationOperator.PSEUDONYMIZE,
                 language=language,
