@@ -13,6 +13,7 @@ from src.data_deidentifier.adapters.presidio.anonymizer.structured import (
 from src.data_deidentifier.adapters.presidio.anonymizer.text import (
     PresidioTextAnonymizer,
 )
+from src.data_deidentifier.adapters.presidio.health_check import PresidioHealthChecker
 from src.data_deidentifier.adapters.presidio.pseudonymizer.structured import (
     PresidioStructuredDataPseudonymizer,
 )
@@ -29,6 +30,7 @@ from src.data_deidentifier.domain.contracts.anonymizer.text import (
 from src.data_deidentifier.domain.contracts.enricher.manager import (
     PseudonymEnrichmentManagerContract,
 )
+from src.data_deidentifier.domain.contracts.health_check import HealthCheckContract
 from src.data_deidentifier.domain.contracts.pseudonymizer.structured import (
     StructuredDataPseudonymizerContract,
 )
@@ -41,6 +43,9 @@ from src.data_deidentifier.domain.services.anonymization.structured import (
 )
 from src.data_deidentifier.domain.services.anonymization.text import (
     TextAnonymizationService,
+)
+from src.data_deidentifier.domain.services.health_check.health_check import (
+    HealthCheckService,
 )
 from src.data_deidentifier.domain.services.pseudonymization.structured import (
     StructuredDataPseudonymizationService,
@@ -309,4 +314,40 @@ async def get_structured_data_pseudonymization_service(
         validator=validator,
         logger=logger,
         pseudonym_enricher=pseudonym_enricher,
+    )
+
+
+async def get_health_checker(
+    logger: Annotated[LoggerContract, Depends(get_logger)],
+) -> HealthCheckContract:
+    """Create and return a health checker instance.
+
+    Args:
+        logger: The logger instance
+
+    Returns:
+        An implementation of the health check contract
+    """
+    return PresidioHealthChecker(logger=logger)
+
+
+async def get_health_check_service(
+    health_checker: Annotated[
+        HealthCheckContract,
+        Depends(get_health_checker),
+    ],
+    logger: Annotated[LoggerContract, Depends(get_logger)],
+) -> HealthCheckService:
+    """Create and return a health check service instance.
+
+    Args:
+        health_checker: The health checker
+        logger: The logger instance
+
+    Returns:
+        A configured health check service
+    """
+    return HealthCheckService(
+        health_checker=health_checker,
+        logger=logger,
     )

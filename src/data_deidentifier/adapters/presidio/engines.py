@@ -24,7 +24,7 @@ class PresidioEngineFactory:
 
     Attributes:
         _lock: Thread lock for safe singleton creation.
-        _text_analyzer_engine: Cached instance of the text analyzer engine.
+        _analyzer_engine: Cached instance of the text analyzer engine.
         _text_anonymizer_engine: Cached instance of the text anonymizer engine.
         _structured_data_factory: Cached factory for structured data analyzers.
         _structured_data_engines: Cache of structured anonymizer engines
