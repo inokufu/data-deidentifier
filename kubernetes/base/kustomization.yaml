@@ -10,6 +10,7 @@ resources:
 configMapGenerator:
   - name: ddi-config
     literals:
+      - DEFAULT_ENTITY_TYPES=["PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "LOCATION", "IP_ADDRESS", "MEDICAL_LICENSE"]
 
 images:
   - name: ddi
