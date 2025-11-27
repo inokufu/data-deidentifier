@@ -336,12 +336,14 @@ async def get_health_check_service(
         HealthCheckContract,
         Depends(get_health_checker),
     ],
+    config: Annotated[ConfigContract, Depends(get_config)],
     logger: Annotated[LoggerContract, Depends(get_logger)],
 ) -> HealthCheckService:
     """Create and return a health check service instance.
 
     Args:
         health_checker: The health checker
+        config: The application configuration
         logger: The logger instance
 
     Returns:
@@ -349,5 +351,6 @@ async def get_health_check_service(
     """
     return HealthCheckService(
         health_checker=health_checker,
+        config=config,
         logger=logger,
     )

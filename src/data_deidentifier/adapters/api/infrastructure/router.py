@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 
 from src.data_deidentifier.adapters.api.dependencies import get_health_check_service
@@ -12,8 +12,13 @@ router = APIRouter()
 
 
 @router.get("/health", status_code=200, tags=["Health"])
-async def health_check(
-    request: Request,
+async def health_liveness() -> JSONResponse:
+    """Simple liveness check."""
+    return JSONResponse(content={"status": "ok", "service": "ddi-api"})
+
+
+@router.get("/health/ready", status_code=200, tags=["Health"])
+async def health_readiness(
     health_service: Annotated[
         HealthCheckService,
         Depends(get_health_check_service),
@@ -25,23 +30,13 @@ async def health_check(
     """
     result = health_service.check_readiness()
 
-    status_code = (
-        status.HTTP_200_OK if result.is_healthy else status.HTTP_503_SERVICE_UNAVAILABLE
-    )
-
-    health_data = {
-        "status": "ok" if result.is_healthy else "degraded",
-        "service": "ddi-api",
-        "checks": {
-            "env": {
-                "log_level": request.state.config.get_log_level().name,
-                "env": request.state.config.get_environment().name,
-            },
-            **result.checks,
-        },
-    }
-
     return JSONResponse(
-        status_code=status_code,
-        content=health_data,
+        status_code=status.HTTP_200_OK
+        if result.is_healthy
+        else status.HTTP_503_SERVICE_UNAVAILABLE,
+        content={
+            "status": "ok" if result.is_healthy else "degraded",
+            "service": "ddi-api",
+            "checks": result.checks,
+        },
     )

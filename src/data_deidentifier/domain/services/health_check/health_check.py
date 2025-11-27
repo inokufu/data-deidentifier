@@ -1,5 +1,6 @@
 from logger import LoggerContract
 
+from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
 from src.data_deidentifier.domain.contracts.health_check import HealthCheckContract
 from src.data_deidentifier.domain.types.health_check_result import HealthCheckResult
 
@@ -19,15 +20,18 @@ class HealthCheckService(HealthCheckContract):
     def __init__(
         self,
         health_checker: HealthCheckContract,
+        config: ConfigContract,
         logger: LoggerContract,
     ) -> None:
         """Initialize the health check service.
 
         Args:
             health_checker: Health checker contract
+            config: The application configuration
             logger: Logger for logging events
         """
         self.health_checker = health_checker
+        self.config = config
         self.logger = logger
 
     def check_readiness(self) -> HealthCheckResult:
@@ -41,6 +45,13 @@ class HealthCheckService(HealthCheckContract):
             HealthCheckResult with status of each check
         """
         result = self.health_checker.check_readiness()
+        result.checks = {
+            "env": {
+                "log_level": self.config.get_log_level().name,
+                "env": self.config.get_environment().name,
+            },
+            **result.checks,
+        }
 
         if not result.is_healthy:
             self.logger.warning(
