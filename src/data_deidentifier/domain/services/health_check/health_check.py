@@ -45,13 +45,6 @@ class HealthCheckService(HealthCheckContract):
             HealthCheckResult with status of each check
         """
         result = self.health_checker.check_readiness()
-        result.checks = {
-            "env": {
-                "log_level": self.config.get_log_level().name,
-                "env": self.config.get_environment().name,
-            },
-            **result.checks,
-        }
 
         if not result.is_healthy:
             self.logger.warning(
@@ -59,4 +52,13 @@ class HealthCheckService(HealthCheckContract):
                 {"checks": result.checks},
             )
 
-        return result
+        return HealthCheckResult(
+            is_healthy=result.is_healthy,
+            checks={
+                "env": {
+                    "log_level": self.config.get_log_level().name,
+                    "environment": self.config.get_environment().name,
+                },
+                **result.checks,
+            },
+        )

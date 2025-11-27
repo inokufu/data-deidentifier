@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ddi
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+        - name: scaleway-cr-secret
+      containers:
+        - name: ddi
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
