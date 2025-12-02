@@ -3,11 +3,16 @@ ARG VARIANT=3.13-slim-bookworm
 # Base stage
 FROM python:${VARIANT} AS base
 
-COPY --from=ghcr.io/astral-sh/uv:0.8.0 /uv /usr/local/bin/uv
-
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
+    curl \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+ADD https://astral.sh/uv/0.9.14/install.sh /uv-installer.sh
+RUN sh /uv-installer.sh && rm /uv-installer.sh
+ENV PATH="/root/.local/bin/:$PATH"
 
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
