@@ -29,7 +29,7 @@ spec:
             - configMapRef:
                 name: ddi-config
           ports:
-            - containerPort: 8000
+            - containerPort: 8005
               name: http
           resources:
             limits:
@@ -41,7 +41,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: http
+              port: 8005
             initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 5
@@ -49,7 +49,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: http
+              port: 8005
             initialDelaySeconds: 15
             periodSeconds: 20
             timeoutSeconds: 3
