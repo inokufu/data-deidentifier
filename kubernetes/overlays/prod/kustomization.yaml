@@ -32,5 +32,5 @@ patches:
 
 images:
   - name: ddi
-    newName: rg.fr-par.scw.cloud/inokufu/ddi
+    newName: rg.fr-par.scw.cloud/deidentification/ddi
     newTag: 1.0.0-linux
