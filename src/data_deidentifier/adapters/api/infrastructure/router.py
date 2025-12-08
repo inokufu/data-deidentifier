@@ -17,7 +17,7 @@ async def health_liveness() -> JSONResponse:
     return JSONResponse(content={"status": "ok", "service": "ddi-api"})
 
 
-@router.get("/health/ready", status_code=200, tags=["Health"])
+@router.get("/health/ready", tags=["Health"])
 async def health_readiness(
     health_service: Annotated[
         HealthCheckService,

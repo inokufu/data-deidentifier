@@ -23,7 +23,7 @@ FROM base AS dev
 COPY requirements-dev.lock ./
 RUN uv pip install --system -r requirements-dev.lock
 COPY src ./src
-CMD ["gunicorn", "data_deidentifier.adapters.api.main:app"]
+CMD ["gunicorn", "src.data_deidentifier.adapters.api.main:app"]
 
 # Standalone dev with code included
 FROM dev AS dev-standalone
@@ -39,4 +39,4 @@ COPY src ./src
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
-CMD ["gunicorn", "data_deidentifier.adapters.api.main:app"]
+CMD ["gunicorn", "src.data_deidentifier.adapters.api.main:app"]
