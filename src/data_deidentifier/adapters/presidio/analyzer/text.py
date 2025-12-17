@@ -42,8 +42,6 @@ class PresidioTextAnalyzer:
         Raises:
             TextAnalysisError: If analysis fails
         """
-        language = language.lower()
-
         logger_context = {
             "text_length": len(text),
             "language": language,

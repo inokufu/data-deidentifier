@@ -291,6 +291,7 @@ tldextract==5.3.0
     # via presidio-analyzer
 tqdm==4.67.1
     # via spacy
+ty==0.0.2
 typer==0.19.2
     # via spacy
     # via weasel

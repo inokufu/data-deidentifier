@@ -54,8 +54,6 @@ class PresidioStructuredDataAnalyzer:
         """
         analyzer = self.analyzer_factory.get_analyzer(data=data)
 
-        language = language.lower()
-
         logger_context = {
             "analyzer": type(analyzer).__name__,
             "language": language,

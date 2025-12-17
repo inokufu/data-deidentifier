@@ -78,7 +78,7 @@ class PresidioTextAnonymizer(TextAnonymizerContract):
                 operators={
                     "DEFAULT": OperatorConfig(
                         operator_name=operator,
-                        params=operator_params,
+                        params=operator_params or {},
                     ),
                 },
             )

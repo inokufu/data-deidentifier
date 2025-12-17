@@ -24,7 +24,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[dict[str, Any]]:
     Yields:
         A dictionary containing logger and config objects
     """
-    logger = LoguruLogger(level=config.get_log_level())
+    logger = LoguruLogger(level=LogLevel[config.get_log_level().name])
     logger.info(
         "Application starting",
         {

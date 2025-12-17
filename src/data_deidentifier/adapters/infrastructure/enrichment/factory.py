@@ -60,6 +60,9 @@ class EnrichmentFactory(PseudonymEnrichmentManagerContract):
             return None
 
         entity_config = enrichment_configs.get(entity_type)
+        if not entity_config:
+            return None
+
         try:
             return self.create(
                 entity_type=entity_type,

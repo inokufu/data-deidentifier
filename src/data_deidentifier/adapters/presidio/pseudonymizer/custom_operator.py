@@ -52,9 +52,12 @@ class PseudonymizeOperator(Operator):
         Returns:
             The pseudonymized text
         """
+        if params is None or "entity_type" not in params:
+            raise ValueError("Parameters dictionary is required")
+
         entity = Entity(
             text=text,
-            type=params.get("entity_type"),
+            type=params["entity_type"],
             start=params.get("start", 0),
             end=params.get("end", len(text)),
             score=params.get("score", 1.0),

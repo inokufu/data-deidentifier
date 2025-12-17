@@ -37,7 +37,7 @@ class DataFrameAnalyzer(StructuredTypeAnalyzer):
         analyzer = PandasAnalysisBuilder()
         return analyzer.generate_analysis(
             df=data,
-            language=language,
+            language=language.value.lower(),
         )
 
     @override

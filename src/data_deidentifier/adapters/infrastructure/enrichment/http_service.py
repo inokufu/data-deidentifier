@@ -107,7 +107,10 @@ class HttpPseudonymEnricher(PseudonymEnricherContract):
         Returns:
             The service URL.
         """
-        return self.params.get(self.PARAM_URL)
+        url = self.params.get(self.PARAM_URL)
+        if not isinstance(url, str):
+            raise TypeError("Service URL must be configured as a string")
+        return url
 
     def get_http_method(self) -> str:
         """Get the HTTP method for the enrichment request.

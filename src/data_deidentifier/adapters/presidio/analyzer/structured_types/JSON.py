@@ -32,7 +32,7 @@ class JsonAnalyzer(StructuredTypeAnalyzer):
         analyzer = JsonAnalysisBuilder()
         return analyzer.generate_analysis(
             data=data,
-            language=language,
+            language=language.value.lower(),
         )
 
     @override
