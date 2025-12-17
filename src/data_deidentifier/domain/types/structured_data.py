@@ -1,5 +1,4 @@
+from collections.abc import Mapping
 from typing import Any
 
-from pandas import DataFrame
-
-type StructuredData = dict[str, Any] | DataFrame
+type StructuredData = Mapping[str, Any]

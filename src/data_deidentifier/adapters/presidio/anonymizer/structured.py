@@ -1,5 +1,6 @@
 from typing import Any, override
 
+import pandas as pd
 from logger import LoggerContract
 from presidio_anonymizer.entities import OperatorConfig
 
@@ -49,6 +50,12 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
         entity_types: list[str] | None = None,
         operator_params: dict[str, Any] | None = None,
     ) -> StructuredDataAnonymizationResult:
+        if not isinstance(data, dict | pd.DataFrame):
+            raise TypeError(
+                f"Unsupported data type: {type(data).__name__}. "
+                "Expected dict or pandas DataFrame.",
+            )
+
         try:
             # Use the analyzer to process the data
             analyzer_results, data_processor = self.analyzer.analyze(
