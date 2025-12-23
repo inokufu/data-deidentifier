@@ -85,7 +85,9 @@ class PseudonymizeOperator(Operator):
         Returns:
             The base pseudonym
         """
-        method: PseudonymizationMethodContract = params.get(self.PARAM_METHOD)
+        method: PseudonymizationMethodContract | None = params.get(self.PARAM_METHOD)
+        if not method:
+            raise ValueError("A 'method' parameter is required")
         return method.generate_pseudonym(entity=entity)
 
     def _get_enrichment(self, entity: Entity, params: dict) -> str | None:
@@ -98,7 +100,7 @@ class PseudonymizeOperator(Operator):
         Returns:
             The enrichment text if available, None otherwise
         """
-        config: ConfigContract = params.get(self.PARAM_CONFIG)
+        config: ConfigContract | None = params.get(self.PARAM_CONFIG)
         enricher: PseudonymEnrichmentManagerContract | None = params.get(
             self.PARAM_ENRICHER,
         )
