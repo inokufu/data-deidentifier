@@ -5,7 +5,7 @@ from typing import Any
 from fastapi import FastAPI
 from logger import LogLevel, LoguruLogger
 
-from src.data_deidentifier.adapters.infrastructure.config.settings import Settings
+from data_deidentifier.adapters.infrastructure.config.settings import Settings
 
 from .anonymize.router import router as anonymize_router
 from .exception_handler import ExceptionHandler

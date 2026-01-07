@@ -2,20 +2,20 @@ from typing import TYPE_CHECKING, override
 
 from presidio_anonymizer.operators import Operator, OperatorType
 
-from src.data_deidentifier.domain.exceptions import PseudonymEnrichmentError
-from src.data_deidentifier.domain.types.anonymization_operator import (
+from data_deidentifier.domain.exceptions import PseudonymEnrichmentError
+from data_deidentifier.domain.types.anonymization_operator import (
     AnonymizationOperator,
 )
-from src.data_deidentifier.domain.types.entity import Entity
+from data_deidentifier.domain.types.entity import Entity
 
 if TYPE_CHECKING:
-    from src.data_deidentifier.adapters.infrastructure.config.contract import (
+    from data_deidentifier.adapters.infrastructure.config.contract import (
         ConfigContract,
     )
-    from src.data_deidentifier.domain.contracts.enricher.manager import (
+    from data_deidentifier.domain.contracts.enricher.manager import (
         PseudonymEnrichmentManagerContract,
     )
-    from src.data_deidentifier.domain.contracts.pseudonymizer.method import (
+    from data_deidentifier.domain.contracts.pseudonymizer.method import (
         PseudonymizationMethodContract,
     )
 

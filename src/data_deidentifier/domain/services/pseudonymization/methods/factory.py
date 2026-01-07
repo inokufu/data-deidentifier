@@ -2,11 +2,11 @@ from typing import Any, ClassVar
 
 from logger import LoggerContract
 
-from src.data_deidentifier.domain.contracts.pseudonymizer.method import (
+from data_deidentifier.domain.contracts.pseudonymizer.method import (
     PseudonymizationMethodContract,
 )
-from src.data_deidentifier.domain.exceptions import TextPseudonymizationError
-from src.data_deidentifier.domain.types.pseudonymization_method import (
+from data_deidentifier.domain.exceptions import TextPseudonymizationError
+from data_deidentifier.domain.types.pseudonymization_method import (
     PseudonymizationMethod,
 )
 

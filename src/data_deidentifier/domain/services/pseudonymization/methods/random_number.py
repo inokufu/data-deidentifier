@@ -3,10 +3,10 @@ from typing import Any, override
 
 from logger import LoggerContract
 
-from src.data_deidentifier.domain.contracts.pseudonymizer.method import (
+from data_deidentifier.domain.contracts.pseudonymizer.method import (
     PseudonymizationMethodContract,
 )
-from src.data_deidentifier.domain.types.entity import Entity
+from data_deidentifier.domain.types.entity import Entity
 
 
 class RandomNumberPseudonymizationMethod(PseudonymizationMethodContract):

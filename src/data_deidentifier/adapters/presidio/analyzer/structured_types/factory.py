@@ -1,7 +1,7 @@
 from logger import LoggerContract
 
-from src.data_deidentifier.domain.exceptions import UnsupportedStructuredDataError
-from src.data_deidentifier.domain.types.structured_data import StructuredData
+from data_deidentifier.domain.exceptions import UnsupportedStructuredDataError
+from data_deidentifier.domain.types.structured_data import StructuredData
 
 from .dataframe import DataFrameAnalyzer
 from .JSON import JsonAnalyzer

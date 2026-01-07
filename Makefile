@@ -84,5 +84,5 @@ clean: ## Remove temporary files and build artifacts
 	rm -rf dist/ build/
 
 .PHONY: start
-start: check-rye ## Start application
-	rye run start
+start: check-uv ## Start application
+	uv run start

@@ -4,26 +4,26 @@ import pandas as pd
 from logger import LoggerContract
 from presidio_anonymizer.entities import OperatorConfig
 
-from src.data_deidentifier.adapters.presidio.analyzer.structured import (
+from data_deidentifier.adapters.presidio.analyzer.structured import (
     PresidioStructuredDataAnalyzer,
 )
-from src.data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
-from src.data_deidentifier.adapters.presidio.exceptions import (
+from data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
+from data_deidentifier.adapters.presidio.exceptions import (
     StructuredDataAnalysisError,
 )
-from src.data_deidentifier.adapters.presidio.mapper import PresidioStructuredDataMapper
-from src.data_deidentifier.domain.contracts.anonymizer.structured import (
+from data_deidentifier.adapters.presidio.mapper import PresidioStructuredDataMapper
+from data_deidentifier.domain.contracts.anonymizer.structured import (
     StructuredDataAnonymizerContract,
 )
-from src.data_deidentifier.domain.exceptions import StructuredDataAnonymizationError
-from src.data_deidentifier.domain.types.anonymization_operator import (
+from data_deidentifier.domain.exceptions import StructuredDataAnonymizationError
+from data_deidentifier.domain.types.anonymization_operator import (
     AnonymizationOperator,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.structured_anonymization_result import (
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.structured_anonymization_result import (
     StructuredDataAnonymizationResult,
 )
-from src.data_deidentifier.domain.types.structured_data import StructuredData
+from data_deidentifier.domain.types.structured_data import StructuredData
 
 
 class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):

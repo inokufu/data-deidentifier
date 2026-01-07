@@ -3,7 +3,7 @@ _commit: b3a2452
 _src_path: git@github.com:inokufu/python-project-template.git
 author_email: contact@inokufu.com
 author_name: Inokufu
-min_python_version: '3.14'
+min_python_version: '3.13'
 package_name: data_deidentifier
 project_description: Data deindenfication
 project_name: Data deidentifier

@@ -3,19 +3,19 @@ from typing import Any, override
 from logger import LoggerContract
 from presidio_anonymizer.entities import OperatorConfig
 
-from src.data_deidentifier.adapters.presidio.analyzer.text import PresidioTextAnalyzer
-from src.data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
-from src.data_deidentifier.adapters.presidio.exceptions import TextAnalysisError
-from src.data_deidentifier.adapters.presidio.mapper import PresidioEntityMapper
-from src.data_deidentifier.domain.contracts.anonymizer.text import (
+from data_deidentifier.adapters.presidio.analyzer.text import PresidioTextAnalyzer
+from data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
+from data_deidentifier.adapters.presidio.exceptions import TextAnalysisError
+from data_deidentifier.adapters.presidio.mapper import PresidioEntityMapper
+from data_deidentifier.domain.contracts.anonymizer.text import (
     TextAnonymizerContract,
 )
-from src.data_deidentifier.domain.exceptions import TextAnonymizationError
-from src.data_deidentifier.domain.types.anonymization_operator import (
+from data_deidentifier.domain.exceptions import TextAnonymizationError
+from data_deidentifier.domain.types.anonymization_operator import (
     AnonymizationOperator,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.text_anonymization_result import (
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.text_anonymization_result import (
     TextAnonymizationResult,
 )
 

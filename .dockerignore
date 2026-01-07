@@ -58,5 +58,4 @@ LICENSE
 docs/
 letsencrypt/
 .python-version
-.rye/
 .venv/

@@ -24,7 +24,7 @@
       * [Development Environment](#development-environment)
       * [Quick Start (Without volumes or Traefik)](#quick-start-without-volumes-or-traefik)
       * [Production Environment](#production-environment)
-    * [With Rye](#with-rye)
+    * [With uv](#with-uv)
     * [Prerequisites](#prerequisites-1)
     * [Installation](#installation)
   * [Usage](#usage)
@@ -82,7 +82,7 @@ with configurable operators and methods.
 
 ## Setup and installation
 
-You can run the application either directly with **Rye** or using **Docker**.
+You can run the application either directly with **uv** or using **Docker**.
 
 1. Clone the repository
 2. Set up environment variables:
@@ -140,16 +140,16 @@ environment:
 docker compose --profile prod up --build
 ```
 
-### With Rye
+### With uv
 
 ### Prerequisites
 
-- Python 3.14 or higher
+- Python 3.13 or higher
 - [uv](https://docs.astral.sh/uv/) for dependency management
 
 ### Installation
 
-1. Install Rye, see https://rye.astral.sh/guide/installation/
+1. Install uv, see https://docs.astral.sh/uv/getting-started/installation/
 
 2. **Install dependencies**
    ```bash
