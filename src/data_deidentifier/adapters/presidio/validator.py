@@ -1,8 +1,8 @@
 from logger import LoggerContract
 
-from src.data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
-from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
-from src.data_deidentifier.domain.exceptions import EntityTypeValidationError
+from data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
+from data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
+from data_deidentifier.domain.exceptions import EntityTypeValidationError
 
 
 class PresidioValidator(EntityTypeValidatorContract):

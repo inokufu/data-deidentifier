@@ -2,15 +2,15 @@ from typing import Any, override
 
 from logger import LoggerContract
 
-from src.data_deidentifier.adapters.infrastructure.http.client import (
+from data_deidentifier.adapters.infrastructure.http.client import (
     BaseHttpClient,
     HttpClientError,
 )
-from src.data_deidentifier.domain.contracts.enricher.enricher import (
+from data_deidentifier.domain.contracts.enricher.enricher import (
     PseudonymEnricherContract,
 )
-from src.data_deidentifier.domain.exceptions import PseudonymEnrichmentError
-from src.data_deidentifier.domain.types.entity import Entity
+from data_deidentifier.domain.exceptions import PseudonymEnrichmentError
+from data_deidentifier.domain.types.entity import Entity
 
 
 class HttpPseudonymEnricher(PseudonymEnricherContract):

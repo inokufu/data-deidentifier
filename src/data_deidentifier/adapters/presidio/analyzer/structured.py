@@ -2,12 +2,12 @@ from logger import LoggerContract
 from presidio_structured import StructuredAnalysis
 from presidio_structured.data.data_processors import DataProcessorBase
 
-from src.data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
-from src.data_deidentifier.adapters.presidio.exceptions import (
+from data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
+from data_deidentifier.adapters.presidio.exceptions import (
     StructuredDataAnalysisError,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.structured_data import StructuredData
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.structured_data import StructuredData
 
 
 class PresidioStructuredDataAnalyzer:

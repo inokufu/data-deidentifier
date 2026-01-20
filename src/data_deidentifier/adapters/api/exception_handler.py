@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from logger import LogLevel
 
-from src.data_deidentifier.domain.exceptions import (
+from data_deidentifier.domain.exceptions import (
     AnonymizationError,
     DataDeidentifierError,
     EntityTypeValidationError,

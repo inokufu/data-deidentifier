@@ -3,11 +3,11 @@ from typing import Any
 
 from configcore import ConfigContract as CoreConfigContract
 
-from src.data_deidentifier.domain.types.anonymization_operator import (
+from data_deidentifier.domain.types.anonymization_operator import (
     AnonymizationOperator,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.pseudonymization_method import (
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.pseudonymization_method import (
     PseudonymizationMethod,
 )
 

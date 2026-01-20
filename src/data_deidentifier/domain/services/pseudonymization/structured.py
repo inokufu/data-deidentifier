@@ -2,26 +2,26 @@ from typing import Any
 
 from logger import LoggerContract
 
-from src.data_deidentifier.domain.contracts.enricher.manager import (
+from data_deidentifier.domain.contracts.enricher.manager import (
     PseudonymEnrichmentManagerContract,
 )
-from src.data_deidentifier.domain.contracts.pseudonymizer.structured import (
+from data_deidentifier.domain.contracts.pseudonymizer.structured import (
     StructuredDataPseudonymizerContract,
 )
-from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
-from src.data_deidentifier.domain.exceptions import (
+from data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
+from data_deidentifier.domain.exceptions import (
     InvalidInputDataError,
     StructuredDataPseudonymizationError,
 )
-from src.data_deidentifier.domain.services.pseudonymization.methods.factory import (
+from data_deidentifier.domain.services.pseudonymization.methods.factory import (
     PseudonymizationMethodFactory,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.pseudonymization_method import (
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.pseudonymization_method import (
     PseudonymizationMethod,
 )
-from src.data_deidentifier.domain.types.structured_data import StructuredData
-from src.data_deidentifier.domain.types.structured_pseudonymization_result import (
+from data_deidentifier.domain.types.structured_data import StructuredData
+from data_deidentifier.domain.types.structured_pseudonymization_result import (
     StructuredDataPseudonymizationResult,
 )
 
