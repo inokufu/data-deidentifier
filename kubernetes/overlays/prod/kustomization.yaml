@@ -18,7 +18,7 @@ configMapGenerator:
       - ENVIRONMENT=production
       - LOG_LEVEL=warning
       - THREADS_PER_WORKER=4
-      - WORKERS_COUNT=2
+      - WORKERS_COUNT=1
     name: ddi-config
 
 labels:
