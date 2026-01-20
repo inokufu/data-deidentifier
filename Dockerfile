@@ -8,6 +8,8 @@ COPY --from=ghcr.io/astral-sh/uv:0.9.22 /uv /uvx /bin/
 
 RUN apt-get update && apt-get install -y \
     git \
+    curl \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PYTHONDONTWRITEBYTECODE=1 \

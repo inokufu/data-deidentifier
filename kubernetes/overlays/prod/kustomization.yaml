@@ -1,0 +1,36 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ddi-prod
+namePrefix: prod-
+
+
+resources:
+  - ../../base
+  - ddi-hpa.yaml
+  - namespace.yaml
+
+
+configMapGenerator:
+  - behavior: merge
+    literals:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=warning
+      - THREADS_PER_WORKER=4
+      - WORKERS_COUNT=2
+    name: ddi-config
+
+labels:
+  - includeSelectors: true
+    pairs:
+      environment: production
+
+patches:
+  - path: patches/ddi-deployment-patch.yaml
+  - path: patches/ddi-ingress-patch.yaml
+
+images:
+  - name: ddi
+    newName: rg.fr-par.scw.cloud/deidentification/ddi
+    newTag: 1.0.0

@@ -1,0 +1,23 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ddi-dev
+namePrefix: dev-
+
+resources:
+  - ../../base
+  - namespace.yaml
+
+
+configMapGenerator:
+  - behavior: merge
+    literals:
+      - ENVIRONMENT=development
+      - LOG_LEVEL=debug
+      - WORKERS_COUNT=1
+    name: ddi-config
+
+patches:
+  - path: patches/ddi-deployment-patch.yaml
+  - path: patches/ddi-ingress-patch.yaml
