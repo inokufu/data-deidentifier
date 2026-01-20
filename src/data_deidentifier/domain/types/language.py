@@ -8,3 +8,4 @@ class SupportedLanguage(StrEnum):
     """
 
     ENGLISH = "en"
+    FRENCH = "fr"

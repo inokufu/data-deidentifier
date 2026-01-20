@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from logger import LoggerContract
+from presidio_analyzer import AnalyzerEngine
 from presidio_structured import StructuredAnalysis
 from presidio_structured.data.data_processors import DataProcessorBase
 
@@ -16,13 +17,15 @@ class StructuredTypeAnalyzer(ABC):
     a particular data type and to perform PII entity analysis on that data.
     """
 
-    def __init__(self, logger: LoggerContract) -> None:
+    def __init__(self, logger: LoggerContract, analyzer_engine: AnalyzerEngine) -> None:
         """Initialize the structured type analyzer.
 
         Args:
             logger: Logger instance for logging events.
+            analyzer_engine: Presidio AnalyzerEngine for PII detection.
         """
         self.logger = logger
+        self.analyzer_engine = analyzer_engine
 
     @abstractmethod
     def can_handle(self, data: StructuredData) -> bool:

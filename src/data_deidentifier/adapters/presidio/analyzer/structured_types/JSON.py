@@ -29,7 +29,7 @@ class JsonAnalyzer(StructuredTypeAnalyzer):
     def analyze(self, data: Any, language: SupportedLanguage) -> StructuredAnalysis:
         self.logger.debug("Analyzing JSON data", {"nb_keys": len(data)})
 
-        analyzer = JsonAnalysisBuilder()
+        analyzer = JsonAnalysisBuilder(analyzer=self.analyzer_engine)
         return analyzer.generate_analysis(
             data=data,
             language=language.value.lower(),

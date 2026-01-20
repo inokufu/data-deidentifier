@@ -3,6 +3,7 @@ from typing import ClassVar
 
 from logger import LoggerContract
 from presidio_analyzer import AnalyzerEngine
+from presidio_analyzer.nlp_engine import NlpEngineProvider
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.operators.operators_factory import ANONYMIZERS
 from presidio_structured import StructuredEngine
@@ -50,7 +51,13 @@ class PresidioEngineFactory:
         if cls._analyzer_engine is None:
             with cls._lock:
                 if cls._analyzer_engine is None:
-                    cls._analyzer_engine = AnalyzerEngine()
+                    nlp_engine_provider = NlpEngineProvider(
+                        conf_file="src/data_deidentifier/adapters/presidio/presidio_nlp_config.yaml",
+                    )
+                    cls._analyzer_engine = AnalyzerEngine(
+                        nlp_engine=nlp_engine_provider.create_engine(),
+                        supported_languages=["en", "fr"],
+                    )
 
         if cls._analyzer_engine is None:
             raise RuntimeError("Failed to initialize analyzer engine")
@@ -97,7 +104,10 @@ class PresidioEngineFactory:
         if cls._structured_data_factory is None:
             with cls._lock:
                 if cls._structured_data_factory is None:
-                    cls._structured_data_factory = StructuredDataAnalyzerFactory(logger)
+                    cls._structured_data_factory = StructuredDataAnalyzerFactory(
+                        logger=logger,
+                        analyzer_engine=cls.get_analyzer_engine(),
+                    )
 
         if cls._structured_data_factory is None:
             raise RuntimeError("Failed to initialize structured data analyzer engine")
