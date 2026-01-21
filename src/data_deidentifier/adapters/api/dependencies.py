@@ -13,6 +13,7 @@ from data_deidentifier.adapters.presidio.anonymizer.structured import (
 from data_deidentifier.adapters.presidio.anonymizer.text import (
     PresidioTextAnonymizer,
 )
+from data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
 from data_deidentifier.adapters.presidio.health_check import PresidioHealthChecker
 from data_deidentifier.adapters.presidio.pseudonymizer.structured import (
     PresidioStructuredDataPseudonymizer,
@@ -27,6 +28,7 @@ from data_deidentifier.domain.contracts.anonymizer.structured import (
 from data_deidentifier.domain.contracts.anonymizer.text import (
     TextAnonymizerContract,
 )
+from data_deidentifier.domain.contracts.engine_factory import EngineFactoryContract
 from data_deidentifier.domain.contracts.enricher.manager import (
     PseudonymEnrichmentManagerContract,
 )
@@ -315,6 +317,18 @@ async def get_structured_data_pseudonymization_service(
         logger=logger,
         pseudonym_enricher=pseudonym_enricher,
     )
+
+
+def get_engine_factory() -> type[EngineFactoryContract]:
+    """Get the engine factory implementation.
+
+    Returns the class that implements the EngineFactoryContract.
+    Call .warmup() on the returned class to pre-load NLP models.
+
+    Returns:
+        The EngineFactoryContract implementation class
+    """
+    return PresidioEngineFactory
 
 
 async def get_health_checker(

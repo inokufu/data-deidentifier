@@ -1,5 +1,6 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from time import perf_counter as time_perf_counter
 from typing import Any
 
 from fastapi import FastAPI
@@ -8,6 +9,7 @@ from logger import LogLevel, LoguruLogger
 from data_deidentifier.adapters.infrastructure.config.settings import Settings
 
 from .anonymize.router import router as anonymize_router
+from .dependencies import get_engine_factory
 from .exception_handler import ExceptionHandler
 from .infrastructure.router import router as infra_router
 from .pseudonymize.router import router as pseudonymize_router
@@ -33,6 +35,12 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[dict[str, Any]]:
             "app_env": config.get_environment().name,
         },
     )
+
+    # Pre-load spaCy models and Presidio engines to avoid cold-start latency
+    start = time_perf_counter()
+    get_engine_factory().warmup()
+    duration = time_perf_counter() - start
+    logger.info("NLP models loaded successfully", {"duration_seconds": duration})
 
     yield {"config": config, "logger": logger}
 

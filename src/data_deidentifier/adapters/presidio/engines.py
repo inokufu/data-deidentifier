@@ -1,6 +1,6 @@
 import threading
 from pathlib import Path
-from typing import ClassVar
+from typing import ClassVar, override
 
 from logger import LoggerContract
 from presidio_analyzer import AnalyzerEngine
@@ -10,6 +10,7 @@ from presidio_anonymizer.operators.operators_factory import ANONYMIZERS
 from presidio_structured import StructuredEngine
 from presidio_structured.data.data_processors import DataProcessorBase
 
+from data_deidentifier.domain.contracts.engine_factory import EngineFactoryContract
 from data_deidentifier.domain.types.language import SupportedLanguage
 
 from .analyzer.structured_types.factory import (
@@ -20,7 +21,7 @@ from .pseudonymizer.custom_operator import (
 )
 
 
-class PresidioEngineFactory:
+class PresidioEngineFactory(EngineFactoryContract):
     """Thread-safe factory and cache manager for Presidio engines.
 
     Provides a centralized way to lazily instantiate and reuse Presidio engines
@@ -152,3 +153,18 @@ class PresidioEngineFactory:
                     )
 
         return cls._structured_data_engines[key]
+
+    @classmethod
+    @override
+    def warmup(cls) -> None:
+        """Pre-load all Presidio engines and spaCy models at application startup.
+
+        This method eagerly initializes the analyzer and anonymizer engines,
+        loading spaCy language models into memory. Call this during application
+        startup to avoid cold-start latency on the first API request.
+        """
+        # Load analyzer engine (loads spaCy models for all configured languages)
+        cls.get_analyzer_engine()
+
+        # Load text anonymizer engine
+        cls.get_text_anonymizer_engine()
