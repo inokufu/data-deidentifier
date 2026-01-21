@@ -2,9 +2,9 @@ from typing import override
 
 from logger import LoggerContract
 
-from src.data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
-from src.data_deidentifier.domain.contracts.health_check import HealthCheckContract
-from src.data_deidentifier.domain.types.health_check_result import HealthCheckResult
+from data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
+from data_deidentifier.domain.contracts.health_check import HealthCheckContract
+from data_deidentifier.domain.types.health_check_result import HealthCheckResult
 
 
 class PresidioHealthChecker(HealthCheckContract):
