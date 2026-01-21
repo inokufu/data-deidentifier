@@ -1,6 +1,5 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from time import perf_counter as time_perf_counter
 from typing import Any
 
 from fastapi import FastAPI
@@ -37,10 +36,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[dict[str, Any]]:
     )
 
     # Pre-load spaCy models and Presidio engines to avoid cold-start latency
-    start = time_perf_counter()
-    get_engine_factory().warmup()
-    duration = time_perf_counter() - start
-    logger.info("NLP models loaded successfully", {"duration_seconds": duration})
+    get_engine_factory().warmup(logger=logger)
 
     yield {"config": config, "logger": logger}
 

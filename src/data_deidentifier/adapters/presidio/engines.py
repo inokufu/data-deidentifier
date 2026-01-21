@@ -1,5 +1,6 @@
 import threading
 from pathlib import Path
+from time import perf_counter as time_perf_counter
 from typing import ClassVar, override
 
 from logger import LoggerContract
@@ -157,15 +158,23 @@ class PresidioEngineFactory(EngineFactoryContract):
 
     @classmethod
     @override
-    def warmup(cls) -> None:
+    def warmup(cls, logger: LoggerContract) -> None:
         """Pre-load all Presidio engines and spaCy models at application startup.
 
         This method eagerly initializes the analyzer and anonymizer engines,
         loading spaCy language models into memory. Call this during application
         startup to avoid cold-start latency on the first API request.
+
+        Args:
+            logger: Logger instance for logging information.
         """
+        start = time_perf_counter()
+
         # Load analyzer engine (loads spaCy models for all configured languages)
         cls.get_analyzer_engine()
 
         # Load text anonymizer engine
         cls.get_text_anonymizer_engine()
+
+        duration = time_perf_counter() - start
+        logger.info("NLP models loaded successfully", {"duration_seconds": duration})
