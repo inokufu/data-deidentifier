@@ -1,4 +1,5 @@
 import threading
+from pathlib import Path
 from typing import ClassVar
 
 from logger import LoggerContract
@@ -8,6 +9,8 @@ from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.operators.operators_factory import ANONYMIZERS
 from presidio_structured import StructuredEngine
 from presidio_structured.data.data_processors import DataProcessorBase
+
+from data_deidentifier.domain.types.language import SupportedLanguage
 
 from .analyzer.structured_types.factory import (
     StructuredDataAnalyzerFactory,
@@ -52,11 +55,11 @@ class PresidioEngineFactory:
             with cls._lock:
                 if cls._analyzer_engine is None:
                     nlp_engine_provider = NlpEngineProvider(
-                        conf_file="src/data_deidentifier/adapters/presidio/presidio_nlp_config.yaml",
+                        conf_file=Path(__file__).parent / "presidio_nlp_config.yaml",
                     )
                     cls._analyzer_engine = AnalyzerEngine(
                         nlp_engine=nlp_engine_provider.create_engine(),
-                        supported_languages=["en", "fr"],
+                        supported_languages=[lang.value for lang in SupportedLanguage],
                     )
 
         if cls._analyzer_engine is None:
