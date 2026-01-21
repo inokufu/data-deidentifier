@@ -56,7 +56,8 @@ class PresidioEngineFactory(EngineFactoryContract):
             with cls._lock:
                 if cls._analyzer_engine is None:
                     nlp_engine_provider = NlpEngineProvider(
-                        conf_file=Path(__file__).parent / "presidio_nlp_config.yaml",
+                        conf_file=Path(__file__).resolve().parent
+                        / "presidio_nlp_config.yaml",
                     )
                     cls._analyzer_engine = AnalyzerEngine(
                         nlp_engine=nlp_engine_provider.create_engine(),
