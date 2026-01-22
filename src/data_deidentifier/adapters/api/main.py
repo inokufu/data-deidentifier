@@ -35,7 +35,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[dict[str, Any]]:
         },
     )
 
-    # Pre-load spaCy models and Presidio engines to avoid cold-start latency
+    # Pre-load Nlp models to avoid cold-start latency
     get_engine_factory().warmup(logger=logger)
 
     yield {"config": config, "logger": logger}

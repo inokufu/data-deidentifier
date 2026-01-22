@@ -11,7 +11,7 @@ class EngineFactoryContract(ABC):
     def warmup(cls, logger: LoggerContract) -> None:
         """Pre-load all NLP engines and models at application startup.
 
-        This method eagerly initializes the engines, loading language models
+        This method eagerly initializes the engines, loading Nlp models
         into memory. Call this during application startup to avoid cold-start
         latency on the first API request.
 
