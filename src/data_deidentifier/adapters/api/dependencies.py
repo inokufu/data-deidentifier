@@ -3,54 +3,54 @@ from typing import Annotated
 from fastapi import Depends, Request
 from logger import LoggerContract
 
-from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
-from src.data_deidentifier.adapters.infrastructure.enrichment.factory import (
+from data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
+from data_deidentifier.adapters.infrastructure.enrichment.factory import (
     EnrichmentFactory,
 )
-from src.data_deidentifier.adapters.presidio.anonymizer.structured import (
+from data_deidentifier.adapters.presidio.anonymizer.structured import (
     PresidioStructuredDataAnonymizer,
 )
-from src.data_deidentifier.adapters.presidio.anonymizer.text import (
+from data_deidentifier.adapters.presidio.anonymizer.text import (
     PresidioTextAnonymizer,
 )
-from src.data_deidentifier.adapters.presidio.health_check import PresidioHealthChecker
-from src.data_deidentifier.adapters.presidio.pseudonymizer.structured import (
+from data_deidentifier.adapters.presidio.health_check import PresidioHealthChecker
+from data_deidentifier.adapters.presidio.pseudonymizer.structured import (
     PresidioStructuredDataPseudonymizer,
 )
-from src.data_deidentifier.adapters.presidio.pseudonymizer.text import (
+from data_deidentifier.adapters.presidio.pseudonymizer.text import (
     PresidioTextPseudonymizer,
 )
-from src.data_deidentifier.adapters.presidio.validator import PresidioValidator
-from src.data_deidentifier.domain.contracts.anonymizer.structured import (
+from data_deidentifier.adapters.presidio.validator import PresidioValidator
+from data_deidentifier.domain.contracts.anonymizer.structured import (
     StructuredDataAnonymizerContract,
 )
-from src.data_deidentifier.domain.contracts.anonymizer.text import (
+from data_deidentifier.domain.contracts.anonymizer.text import (
     TextAnonymizerContract,
 )
-from src.data_deidentifier.domain.contracts.enricher.manager import (
+from data_deidentifier.domain.contracts.enricher.manager import (
     PseudonymEnrichmentManagerContract,
 )
-from src.data_deidentifier.domain.contracts.health_check import HealthCheckContract
-from src.data_deidentifier.domain.contracts.pseudonymizer.structured import (
+from data_deidentifier.domain.contracts.health_check import HealthCheckContract
+from data_deidentifier.domain.contracts.pseudonymizer.structured import (
     StructuredDataPseudonymizerContract,
 )
-from src.data_deidentifier.domain.contracts.pseudonymizer.text import (
+from data_deidentifier.domain.contracts.pseudonymizer.text import (
     TextPseudonymizerContract,
 )
-from src.data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
-from src.data_deidentifier.domain.services.anonymization.structured import (
+from data_deidentifier.domain.contracts.validator import EntityTypeValidatorContract
+from data_deidentifier.domain.services.anonymization.structured import (
     StructuredDataAnonymizationService,
 )
-from src.data_deidentifier.domain.services.anonymization.text import (
+from data_deidentifier.domain.services.anonymization.text import (
     TextAnonymizationService,
 )
-from src.data_deidentifier.domain.services.health_check.health_check import (
+from data_deidentifier.domain.services.health_check.health_check import (
     HealthCheckService,
 )
-from src.data_deidentifier.domain.services.pseudonymization.structured import (
+from data_deidentifier.domain.services.pseudonymization.structured import (
     StructuredDataPseudonymizationService,
 )
-from src.data_deidentifier.domain.services.pseudonymization.text import (
+from data_deidentifier.domain.services.pseudonymization.text import (
     TextPseudonymizationService,
 )
 

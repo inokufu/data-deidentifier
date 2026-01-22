@@ -3,10 +3,10 @@ from typing import Any, override
 
 from logger import LoggerContract
 
-from src.data_deidentifier.domain.contracts.pseudonymizer.method import (
+from data_deidentifier.domain.contracts.pseudonymizer.method import (
     PseudonymizationMethodContract,
 )
-from src.data_deidentifier.domain.types.entity import Entity
+from data_deidentifier.domain.types.entity import Entity
 
 
 class RandomNumberPseudonymizationMethod(PseudonymizationMethodContract):
@@ -28,6 +28,9 @@ class RandomNumberPseudonymizationMethod(PseudonymizationMethodContract):
 
     @override
     def generate_pseudonym(self, entity: Entity) -> str:
+        if entity.text is None:
+            return ""
+
         cache_key = entity.text
         entity_type = entity.type
 
@@ -36,9 +39,9 @@ class RandomNumberPseudonymizationMethod(PseudonymizationMethodContract):
             self._mapping[entity_type] = {}
 
         # Check if we already have a pseudonym for this entity
-        entity_mapping_for_type = self._mapping.get(entity_type)
+        entity_mapping_for_type = self._mapping[entity_type]
         if cache_key in entity_mapping_for_type:
-            return entity_mapping_for_type.get(cache_key)
+            return entity_mapping_for_type[cache_key]
 
         # Generate base random number
         random_number = secrets.randbits(self.RANDOM_BITS_NUMBER)

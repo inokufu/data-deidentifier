@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
 
-from src.data_deidentifier.domain.contracts.enricher.manager import (
+from data_deidentifier.domain.contracts.enricher.manager import (
     PseudonymEnrichmentManagerContract,
 )
-from src.data_deidentifier.domain.contracts.pseudonymizer.method import (
+from data_deidentifier.domain.contracts.pseudonymizer.method import (
     PseudonymizationMethodContract,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.structured_data import StructuredData
-from src.data_deidentifier.domain.types.structured_pseudonymization_result import (
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.structured_data import StructuredData
+from data_deidentifier.domain.types.structured_pseudonymization_result import (
     StructuredDataPseudonymizationResult,
 )
 

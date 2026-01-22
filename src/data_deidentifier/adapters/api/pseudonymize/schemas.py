@@ -2,12 +2,12 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from src.data_deidentifier.domain.types.entity import Entity
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.pseudonymization_method import (
+from data_deidentifier.domain.types.entity import Entity
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.pseudonymization_method import (
     PseudonymizationMethod,
 )
-from src.data_deidentifier.domain.types.structured_data import StructuredData
+from data_deidentifier.domain.types.structured_data import StructuredData
 
 
 class PseudonymizeTextRequest(BaseModel):

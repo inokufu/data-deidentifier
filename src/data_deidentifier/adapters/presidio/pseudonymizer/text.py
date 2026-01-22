@@ -2,28 +2,28 @@ from typing import override
 
 from logger import LoggerContract
 
-from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
-from src.data_deidentifier.adapters.presidio.anonymizer.text import (
+from data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
+from data_deidentifier.adapters.presidio.anonymizer.text import (
     PresidioTextAnonymizer,
 )
-from src.data_deidentifier.domain.contracts.enricher.manager import (
+from data_deidentifier.domain.contracts.enricher.manager import (
     PseudonymEnrichmentManagerContract,
 )
-from src.data_deidentifier.domain.contracts.pseudonymizer.method import (
+from data_deidentifier.domain.contracts.pseudonymizer.method import (
     PseudonymizationMethodContract,
 )
-from src.data_deidentifier.domain.contracts.pseudonymizer.text import (
+from data_deidentifier.domain.contracts.pseudonymizer.text import (
     TextPseudonymizerContract,
 )
-from src.data_deidentifier.domain.exceptions import (
+from data_deidentifier.domain.exceptions import (
     TextAnonymizationError,
     TextPseudonymizationError,
 )
-from src.data_deidentifier.domain.types.anonymization_operator import (
+from data_deidentifier.domain.types.anonymization_operator import (
     AnonymizationOperator,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.text_pseudonymization_result import (
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.text_pseudonymization_result import (
     TextPseudonymizationResult,
 )
 

@@ -5,7 +5,7 @@ from typing import Any
 from fastapi import FastAPI
 from logger import LogLevel, LoguruLogger
 
-from src.data_deidentifier.adapters.infrastructure.config.settings import Settings
+from data_deidentifier.adapters.infrastructure.config.settings import Settings
 
 from .anonymize.router import router as anonymize_router
 from .exception_handler import ExceptionHandler
@@ -25,7 +25,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[dict[str, Any]]:
     Yields:
         A dictionary containing logger and config objects
     """
-    logger = LoguruLogger(level=config.get_log_level())
+    logger = LoguruLogger(level=LogLevel[config.get_log_level().name])
     logger.info(
         "Application starting",
         {

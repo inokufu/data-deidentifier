@@ -2,20 +2,20 @@ from typing import TYPE_CHECKING, override
 
 from presidio_anonymizer.operators import Operator, OperatorType
 
-from src.data_deidentifier.domain.exceptions import PseudonymEnrichmentError
-from src.data_deidentifier.domain.types.anonymization_operator import (
+from data_deidentifier.domain.exceptions import PseudonymEnrichmentError
+from data_deidentifier.domain.types.anonymization_operator import (
     AnonymizationOperator,
 )
-from src.data_deidentifier.domain.types.entity import Entity
+from data_deidentifier.domain.types.entity import Entity
 
 if TYPE_CHECKING:
-    from src.data_deidentifier.adapters.infrastructure.config.contract import (
+    from data_deidentifier.adapters.infrastructure.config.contract import (
         ConfigContract,
     )
-    from src.data_deidentifier.domain.contracts.enricher.manager import (
+    from data_deidentifier.domain.contracts.enricher.manager import (
         PseudonymEnrichmentManagerContract,
     )
-    from src.data_deidentifier.domain.contracts.pseudonymizer.method import (
+    from data_deidentifier.domain.contracts.pseudonymizer.method import (
         PseudonymizationMethodContract,
     )
 
@@ -52,9 +52,12 @@ class PseudonymizeOperator(Operator):
         Returns:
             The pseudonymized text
         """
+        if params is None or "entity_type" not in params:
+            raise ValueError("Parameters dictionary is required")
+
         entity = Entity(
             text=text,
-            type=params.get("entity_type"),
+            type=params["entity_type"],
             start=params.get("start", 0),
             end=params.get("end", len(text)),
             score=params.get("score", 1.0),
@@ -82,7 +85,9 @@ class PseudonymizeOperator(Operator):
         Returns:
             The base pseudonym
         """
-        method: PseudonymizationMethodContract = params.get(self.PARAM_METHOD)
+        method: PseudonymizationMethodContract | None = params.get(self.PARAM_METHOD)
+        if not method:
+            raise ValueError("A 'method' parameter is required")
         return method.generate_pseudonym(entity=entity)
 
     def _get_enrichment(self, entity: Entity, params: dict) -> str | None:
@@ -95,7 +100,7 @@ class PseudonymizeOperator(Operator):
         Returns:
             The enrichment text if available, None otherwise
         """
-        config: ConfigContract = params.get(self.PARAM_CONFIG)
+        config: ConfigContract | None = params.get(self.PARAM_CONFIG)
         enricher: PseudonymEnrichmentManagerContract | None = params.get(
             self.PARAM_ENRICHER,
         )

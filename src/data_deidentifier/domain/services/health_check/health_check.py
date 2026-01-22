@@ -1,8 +1,8 @@
 from logger import LoggerContract
 
-from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
-from src.data_deidentifier.domain.contracts.health_check import HealthCheckContract
-from src.data_deidentifier.domain.types.health_check_result import HealthCheckResult
+from data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
+from data_deidentifier.domain.contracts.health_check import HealthCheckContract
+from data_deidentifier.domain.types.health_check_result import HealthCheckResult
 
 
 class HealthCheckService(HealthCheckContract):

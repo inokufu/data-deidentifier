@@ -9,7 +9,7 @@ from presidio_structured.data.data_processors import (
     JsonDataProcessor,
 )
 
-from src.data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.language import SupportedLanguage
 
 from .structured_type import StructuredTypeAnalyzer
 
@@ -32,7 +32,7 @@ class JsonAnalyzer(StructuredTypeAnalyzer):
         analyzer = JsonAnalysisBuilder()
         return analyzer.generate_analysis(
             data=data,
-            language=language,
+            language=language.value.lower(),
         )
 
     @override

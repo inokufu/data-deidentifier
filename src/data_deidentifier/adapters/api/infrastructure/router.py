@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 
-from src.data_deidentifier.adapters.api.dependencies import get_health_check_service
-from src.data_deidentifier.domain.services.health_check.health_check import (
+from data_deidentifier.adapters.api.dependencies import get_health_check_service
+from data_deidentifier.domain.services.health_check.health_check import (
     HealthCheckService,
 )
 

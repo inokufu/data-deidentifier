@@ -1,9 +1,9 @@
 from logger import LoggerContract
 from presidio_analyzer import RecognizerResult
 
-from src.data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
-from src.data_deidentifier.adapters.presidio.exceptions import TextAnalysisError
-from src.data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
+from data_deidentifier.adapters.presidio.exceptions import TextAnalysisError
+from data_deidentifier.domain.types.language import SupportedLanguage
 
 
 class PresidioTextAnalyzer:
@@ -42,8 +42,6 @@ class PresidioTextAnalyzer:
         Raises:
             TextAnalysisError: If analysis fails
         """
-        language = language.lower()
-
         logger_context = {
             "text_length": len(text),
             "language": language,

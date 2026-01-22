@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.data_deidentifier.domain.types.health_check_result import HealthCheckResult
+from data_deidentifier.domain.types.health_check_result import HealthCheckResult
 
 
 class HealthCheckContract(ABC):

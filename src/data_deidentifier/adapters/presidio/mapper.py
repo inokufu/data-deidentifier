@@ -1,8 +1,8 @@
 from presidio_analyzer import RecognizerResult
 from presidio_structured import StructuredAnalysis as PresidioStructuredAnalysis
 
-from src.data_deidentifier.domain.types.entity import Entity
-from src.data_deidentifier.domain.types.structured_anonymization_result import (
+from data_deidentifier.domain.types.entity import Entity
+from data_deidentifier.domain.types.structured_anonymization_result import (
     StructuredDataAnalysisField,
 )
 

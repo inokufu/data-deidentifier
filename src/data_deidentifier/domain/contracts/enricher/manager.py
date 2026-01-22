@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.data_deidentifier.domain.contracts.enricher.enricher import (
+from data_deidentifier.domain.contracts.enricher.enricher import (
     PseudonymEnricherContract,
 )
 
