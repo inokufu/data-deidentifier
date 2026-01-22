@@ -1,4 +1,4 @@
-from typing import Any, override
+from typing import Any, cast, override
 
 from logger import LoggerContract
 from presidio_anonymizer.entities import OperatorConfig
@@ -74,7 +74,7 @@ class PresidioTextAnonymizer(TextAnonymizerContract):
             # Anonymize the text
             presidio_results = self.presidio_anonymizer.anonymize(
                 text=text,
-                analyzer_results=analyzer_results,
+                analyzer_results=cast(list, analyzer_results),
                 operators={
                     "DEFAULT": OperatorConfig(
                         operator_name=operator,

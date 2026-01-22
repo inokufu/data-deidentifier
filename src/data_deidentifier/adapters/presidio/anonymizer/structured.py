@@ -113,6 +113,12 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
             logger_context,
         )
 
+        # Sanity check - should never happen as we only support dicts for now
+        if isinstance(anonymized_data, pd.DataFrame):
+            msg = "Unsupported anonymized data type: pandas DataFrame."
+            self.logger.error(msg, logger_context)
+            raise StructuredDataAnonymizationError(msg)
+
         return StructuredDataAnonymizationResult(
             anonymized_data=anonymized_data,
             detected_fields=fields,
