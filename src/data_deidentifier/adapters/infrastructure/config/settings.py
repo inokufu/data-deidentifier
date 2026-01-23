@@ -3,11 +3,11 @@ from typing import Annotated, Any, override
 from configcore import Settings as CoreSettings
 from pydantic import BeforeValidator, Field
 
-from src.data_deidentifier.domain.types.anonymization_operator import (
+from data_deidentifier.domain.types.anonymization_operator import (
     AnonymizationOperator,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.pseudonymization_method import (
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.pseudonymization_method import (
     PseudonymizationMethod,
 )
 

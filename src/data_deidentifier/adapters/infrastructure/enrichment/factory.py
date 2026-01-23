@@ -2,15 +2,15 @@ from typing import Any, ClassVar, override
 
 from logger import LoggerContract
 
-from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
-from src.data_deidentifier.domain.contracts.enricher.enricher import (
+from data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
+from data_deidentifier.domain.contracts.enricher.enricher import (
     PseudonymEnricherContract,
 )
-from src.data_deidentifier.domain.contracts.enricher.manager import (
+from data_deidentifier.domain.contracts.enricher.manager import (
     PseudonymEnrichmentManagerContract,
 )
-from src.data_deidentifier.domain.exceptions import PseudonymEnrichmentError
-from src.data_deidentifier.domain.types.enrichment_type import EnrichmentType
+from data_deidentifier.domain.exceptions import PseudonymEnrichmentError
+from data_deidentifier.domain.types.enrichment_type import EnrichmentType
 
 from .http_service import HttpPseudonymEnricher
 
@@ -60,6 +60,9 @@ class EnrichmentFactory(PseudonymEnrichmentManagerContract):
             return None
 
         entity_config = enrichment_configs.get(entity_type)
+        if not entity_config:
+            return None
+
         try:
             return self.create(
                 entity_type=entity_type,

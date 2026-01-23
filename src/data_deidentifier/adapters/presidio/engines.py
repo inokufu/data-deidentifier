@@ -24,7 +24,7 @@ class PresidioEngineFactory:
 
     Attributes:
         _lock: Thread lock for safe singleton creation.
-        _text_analyzer_engine: Cached instance of the text analyzer engine.
+        _analyzer_engine: Cached instance of the text analyzer engine.
         _text_anonymizer_engine: Cached instance of the text anonymizer engine.
         _structured_data_factory: Cached factory for structured data analyzers.
         _structured_data_engines: Cache of structured anonymizer engines
@@ -51,6 +51,10 @@ class PresidioEngineFactory:
             with cls._lock:
                 if cls._analyzer_engine is None:
                     cls._analyzer_engine = AnalyzerEngine()
+
+        if cls._analyzer_engine is None:
+            raise RuntimeError("Failed to initialize analyzer engine")
+
         return cls._analyzer_engine
 
     @classmethod
@@ -68,6 +72,10 @@ class PresidioEngineFactory:
                 if cls._text_anonymizer_engine is None:
                     cls._text_anonymizer_engine = AnonymizerEngine()
                     cls._text_anonymizer_engine.add_anonymizer(PseudonymizeOperator)
+
+        if cls._text_anonymizer_engine is None:
+            raise RuntimeError("Failed to initialize text anonymizer engine")
+
         return cls._text_anonymizer_engine
 
     @classmethod
@@ -90,6 +98,10 @@ class PresidioEngineFactory:
             with cls._lock:
                 if cls._structured_data_factory is None:
                     cls._structured_data_factory = StructuredDataAnalyzerFactory(logger)
+
+        if cls._structured_data_factory is None:
+            raise RuntimeError("Failed to initialize structured data analyzer engine")
+
         return cls._structured_data_factory
 
     @classmethod

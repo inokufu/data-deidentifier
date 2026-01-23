@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from src.data_deidentifier.domain.types.anonymization_operator import (
+from data_deidentifier.domain.types.anonymization_operator import (
     AnonymizationOperator,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.text_anonymization_result import (
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.text_anonymization_result import (
     TextAnonymizationResult,
 )
 

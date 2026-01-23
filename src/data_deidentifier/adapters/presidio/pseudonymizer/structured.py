@@ -2,29 +2,29 @@ from typing import override
 
 from logger import LoggerContract
 
-from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
-from src.data_deidentifier.adapters.presidio.anonymizer.structured import (
+from data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
+from data_deidentifier.adapters.presidio.anonymizer.structured import (
     PresidioStructuredDataAnonymizer,
 )
-from src.data_deidentifier.domain.contracts.enricher.manager import (
+from data_deidentifier.domain.contracts.enricher.manager import (
     PseudonymEnrichmentManagerContract,
 )
-from src.data_deidentifier.domain.contracts.pseudonymizer.method import (
+from data_deidentifier.domain.contracts.pseudonymizer.method import (
     PseudonymizationMethodContract,
 )
-from src.data_deidentifier.domain.contracts.pseudonymizer.structured import (
+from data_deidentifier.domain.contracts.pseudonymizer.structured import (
     StructuredDataPseudonymizerContract,
 )
-from src.data_deidentifier.domain.exceptions import (
+from data_deidentifier.domain.exceptions import (
     StructuredDataAnonymizationError,
     StructuredDataPseudonymizationError,
 )
-from src.data_deidentifier.domain.types.anonymization_operator import (
+from data_deidentifier.domain.types.anonymization_operator import (
     AnonymizationOperator,
 )
-from src.data_deidentifier.domain.types.language import SupportedLanguage
-from src.data_deidentifier.domain.types.structured_data import StructuredData
-from src.data_deidentifier.domain.types.structured_pseudonymization_result import (
+from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.structured_data import StructuredData
+from data_deidentifier.domain.types.structured_pseudonymization_result import (
     StructuredDataPseudonymizationResult,
 )
 

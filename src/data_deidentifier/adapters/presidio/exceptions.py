@@ -1,4 +1,4 @@
-from src.data_deidentifier.domain.exceptions import DataDeidentifierError
+from data_deidentifier.domain.exceptions import DataDeidentifierError
 
 
 class AnalysisError(DataDeidentifierError):

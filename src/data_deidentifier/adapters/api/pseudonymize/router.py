@@ -2,16 +2,16 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
-from src.data_deidentifier.adapters.api.dependencies import (
+from data_deidentifier.adapters.api.dependencies import (
     get_config,
     get_structured_data_pseudonymization_service,
     get_text_pseudonymization_service,
 )
-from src.data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
-from src.data_deidentifier.domain.services.pseudonymization.structured import (
+from data_deidentifier.adapters.infrastructure.config.contract import ConfigContract
+from data_deidentifier.domain.services.pseudonymization.structured import (
     StructuredDataPseudonymizationService,
 )
-from src.data_deidentifier.domain.services.pseudonymization.text import (
+from data_deidentifier.domain.services.pseudonymization.text import (
     TextPseudonymizationService,
 )
 

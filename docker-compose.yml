@@ -30,7 +30,7 @@ services:
     profiles: [ "dev" ]
 
   traefik-dev:
-    image: traefik:${TRAEFIK_RELEASE:-v3.4.4}
+    image: traefik:${TRAEFIK_RELEASE:-v3.6.6}
     command:
       # App configuration
       - "--providers.docker=true"
@@ -73,7 +73,7 @@ services:
     profiles: [ "prod" ]
 
   traefik-prod:
-    image: traefik:${TRAEFIK_RELEASE:-v3.4.4}
+    image: traefik:${TRAEFIK_RELEASE:-v3.6.6}
     command:
       # App configuration
       - "--providers.docker=true"

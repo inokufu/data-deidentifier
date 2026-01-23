@@ -5,8 +5,9 @@
 [![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-E6F0FF?logo=githubactions)](https://github.com/features/actions)
 [![Pytest](https://img.shields.io/badge/pytest-E6F7FF?logo=pytest)](https://docs.pytest.org/)
 [![EditorConfig](https://img.shields.io/badge/EditorConfig-333333?logo=editorconfig)](https://editorconfig.org/)
-[![Rye](https://img.shields.io/badge/Rye-000000?logo=rye)](https://rye.astral.sh/)
+[![uv](https://img.shields.io/badge/uv-261230?logo=astral)](https://docs.astral.sh/uv/)
 [![Ruff](https://img.shields.io/badge/Ruff-3A3A3A?logo=ruff)](https://docs.astral.sh/ruff/)
+[![ty](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ty/main/assets/badge/v0.json)](https://github.com/astral-sh/ty)
 [![Pre-commit](https://img.shields.io/badge/pre--commit-40332E?logo=pre-commit)](https://pre-commit.com/)
 [![Makefile](https://img.shields.io/badge/Makefile-427819?logo=gnu)](https://www.gnu.org/software/make/manual/make.html)
 [![MkDocs](https://img.shields.io/badge/MkDocs-526CFE?logo=markdown)](https://www.mkdocs.org/)
@@ -23,7 +24,7 @@
       * [Development Environment](#development-environment)
       * [Quick Start (Without volumes or Traefik)](#quick-start-without-volumes-or-traefik)
       * [Production Environment](#production-environment)
-    * [With Rye](#with-rye)
+    * [With uv](#with-uv)
     * [Prerequisites](#prerequisites-1)
     * [Installation](#installation)
   * [Usage](#usage)
@@ -81,7 +82,7 @@ with configurable operators and methods.
 
 ## Setup and installation
 
-You can run the application either directly with **Rye** or using **Docker**.
+You can run the application either directly with **uv** or using **Docker**.
 
 1. Clone the repository
 2. Set up environment variables:
@@ -139,16 +140,16 @@ environment:
 docker compose --profile prod up --build
 ```
 
-### With Rye
+### With uv
 
 ### Prerequisites
 
 - Python 3.13 or higher
-- [Rye](https://rye.astral.sh) for dependency management
+- [uv](https://docs.astral.sh/uv/) for dependency management
 
 ### Installation
 
-1. Install Rye, see https://rye.astral.sh/guide/installation/
+1. Install uv, see https://docs.astral.sh/uv/getting-started/installation/
 
 2. **Install dependencies**
    ```bash

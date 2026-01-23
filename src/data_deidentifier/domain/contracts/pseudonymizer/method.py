@@ -3,7 +3,7 @@ from typing import Any
 
 from logger import LoggerContract
 
-from src.data_deidentifier.domain.types.entity import Entity
+from data_deidentifier.domain.types.entity import Entity
 
 
 class PseudonymizationMethodContract(ABC):
