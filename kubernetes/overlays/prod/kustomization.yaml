@@ -18,7 +18,7 @@ configMapGenerator:
       - ENVIRONMENT=production
       - LOG_LEVEL=warning
       - THREADS_PER_WORKER=4
-      - WORKERS_COUNT=2
+      - WORKERS_COUNT=1
     name: ddi-config
 
 labels:
@@ -33,4 +33,4 @@ patches:
 images:
   - name: ddi
     newName: rg.fr-par.scw.cloud/deidentification/ddi
-    newTag: 1.0.0
+    newTag: 1.0.1-add-french-7

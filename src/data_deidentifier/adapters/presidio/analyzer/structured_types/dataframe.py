@@ -34,7 +34,7 @@ class DataFrameAnalyzer(StructuredTypeAnalyzer):
     ) -> StructuredAnalysis:
         self.logger.debug("Analyzing DataFrame", {"nb_rows": len(data)})
 
-        analyzer = PandasAnalysisBuilder()
+        analyzer = PandasAnalysisBuilder(analyzer=self.analyzer_engine)
         return analyzer.generate_analysis(
             df=data,
             language=language.value.lower(),

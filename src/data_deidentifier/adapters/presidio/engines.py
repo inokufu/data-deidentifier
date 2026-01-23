@@ -1,12 +1,18 @@
 import threading
-from typing import ClassVar
+from pathlib import Path
+from time import perf_counter as time_perf_counter
+from typing import ClassVar, override
 
 from logger import LoggerContract
 from presidio_analyzer import AnalyzerEngine
+from presidio_analyzer.nlp_engine import NlpEngineProvider
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.operators.operators_factory import ANONYMIZERS
 from presidio_structured import StructuredEngine
 from presidio_structured.data.data_processors import DataProcessorBase
+
+from data_deidentifier.domain.contracts.engine_factory import EngineFactoryContract
+from data_deidentifier.domain.types.language import SupportedLanguage
 
 from .analyzer.structured_types.factory import (
     StructuredDataAnalyzerFactory,
@@ -16,7 +22,7 @@ from .pseudonymizer.custom_operator import (
 )
 
 
-class PresidioEngineFactory:
+class PresidioEngineFactory(EngineFactoryContract):
     """Thread-safe factory and cache manager for Presidio engines.
 
     Provides a centralized way to lazily instantiate and reuse Presidio engines
@@ -50,7 +56,14 @@ class PresidioEngineFactory:
         if cls._analyzer_engine is None:
             with cls._lock:
                 if cls._analyzer_engine is None:
-                    cls._analyzer_engine = AnalyzerEngine()
+                    nlp_engine_provider = NlpEngineProvider(
+                        conf_file=Path(__file__).resolve().parent
+                        / "presidio_nlp_config.yaml",
+                    )
+                    cls._analyzer_engine = AnalyzerEngine(
+                        nlp_engine=nlp_engine_provider.create_engine(),
+                        supported_languages=[lang.value for lang in SupportedLanguage],
+                    )
 
         if cls._analyzer_engine is None:
             raise RuntimeError("Failed to initialize analyzer engine")
@@ -97,7 +110,10 @@ class PresidioEngineFactory:
         if cls._structured_data_factory is None:
             with cls._lock:
                 if cls._structured_data_factory is None:
-                    cls._structured_data_factory = StructuredDataAnalyzerFactory(logger)
+                    cls._structured_data_factory = StructuredDataAnalyzerFactory(
+                        logger=logger,
+                        analyzer_engine=cls.get_analyzer_engine(),
+                    )
 
         if cls._structured_data_factory is None:
             raise RuntimeError("Failed to initialize structured data analyzer engine")
@@ -139,3 +155,26 @@ class PresidioEngineFactory:
                     )
 
         return cls._structured_data_engines[key]
+
+    @classmethod
+    @override
+    def warmup(cls, logger: LoggerContract) -> None:
+        """Pre-load all Presidio engines and spaCy models at application startup.
+
+        This method eagerly initializes the analyzer and anonymizer engines,
+        loading spaCy language models into memory. Call this during application
+        startup to avoid cold-start latency on the first API request.
+
+        Args:
+            logger: Logger instance for logging information.
+        """
+        start = time_perf_counter()
+
+        # Load analyzer engine (loads spaCy models for all configured languages)
+        cls.get_analyzer_engine()
+
+        # Load text anonymizer engine
+        cls.get_text_anonymizer_engine()
+
+        duration = time_perf_counter() - start
+        logger.info("NLP models loaded successfully", {"duration_seconds": duration})

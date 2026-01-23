@@ -407,7 +407,9 @@ version = "1.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "configcore" },
+    { name = "en-core-web-lg" },
     { name = "fastapi" },
+    { name = "fr-core-news-lg" },
     { name = "gunicorn" },
     { name = "httpx" },
     { name = "logger" },
@@ -438,7 +440,9 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "configcore", git = "https://github.com/inokufu/python-config?rev=v0.2.1" },
+    { name = "en-core-web-lg", url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.8.0/en_core_web_lg-3.8.0-py3-none-any.whl" },
     { name = "fastapi", specifier = ">=0.120.0,<0.121.0" },
+    { name = "fr-core-news-lg", url = "https://github.com/explosion/spacy-models/releases/download/fr_core_news_lg-3.8.0/fr_core_news_lg-3.8.0-py3-none-any.whl" },
     { name = "gunicorn", specifier = ">=23.0.0,<23.1.0" },
     { name = "httpx", specifier = ">=0.28.1,<0.28.2" },
     { name = "logger", git = "https://github.com/inokufu/python-logger?rev=v0.2.1" },
@@ -491,6 +495,14 @@ wheels = [
 ]
 
 [[package]]
+name = "en-core-web-lg"
+version = "3.8.0"
+source = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.8.0/en_core_web_lg-3.8.0-py3-none-any.whl" }
+wheels = [
+    { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.8.0/en_core_web_lg-3.8.0-py3-none-any.whl", hash = "sha256:293e9547a655b25499198ab15a525b05b9407a75f10255e405e8c3854329ab63" },
+]
+
+[[package]]
 name = "fastapi"
 version = "0.120.4"
 source = { registry = "https://pypi.org/simple" }
@@ -512,6 +524,14 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/1d/65/ce7f1b70157833bf3cb851b556a37d4547ceafc158aa9b34b36782f23696/filelock-3.20.3.tar.gz", hash = "sha256:18c57ee915c7ec61cff0ecf7f0f869936c7c30191bb0cf406f1341778d0834e1", size = 19485, upload-time = "2026-01-09T17:55:05.421Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b5/36/7fb70f04bf00bc646cd5bb45aa9eddb15e19437a28b8fb2b4a5249fac770/filelock-3.20.3-py3-none-any.whl", hash = "sha256:4b0dda527ee31078689fc205ec4f1c1bf7d56cf88b6dc9426c4f230e46c2dce1", size = 16701, upload-time = "2026-01-09T17:55:04.334Z" },
+]
+
+[[package]]
+name = "fr-core-news-lg"
+version = "3.8.0"
+source = { url = "https://github.com/explosion/spacy-models/releases/download/fr_core_news_lg-3.8.0/fr_core_news_lg-3.8.0-py3-none-any.whl" }
+wheels = [
+    { url = "https://github.com/explosion/spacy-models/releases/download/fr_core_news_lg-3.8.0/fr_core_news_lg-3.8.0-py3-none-any.whl", hash = "sha256:da5bf7fc860af64293d88638b4416b3de3a29005b785bfff67d09b06c77345de" },
 ]
 
 [[package]]

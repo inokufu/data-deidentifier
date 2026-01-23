@@ -354,7 +354,7 @@ make docs-serve        # Serve project documentation locally
 | Variable                               | Description                                                   | Required | Default Value      | Possible Values                                 |
 |----------------------------------------|---------------------------------------------------------------|----------|--------------------|-------------------------------------------------|
 | **Application Configuration**          |                                                               |          |                    |                                                 |
-| `DEFAULT_LANGUAGE`                     | Default language for text analysis                            | No       | `en`               | `en`                                            |
+| `DEFAULT_LANGUAGE`                     | Default language for text analysis                            | No       | `en`               | `en`, `fr`                                      |
 | `DEFAULT_MINIMUM_SCORE`                | Default confidence threshold                                  | No       | `0.5`              | `0.0` to `1.0`                                  |
 | `DEFAULT_ANONYMIZATION_OPERATOR`       | Default anonymization method                                  | No       | `replace`          | `replace`, `redact`, `mask`, `hash`, `encrypt`  |
 | `DEFAULT_PSEUDONYMIZATION_METHOD`      | Default pseudonymization method                               | No       | `random_number`    | `random_number`, `counter`, `crypto_hash`       |

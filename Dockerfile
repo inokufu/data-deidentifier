@@ -64,4 +64,4 @@ USER appuser
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-CMD ["gunicorn", "data_deidentifier.__main__:main"]
+CMD ["gunicorn", "data_deidentifier.adapters.api.main:app"]
