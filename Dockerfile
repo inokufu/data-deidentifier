@@ -1,4 +1,4 @@
-ARG VARIANT=3.13.11-slim-bookworm
+ARG VARIANT=3.13.12-slim-bookworm
 # Base stage
 FROM python:${VARIANT} AS base
 WORKDIR /app
