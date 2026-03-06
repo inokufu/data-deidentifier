@@ -41,7 +41,7 @@ class BaseHttpClient:
     @retry(
         stop=stop_after_attempt(3),
         wait=wait_exponential(multiplier=1, min=1, max=5),
-        retry=retry_if_exception(lambda e: BaseHttpClient._should_retry(e)),
+        retry=retry_if_exception(lambda e: BaseHttpClient._should_retry(e)),  # noqa: PLW0108
         reraise=True,
     )
     def request(
