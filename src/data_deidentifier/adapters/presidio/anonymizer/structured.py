@@ -91,7 +91,7 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
         operators = {
             field.entity_type: OperatorConfig(
                 operator_name=operator,
-                params={**operator_params, "entity_type": field.entity_type},
+                params={**(operator_params or {}), "entity_type": field.entity_type},
             )
             for field in fields
         }
