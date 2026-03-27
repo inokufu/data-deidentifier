@@ -148,7 +148,7 @@ class PresidioEngineFactory(EngineFactoryContract):
                     # instantiates a new OperatorsFactory(), which only loads
                     # predefined operators from the global ANONYMIZERS list.
                     if PseudonymizeOperator not in ANONYMIZERS:
-                        ANONYMIZERS.append(PseudonymizeOperator)
+                        ANONYMIZERS.append(PseudonymizeOperator)  # ty: ignore[invalid-argument-type]
 
                     cls._structured_data_engines[key] = StructuredEngine(
                         data_processor=processor,
