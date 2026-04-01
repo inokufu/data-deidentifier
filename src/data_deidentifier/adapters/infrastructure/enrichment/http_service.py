@@ -62,7 +62,7 @@ class HttpPseudonymEnricher(PseudonymEnricherContract):
 
             enrichment = self.parse_response_data(response_data=response.json())
 
-            if enrichment and isinstance(enrichment, str) and enrichment.strip():
+            if enrichment and enrichment.strip():
                 self.logger.debug(
                     "Pseudonym enrichment successful",
                     {"enrichment": enrichment},

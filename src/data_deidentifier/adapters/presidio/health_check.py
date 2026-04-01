@@ -20,7 +20,7 @@ class PresidioHealthChecker(HealthCheckContract):
 
     @override
     def check_readiness(self) -> HealthCheckResult:
-        checks = {}
+        checks: dict[str, dict[str, str | int | bool]] = {}
         is_healthy = True
 
         try:
