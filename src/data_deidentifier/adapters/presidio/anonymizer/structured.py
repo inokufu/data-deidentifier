@@ -1,6 +1,5 @@
 from typing import Any, override
 
-import pandas as pd
 from logger import LoggerContract
 from presidio_anonymizer.entities import OperatorConfig
 
@@ -11,6 +10,7 @@ from data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
 from data_deidentifier.adapters.presidio.exceptions import (
     StructuredDataAnalysisError,
 )
+from data_deidentifier.adapters.presidio.json_utils import flatten, unflatten
 from data_deidentifier.adapters.presidio.mapper import PresidioStructuredDataMapper
 from data_deidentifier.domain.contracts.anonymizer.structured import (
     StructuredDataAnonymizerContract,
@@ -50,16 +50,12 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
         entity_types: list[str] | None = None,
         operator_params: dict[str, Any] | None = None,
     ) -> StructuredDataAnonymizationResult:
-        if not isinstance(data, dict | pd.DataFrame):
-            raise TypeError(
-                f"Unsupported data type: {type(data).__name__}. "
-                "Expected dict or pandas DataFrame.",
-            )
+        flat_data = flatten(data)
 
         try:
             # Use the analyzer to process the data
             analyzer_results, data_processor = self.analyzer.analyze(
-                data=data,
+                data=flat_data,
                 language=language,
                 entity_types=entity_types,
             )
@@ -99,7 +95,7 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
         try:
             # Anonymize the structured data
             anonymized_data = engine.anonymize(
-                data=data,
+                data=flat_data,
                 structured_analysis=analyzer_results,
                 operators=operators,
             )
@@ -113,13 +109,7 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
             logger_context,
         )
 
-        # Sanity check - should never happen as we only support dicts for now
-        if isinstance(anonymized_data, pd.DataFrame):
-            msg = "Unsupported anonymized data type: pandas DataFrame."
-            self.logger.error(msg, logger_context)
-            raise StructuredDataAnonymizationError(msg)
-
         return StructuredDataAnonymizationResult(
-            anonymized_data=anonymized_data,
+            anonymized_data=unflatten(anonymized_data),
             detected_fields=fields,
         )
