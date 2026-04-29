@@ -9,6 +9,8 @@ from data_deidentifier.adapters.presidio.exceptions import (
 from data_deidentifier.domain.types.language import SupportedLanguage
 from data_deidentifier.domain.types.structured_data import StructuredData
 
+from .structured_types.JSON import StructuredAnalysisWithSpans
+
 
 class PresidioStructuredDataAnalyzer:
     """Implementation of the structured analyzer contract using Presidio-structured.
@@ -79,6 +81,12 @@ class PresidioStructuredDataAnalyzer:
                 for field_name, entity_type in presidio_results.entity_mapping.items()
                 if entity_type in entity_types
             }
+            if isinstance(presidio_results, StructuredAnalysisWithSpans):
+                presidio_results.spans_mapping = {
+                    field_path: spans
+                    for field_path, spans in presidio_results.spans_mapping.items()
+                    if ".".join(field_path) in presidio_results.entity_mapping
+                }
 
         self.logger.info(
             "Structured analysis completed successfully",

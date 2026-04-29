@@ -1,7 +1,6 @@
 from typing import Any, override
 
 from logger import LoggerContract
-from presidio_anonymizer.entities import OperatorConfig
 
 from data_deidentifier.adapters.presidio.analyzer.structured import (
     PresidioStructuredDataAnalyzer,
@@ -80,17 +79,11 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
         engine = PresidioEngineFactory.get_structured_data_anonymizer_engine(
             processor=data_processor,
         )
-
-        # Create entity-specific OperatorConfig instead of single DEFAULT config
-        # Required because structured data processing doesn't auto-inject entity_type
-        # into params (unlike text anonymization), but our PseudonymizeOperator needs it
-        operators = {
-            field.entity_type: OperatorConfig(
-                operator_name=operator,
-                params={**(operator_params or {}), "entity_type": field.entity_type},
-            )
-            for field in fields
-        }
+        operators = engine.build_operators(
+            operator=operator,
+            fields=fields,
+            operator_params=operator_params,
+        )
 
         try:
             # Anonymize the structured data
@@ -111,5 +104,5 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
 
         return StructuredDataAnonymizationResult(
             anonymized_data=unflatten(anonymized_data),
-            detected_fields=fields,
+            detected_fields=engine.detected_fields,
         )

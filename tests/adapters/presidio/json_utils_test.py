@@ -1,6 +1,11 @@
 import pytest
 
-from data_deidentifier.adapters.presidio.json_utils import flatten, unflatten
+from data_deidentifier.adapters.presidio.json_utils import (
+    flatten,
+    get_nested_value,
+    set_nested_value,
+    unflatten,
+)
 
 
 class TestFlatten:
@@ -136,3 +141,130 @@ class TestRoundTrip:
 
         # Assert
         assert result == data
+
+
+class TestGetNestedValue:
+    """Tests for the get_nested_value function."""
+
+    @pytest.mark.parametrize(
+        ("data", "path", "expected"),
+        [
+            ({"a": "x"}, ("a",), "x"),
+            ({"a": {"b": {"c": "x"}}}, ("a", "b", "c"), "x"),
+            ({"users": {"0": {"name": "Alice"}}}, ("users", "0", "name"), "Alice"),
+            # Key containing a dot — the main advantage over dot-separated paths
+            ({"jacky@tuning.com": "x"}, ("jacky@tuning.com",), "x"),
+            # Empty path returns the dict itself
+            ({"a": "x"}, (), {"a": "x"}),
+        ],
+    )
+    def test_get_nested_value(
+        self,
+        data: dict,
+        path: tuple[str, ...],
+        expected: object,
+    ) -> None:
+        """Navigates nested dict using a tuple path."""
+        # Act
+        result = get_nested_value(data, path)
+
+        # Assert
+        assert result == expected
+
+    def test_missing_key_raises(self) -> None:
+        """Raises KeyError for a missing key."""
+        # Arrange
+        data = {"a": "x"}
+
+        # Act / Assert
+        with pytest.raises(KeyError):
+            get_nested_value(data, ("b",))
+
+
+class TestSetNestedValue:
+    """Tests for the set_nested_value function."""
+
+    @pytest.mark.parametrize(
+        ("data", "path", "value", "expected"),
+        [
+            ({"a": "x"}, ("a",), "y", {"a": "y"}),
+            ({"a": {"b": {"c": "x"}}}, ("a", "b", "c"), "y", {"a": {"b": {"c": "y"}}}),
+            (
+                {"users": {"0": {"name": "Alice"}}},
+                ("users", "0", "name"),
+                "Bob",
+                {"users": {"0": {"name": "Bob"}}},
+            ),
+            # Key containing a dot — the main advantage over dot-separated paths
+            (
+                {"jacky@tuning.com": "x"},
+                ("jacky@tuning.com",),
+                "y",
+                {"jacky@tuning.com": "y"},
+            ),
+        ],
+    )
+    def test_set_nested_value(
+        self,
+        data: dict,
+        path: tuple[str, ...],
+        value: object,
+        expected: dict,
+    ) -> None:
+        """Sets a value in a nested dict using a tuple path."""
+        # Act
+        set_nested_value(data, path, value)
+
+        # Assert
+        assert data == expected
+
+    def test_adds_new_leaf_key(self) -> None:
+        """Adds a new leaf key when intermediate nodes exist but the key does not."""
+        # Arrange
+        data = {"a": {}}
+
+        # Act
+        set_nested_value(data, ("a", "b"), "y")
+
+        # Assert
+        assert data == {"a": {"b": "y"}}
+
+    def test_mutates_in_place(self) -> None:
+        """Modifies the original dict, does not return a copy."""
+        # Arrange
+        data = {"a": {"b": "x"}}
+        original_inner = data["a"]
+
+        # Act
+        set_nested_value(data, ("a", "b"), "y")
+
+        # Assert
+        assert data["a"] is original_inner
+        assert data["a"]["b"] == "y"
+
+    def test_empty_path_raises(self) -> None:
+        """Raises ValueError for an empty path."""
+        # Arrange
+        data = {"a": "x"}
+
+        # Act / Assert
+        with pytest.raises(ValueError, match="Path cannot be empty"):
+            set_nested_value(data, (), "y")
+
+    def test_missing_intermediate_key_raises(self) -> None:
+        """Raises KeyError when an intermediate key does not exist."""
+        # Arrange
+        data = {"a": {}}
+
+        # Act / Assert
+        with pytest.raises(KeyError):
+            set_nested_value(data, ("a", "b", "c"), "y")
+
+    def test_intermediate_not_dict_raises(self) -> None:
+        """Raises TypeError when an intermediate node is not a dict."""
+        # Arrange
+        data = {"a": "x"}
+
+        # Act / Assert
+        with pytest.raises(TypeError):
+            set_nested_value(data, ("a", "b"), "y")
