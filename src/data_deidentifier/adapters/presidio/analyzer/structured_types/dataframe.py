@@ -32,7 +32,9 @@ class DataFrameAnalyzer(StructuredTypeAnalyzer):
         self,
         data: StructuredData,
         language: SupportedLanguage,
+        min_score: float = 0.0,
     ) -> StructuredAnalysis:
+        # PandasAnalysisBuilder.generate_analysis() doesn't expose score_threshold.
         self.logger.debug("Analyzing DataFrame", {"nb_rows": len(data)})
 
         analyzer = PandasAnalysisBuilder(analyzer=self.analyzer_engine)

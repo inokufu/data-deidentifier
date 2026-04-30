@@ -36,11 +36,12 @@ class StructuredDataAnonymizationService:
         self.anonymizer = anonymizer
         self.validator = validator
 
-    def anonymize(
+    def anonymize(  # noqa: PLR0913
         self,
         data: StructuredData,
         operator: AnonymizationOperator,
         language: SupportedLanguage,
+        min_score: float,
         entity_types: list[str],
         operator_params: dict[str, Any] | None = None,
     ) -> StructuredDataAnonymizationResult:
@@ -50,6 +51,7 @@ class StructuredDataAnonymizationService:
             data: The structured data to anonymize
             operator: Anonymization method to use
             language: Language code of the text
+            min_score: Minimum confidence score threshold
             entity_types: Entity types to detect
             operator_params: Optional parameters for the operator
 
@@ -71,4 +73,5 @@ class StructuredDataAnonymizationService:
             operator_params=operator_params,
             entity_types=effective_entity_types,
             language=language,
+            min_score=min_score,
         )

@@ -41,6 +41,7 @@ class JsonAnalysisBuilderWithSpans(JsonAnalysisBuilder):
         self,
         data: dict,
         language: str = "en",
+        score_threshold: float = 0.0,
     ) -> StructuredAnalysisWithSpans:
         """Analyze a JSON dict and return entity mapping alongside full spans.
 
@@ -54,6 +55,7 @@ class JsonAnalysisBuilderWithSpans(JsonAnalysisBuilder):
             language=language,
             n_process=self.n_process,
             batch_size=self.batch_size,
+            score_threshold=score_threshold,
         )
 
         entity_mapping: dict[str, str] = {}
@@ -97,6 +99,7 @@ class JsonAnalyzer(StructuredTypeAnalyzer):
         self,
         data: StructuredData,
         language: SupportedLanguage,
+        min_score: float = 0.0,
     ) -> StructuredAnalysisWithSpans:
         self.logger.debug("Analyzing JSON data", {"nb_keys": len(data)})
 
@@ -104,6 +107,7 @@ class JsonAnalyzer(StructuredTypeAnalyzer):
         return analyzer.generate_analysis(
             data=cast(dict, data),  # can_handle() guarantees data is a dict
             language=language.value.lower(),
+            score_threshold=min_score,
         )
 
     @override

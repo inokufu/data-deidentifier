@@ -224,7 +224,8 @@ curl -X POST "http://localhost:8005/anonymize/structured" \
         }
       ]
     },
-    "operator": "replace"
+    "operator": "replace",
+    "min_score": 0.7
   }'
 ```
 

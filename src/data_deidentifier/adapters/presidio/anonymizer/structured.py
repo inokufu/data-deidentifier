@@ -46,6 +46,7 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
         data: StructuredData,
         operator: AnonymizationOperator,
         language: SupportedLanguage,
+        min_score: float = 0.0,
         entity_types: list[str] | None = None,
         operator_params: dict[str, Any] | None = None,
     ) -> StructuredDataAnonymizationResult:
@@ -56,6 +57,7 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
             analyzer_results, data_processor = self.analyzer.analyze(
                 data=flat_data,
                 language=language,
+                min_score=min_score,
                 entity_types=entity_types,
             )
         except StructuredDataAnalysisError as e:

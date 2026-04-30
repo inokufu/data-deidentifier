@@ -15,11 +15,12 @@ class StructuredDataAnonymizerContract(ABC):
     """Abstract base class defining the structured anonymizer interface."""
 
     @abstractmethod
-    def anonymize(
+    def anonymize(  # noqa: PLR0913
         self,
         data: StructuredData,
         operator: AnonymizationOperator,
         language: SupportedLanguage,
+        min_score: float,
         entity_types: list[str] | None = None,
         operator_params: dict[str, Any] | None = None,
     ) -> StructuredDataAnonymizationResult:
@@ -29,6 +30,7 @@ class StructuredDataAnonymizerContract(ABC):
             data: Original structured data containing PII entities
             operator: Anonymization method
             language: Language code of the data content
+            min_score: Minimum confidence score threshold
             entity_types: Types of entities to detect (None means all supported types)
             operator_params: Optional parameters for the operator
 

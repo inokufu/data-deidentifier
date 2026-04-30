@@ -17,11 +17,12 @@ class StructuredDataPseudonymizerContract(ABC):
     """Abstract base class defining the structured data pseudonymizer interface."""
 
     @abstractmethod
-    def pseudonymize(
+    def pseudonymize(  # noqa: PLR0913
         self,
         data: StructuredData,
         method: PseudonymizationMethodContract,
         language: SupportedLanguage,
+        min_score: float,
         entity_types: list[str] | None = None,
         pseudonym_enricher: PseudonymEnrichmentManagerContract | None = None,
     ) -> StructuredDataPseudonymizationResult:
@@ -31,6 +32,7 @@ class StructuredDataPseudonymizerContract(ABC):
             data: Original structured data containing PII entities
             method: Pseudonymization method instance
             language: Language code of the data
+            min_score: Minimum confidence score threshold
             entity_types: Types of entities to detect (None means all supported types)
             pseudonym_enricher: Optional enrichment service for adding contextual
                 information to pseudonyms found in structured data

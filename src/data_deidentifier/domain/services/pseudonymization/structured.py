@@ -54,11 +54,12 @@ class StructuredDataPseudonymizationService:
         self.logger = logger
         self.pseudonym_enricher = pseudonym_enricher
 
-    def pseudonymize(
+    def pseudonymize(  # noqa: PLR0913
         self,
         data: StructuredData,
         method: PseudonymizationMethod,
         language: SupportedLanguage,
+        min_score: float,
         entity_types: list[str],
         method_params: dict[str, Any] | None = None,
     ) -> StructuredDataPseudonymizationResult:
@@ -70,6 +71,10 @@ class StructuredDataPseudonymizationService:
             language: Language code of the text
             entity_types: Entity types to detect
             method_params: Optional parameters for the method
+            min_score: Minimum confidence score threshold
+            entity_types: Entity types to detect
+            method_params: Optional parameters for the method
+
 
         Returns:
             A StructuredDataPseudonymizationResult
@@ -106,4 +111,5 @@ class StructuredDataPseudonymizationService:
             entity_types=effective_entity_types,
             language=language,
             pseudonym_enricher=self.pseudonym_enricher,
+            min_score=min_score,
         )

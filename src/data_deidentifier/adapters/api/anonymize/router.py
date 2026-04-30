@@ -104,6 +104,11 @@ async def anonymize_structured(
     """
     effective_operator = query.operator or config.get_default_anonymization_operator()
     effective_language = query.language or config.get_default_language()
+    effective_min_score = (
+        query.min_score
+        if query.min_score is not None
+        else config.get_default_minimum_score()
+    )
     effective_entity_types = query.entity_types or config.get_default_entity_types()
 
     result = anonymization_service.anonymize(
@@ -111,6 +116,7 @@ async def anonymize_structured(
         operator=effective_operator,
         operator_params=query.operator_params,
         language=effective_language,
+        min_score=effective_min_score,
         entity_types=effective_entity_types,
     )
 
@@ -120,5 +126,6 @@ async def anonymize_structured(
         meta={
             "operator": effective_operator,
             "language": effective_language,
+            "min_score": effective_min_score,
         },
     )

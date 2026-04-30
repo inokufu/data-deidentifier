@@ -39,6 +39,7 @@ class PresidioStructuredDataAnalyzer:
         data: StructuredData,
         language: SupportedLanguage,
         entity_types: list[str] | None = None,
+        min_score: float = 0.0,
     ) -> tuple[StructuredAnalysis, DataProcessorBase]:
         """Analyze structured data to detect PII entities.
 
@@ -46,6 +47,7 @@ class PresidioStructuredDataAnalyzer:
             data: Structured data to analyze
             language: Language code of the text
             entity_types: Types of entities to detect (None means all supported types)
+            min_score: Minimum confidence score threshold
 
         Returns:
             StructuredAnalysis: List of detected fields
@@ -60,6 +62,7 @@ class PresidioStructuredDataAnalyzer:
             "analyzer": type(analyzer).__name__,
             "language": language,
             "entity_types": entity_types,
+            "min_score": min_score,
         }
         self.logger.debug("Starting structured data analysis", logger_context)
 
@@ -68,6 +71,7 @@ class PresidioStructuredDataAnalyzer:
             presidio_results = analyzer.analyze(
                 data=data,
                 language=language,
+                min_score=min_score,
             )
         except Exception as e:
             msg = "Unexpected error during structured data analysis"
