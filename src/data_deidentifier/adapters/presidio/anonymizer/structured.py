@@ -64,13 +64,13 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
             ) from e
 
         # Convert results to our format
-        fields = PresidioStructuredDataMapper.presidio_result_to_domain(
+        analysis_fields = PresidioStructuredDataMapper.presidio_result_to_domain(
             analysis=analyzer_results,
         )
 
         logger_context = {
             "data_type": str(type(data)),
-            "fields_count": len(fields),
+            "fields_count": len(analysis_fields),
             "operator": operator.value,
         }
         self.logger.debug("Starting structured data anonymization", logger_context)
@@ -79,18 +79,15 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
         engine = PresidioEngineFactory.get_structured_data_anonymizer_engine(
             processor=data_processor,
         )
-        operators = engine.build_operators(
-            operator=operator,
-            fields=fields,
-            operator_params=operator_params,
-        )
 
         try:
             # Anonymize the structured data
-            anonymized_data = engine.anonymize(
+            anonymized_data, detected_fields = engine.anonymize_structured(
                 data=flat_data,
                 structured_analysis=analyzer_results,
-                operators=operators,
+                operator=operator,
+                fields=analysis_fields,
+                operator_params=operator_params,
             )
         except Exception as e:
             msg = "Unexpected error during structured data anonymization"
@@ -104,5 +101,5 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
 
         return StructuredDataAnonymizationResult(
             anonymized_data=unflatten(anonymized_data),
-            detected_fields=engine.detected_fields,
+            detected_fields=detected_fields,
         )

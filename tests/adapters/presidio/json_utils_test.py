@@ -152,7 +152,7 @@ class TestGetNestedValue:
             ({"a": "x"}, ("a",), "x"),
             ({"a": {"b": {"c": "x"}}}, ("a", "b", "c"), "x"),
             ({"users": {"0": {"name": "Alice"}}}, ("users", "0", "name"), "Alice"),
-            # Key containing a dot — the main advantage over dot-separated paths
+            # Key containing a dot
             ({"jacky@tuning.com": "x"}, ("jacky@tuning.com",), "x"),
             # Empty path returns the dict itself
             ({"a": "x"}, (), {"a": "x"}),
@@ -195,7 +195,7 @@ class TestSetNestedValue:
                 "Bob",
                 {"users": {"0": {"name": "Bob"}}},
             ),
-            # Key containing a dot — the main advantage over dot-separated paths
+            # Key containing a dot
             (
                 {"jacky@tuning.com": "x"},
                 ("jacky@tuning.com",),

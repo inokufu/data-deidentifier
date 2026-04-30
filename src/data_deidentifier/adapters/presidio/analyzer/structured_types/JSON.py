@@ -1,6 +1,6 @@
 from collections.abc import Iterator
 from dataclasses import dataclass
-from typing import Any, override
+from typing import cast, override
 
 from presidio_analyzer import RecognizerResult
 from presidio_structured import JsonAnalysisBuilder, StructuredAnalysis
@@ -10,6 +10,7 @@ from presidio_structured.data.data_processors import (
 )
 
 from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.structured_data import StructuredData
 
 from .structured_type import StructuredTypeAnalyzer
 
@@ -88,20 +89,20 @@ class JsonAnalyzer(StructuredTypeAnalyzer):
     """
 
     @override
-    def can_handle(self, data: Any) -> bool:
+    def can_handle(self, data: StructuredData) -> bool:
         return isinstance(data, dict)
 
     @override
     def analyze(
         self,
-        data: Any,
+        data: StructuredData,
         language: SupportedLanguage,
     ) -> StructuredAnalysisWithSpans:
         self.logger.debug("Analyzing JSON data", {"nb_keys": len(data)})
 
         analyzer = JsonAnalysisBuilderWithSpans(analyzer=self.analyzer_engine)
         return analyzer.generate_analysis(
-            data=data,
+            data=cast(dict, data),  # can_handle() guarantees data is a dict
             language=language.value.lower(),
         )
 

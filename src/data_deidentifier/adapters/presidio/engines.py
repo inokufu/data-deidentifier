@@ -163,7 +163,7 @@ class PresidioEngineFactory(EngineFactoryContract):
                         )
                     else:
                         cls._structured_data_engines[key] = DefaultStructuredEngine(
-                            processor=processor,
+                            data_processor=processor,
                         )
 
         return cls._structured_data_engines[key]
