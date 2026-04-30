@@ -69,8 +69,6 @@ class StructuredDataPseudonymizationService:
             data: The structured data to pseudonymize
             method: Pseudonymization method to use
             language: Language code of the text
-            entity_types: Entity types to detect
-            method_params: Optional parameters for the method
             min_score: Minimum confidence score threshold
             entity_types: Entity types to detect
             method_params: Optional parameters for the method
