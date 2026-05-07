@@ -44,12 +44,14 @@ class StructuredTypeAnalyzer(ABC):
         self,
         data: StructuredData,
         language: SupportedLanguage,
+        min_score: float = 0.0,
     ) -> StructuredAnalysis:
         """Analyze structured data to detect PII entities.
 
         Args:
             data: The structured data to analyze.
             language: Language code of the data content.
+            min_score: Minimum confidence score threshold.
 
         Returns:
             StructuredAnalysis object containing the analysis results.

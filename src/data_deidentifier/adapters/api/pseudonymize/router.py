@@ -105,6 +105,11 @@ async def pseudonymize_structured(
     """
     effective_method = query.method or config.get_default_pseudonymization_method()
     effective_language = query.language or config.get_default_language()
+    effective_min_score = (
+        query.min_score
+        if query.min_score is not None
+        else config.get_default_minimum_score()
+    )
     effective_entity_types = query.entity_types or config.get_default_entity_types()
 
     result = pseudonymization_service.pseudonymize(
@@ -112,6 +117,7 @@ async def pseudonymize_structured(
         method=effective_method,
         method_params=query.method_params,
         language=effective_language,
+        min_score=effective_min_score,
         entity_types=effective_entity_types,
     )
 
@@ -121,5 +127,6 @@ async def pseudonymize_structured(
         meta={
             "method": effective_method,
             "language": effective_language,
+            "min_score": effective_min_score,
         },
     )
