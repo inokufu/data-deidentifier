@@ -11,7 +11,12 @@ def flatten(node: Any) -> Any:  # noqa: ANN401
 
 
 def unflatten(node: Any) -> Any:  # noqa: ANN401
-    """Rebuild original JSON: list-like dicts are converted back to lists."""
+    """Rebuild original JSON: list-like dicts are converted back to lists.
+
+    Note: dicts whose keys are consecutive integers starting from 0
+    (e.g. {"0": "a", "1": "b"}) are indistinguishable from flattened lists
+    and will be returned as lists. This is a known limitation.
+    """
     if isinstance(node, dict):
         if node:
             keys = node.keys()
