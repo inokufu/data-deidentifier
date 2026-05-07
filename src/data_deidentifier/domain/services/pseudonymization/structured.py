@@ -73,7 +73,6 @@ class StructuredDataPseudonymizationService:
             entity_types: Entity types to detect
             method_params: Optional parameters for the method
 
-
         Returns:
             A StructuredDataPseudonymizationResult
             containing the pseudonymized data and metadata
