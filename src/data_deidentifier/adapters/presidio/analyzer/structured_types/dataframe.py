@@ -1,4 +1,4 @@
-from typing import Any, override
+from typing import cast, override
 
 import pandas as pd
 from presidio_structured import (
@@ -11,6 +11,7 @@ from presidio_structured.data.data_processors import (
 )
 
 from data_deidentifier.domain.types.language import SupportedLanguage
+from data_deidentifier.domain.types.structured_data import StructuredData
 
 from .structured_type import StructuredTypeAnalyzer
 
@@ -23,20 +24,20 @@ class DataFrameAnalyzer(StructuredTypeAnalyzer):
     """
 
     @override
-    def can_handle(self, data: Any) -> bool:
+    def can_handle(self, data: StructuredData) -> bool:
         return isinstance(data, pd.DataFrame)
 
     @override
     def analyze(
         self,
-        data: Any,
+        data: StructuredData,
         language: SupportedLanguage,
     ) -> StructuredAnalysis:
         self.logger.debug("Analyzing DataFrame", {"nb_rows": len(data)})
 
         analyzer = PandasAnalysisBuilder(analyzer=self.analyzer_engine)
         return analyzer.generate_analysis(
-            df=data,
+            df=cast(pd.DataFrame, data),  # can_handle() guarantees data is a DataFrame
             language=language.value.lower(),
         )
 

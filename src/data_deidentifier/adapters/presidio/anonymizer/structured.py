@@ -1,7 +1,6 @@
 from typing import Any, override
 
 from logger import LoggerContract
-from presidio_anonymizer.entities import OperatorConfig
 
 from data_deidentifier.adapters.presidio.analyzer.structured import (
     PresidioStructuredDataAnalyzer,
@@ -65,13 +64,13 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
             ) from e
 
         # Convert results to our format
-        fields = PresidioStructuredDataMapper.presidio_result_to_domain(
+        analysis_fields = PresidioStructuredDataMapper.presidio_result_to_domain(
             analysis=analyzer_results,
         )
 
         logger_context = {
             "data_type": str(type(data)),
-            "fields_count": len(fields),
+            "fields_count": len(analysis_fields),
             "operator": operator.value,
         }
         self.logger.debug("Starting structured data anonymization", logger_context)
@@ -81,23 +80,14 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
             processor=data_processor,
         )
 
-        # Create entity-specific OperatorConfig instead of single DEFAULT config
-        # Required because structured data processing doesn't auto-inject entity_type
-        # into params (unlike text anonymization), but our PseudonymizeOperator needs it
-        operators = {
-            field.entity_type: OperatorConfig(
-                operator_name=operator,
-                params={**(operator_params or {}), "entity_type": field.entity_type},
-            )
-            for field in fields
-        }
-
         try:
             # Anonymize the structured data
-            anonymized_data = engine.anonymize(
+            anonymized_data, detected_fields = engine.anonymize_structured(
                 data=flat_data,
                 structured_analysis=analyzer_results,
-                operators=operators,
+                operator=operator,
+                fields=analysis_fields,
+                operator_params=operator_params,
             )
         except Exception as e:
             msg = "Unexpected error during structured data anonymization"
@@ -111,5 +101,5 @@ class PresidioStructuredDataAnonymizer(StructuredDataAnonymizerContract):
 
         return StructuredDataAnonymizationResult(
             anonymized_data=unflatten(anonymized_data),
-            detected_fields=fields,
+            detected_fields=detected_fields,
         )
