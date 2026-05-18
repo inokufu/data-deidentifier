@@ -1,3 +1,5 @@
+from typing import override
+
 from logger import LoggerContract
 
 from data_deidentifier.adapters.presidio.engines import PresidioEngineFactory
@@ -17,7 +19,7 @@ class PresidioValidator(EntityTypeValidatorContract):
         self.logger = logger
 
         self.analyzer_engine = PresidioEngineFactory.get_analyzer_engine()
-        self._supported_entities = None  # Lazy loading
+        self._supported_entities: set[str] | None = None  # Lazy loading
 
     @property
     def supported_entities(self) -> set[str]:
@@ -32,18 +34,8 @@ class PresidioValidator(EntityTypeValidatorContract):
             )
         return self._supported_entities
 
+    @override
     def validate_entity_types(self, entity_types: list[str]) -> list[str]:
-        """Validate and normalize entity types.
-
-        Args:
-            entity_types: List of entity types to validate
-
-        Returns:
-            List of validated and normalized entity types
-
-        Raises:
-            EntityTypeValidationError: If any entity type is not supported
-        """
         if not entity_types:
             return []
 

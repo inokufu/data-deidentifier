@@ -90,6 +90,13 @@ class PseudonymizeStructuredDataRequest(BaseModel):
         description="Language code of the data (e.g., 'en', 'fr', 'es')",
     )
 
+    min_score: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description="Minimum confidence score threshold (0.0 to 1.0)",
+    )
+
     entity_types: list[str] | None = Field(
         default=None,
         description="Types of entities to detect (defaults to all supported types)",

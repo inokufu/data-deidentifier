@@ -9,6 +9,8 @@ from data_deidentifier.adapters.presidio.exceptions import (
 from data_deidentifier.domain.types.language import SupportedLanguage
 from data_deidentifier.domain.types.structured_data import StructuredData
 
+from .structured_types.JSON import StructuredAnalysisWithSpans
+
 
 class PresidioStructuredDataAnalyzer:
     """Implementation of the structured analyzer contract using Presidio-structured.
@@ -37,6 +39,7 @@ class PresidioStructuredDataAnalyzer:
         data: StructuredData,
         language: SupportedLanguage,
         entity_types: list[str] | None = None,
+        min_score: float = 0.0,
     ) -> tuple[StructuredAnalysis, DataProcessorBase]:
         """Analyze structured data to detect PII entities.
 
@@ -44,6 +47,7 @@ class PresidioStructuredDataAnalyzer:
             data: Structured data to analyze
             language: Language code of the text
             entity_types: Types of entities to detect (None means all supported types)
+            min_score: Minimum confidence score threshold
 
         Returns:
             StructuredAnalysis: List of detected fields
@@ -58,6 +62,7 @@ class PresidioStructuredDataAnalyzer:
             "analyzer": type(analyzer).__name__,
             "language": language,
             "entity_types": entity_types,
+            "min_score": min_score,
         }
         self.logger.debug("Starting structured data analysis", logger_context)
 
@@ -66,6 +71,7 @@ class PresidioStructuredDataAnalyzer:
             presidio_results = analyzer.analyze(
                 data=data,
                 language=language,
+                min_score=min_score,
             )
         except Exception as e:
             msg = "Unexpected error during structured data analysis"
@@ -79,6 +85,12 @@ class PresidioStructuredDataAnalyzer:
                 for field_name, entity_type in presidio_results.entity_mapping.items()
                 if entity_type in entity_types
             }
+            if isinstance(presidio_results, StructuredAnalysisWithSpans):
+                presidio_results.spans_mapping = {
+                    field_path: spans
+                    for field_path, spans in presidio_results.spans_mapping.items()
+                    if ".".join(field_path) in presidio_results.entity_mapping
+                }
 
         self.logger.info(
             "Structured analysis completed successfully",

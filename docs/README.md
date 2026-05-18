@@ -209,22 +209,23 @@ Response:
 
 ### Structured Data Anonymization
 
+Supports nested JSON objects and arrays. Entities are replaced **within** the
+field value, preserving surrounding context.
+
 ```bash
 curl -X POST "http://localhost:8005/anonymize/structured" \
   -H "Content-Type: application/json" \
   -d '{
     "data": {
-      "user": {
-        "name": "Alice Johnson",
-        "email": "alice@company.com",
-        "address": "123 Main St, Boston"
-      }
+      "users": [
+        {
+          "name": "Alice Johnson",
+          "bio": "Alice Johnson can be reached at alice@company.com"
+        }
+      ]
     },
-    "operator": "mask",
-    "operator_params": {
-      "masking_char":"*",
-      "chars_to_mask":999
-    }
+    "operator": "replace",
+    "min_score": 0.7
   }'
 ```
 
@@ -233,16 +234,16 @@ Response:
 ```json
 {
   "anonymized_data": {
-    "user": {
-      "name": "*************",
-      "email": "*****************",
-      "address": "*******************"
-    }
+    "users": [
+      {
+        "name": "<PERSON>",
+        "bio": "<PERSON> can be reached at <EMAIL_ADDRESS>"
+      }
+    ]
   },
   "detected_fields": {
-    "user.name": "PERSON",
-    "user.email": "EMAIL_ADDRESS",
-    "user.address": "LOCATION"
+    "users.0.name": "PERSON",
+    "users.0.bio": "PERSON, EMAIL_ADDRESS"
   }
 }
 ```

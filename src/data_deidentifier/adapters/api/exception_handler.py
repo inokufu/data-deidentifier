@@ -143,9 +143,11 @@ class ExceptionHandler:
             exc,
             {
                 "status_code": status_code,
-                "details": details
-                if request.state.config.get_log_level() == LogLevel.DEBUG
-                else None,
+                "details": (
+                    details
+                    if request.state.config.get_log_level() == LogLevel.DEBUG
+                    else None
+                ),
             },
         )
 

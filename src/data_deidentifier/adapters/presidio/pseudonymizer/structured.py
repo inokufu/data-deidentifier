@@ -54,6 +54,7 @@ class PresidioStructuredDataPseudonymizer(StructuredDataPseudonymizerContract):
         data: StructuredData,
         method: PseudonymizationMethodContract,
         language: SupportedLanguage,
+        min_score: float = 0.0,
         entity_types: list[str] | None = None,
         pseudonym_enricher: PseudonymEnrichmentManagerContract | None = None,
     ) -> StructuredDataPseudonymizationResult:
@@ -68,6 +69,7 @@ class PresidioStructuredDataPseudonymizer(StructuredDataPseudonymizerContract):
                 data=data,
                 operator=AnonymizationOperator.PSEUDONYMIZE,
                 language=language,
+                min_score=min_score,
                 entity_types=entity_types,
                 operator_params={
                     PseudonymizeOperator.PARAM_METHOD: method,
