@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from typing import Any
 
 from configcore import ConfigContract as CoreConfigContract
@@ -12,7 +12,7 @@ from data_deidentifier.domain.types.pseudonymization_method import (
 )
 
 
-class ConfigContract(CoreConfigContract):
+class ConfigContract(CoreConfigContract, ABC):
     """Contract for application configuration."""
 
     @abstractmethod

@@ -5,7 +5,7 @@ from data_deidentifier.domain.contracts.health_check import HealthCheckContract
 from data_deidentifier.domain.types.health_check_result import HealthCheckResult
 
 
-class HealthCheckService(HealthCheckContract):
+class HealthCheckService:
     """Service for checking application health and readiness.
 
     This service orchestrates health checks from various components

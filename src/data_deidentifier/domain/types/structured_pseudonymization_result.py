@@ -21,4 +21,7 @@ class StructuredDataPseudonymizationResult:
     @property
     def field_mapping(self) -> dict[str, str]:
         """Get field mapping as a dictionary for convenience."""
-        return {field.field_name: field.entity_type for field in self.detected_fields}
+        mapping: dict[str, list[str]] = {}
+        for field in self.detected_fields:
+            mapping.setdefault(field.field_name, []).append(field.entity_type)
+        return {name: ", ".join(types) for name, types in mapping.items()}

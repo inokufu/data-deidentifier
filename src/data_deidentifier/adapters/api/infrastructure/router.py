@@ -31,9 +31,11 @@ async def health_readiness(
     result = health_service.check_readiness()
 
     return JSONResponse(
-        status_code=status.HTTP_200_OK
-        if result.is_healthy
-        else status.HTTP_503_SERVICE_UNAVAILABLE,
+        status_code=(
+            status.HTTP_200_OK
+            if result.is_healthy
+            else status.HTTP_503_SERVICE_UNAVAILABLE
+        ),
         content={
             "status": "ok" if result.is_healthy else "degraded",
             "service": "ddi-api",

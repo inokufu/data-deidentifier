@@ -8,18 +8,23 @@ from presidio_analyzer import AnalyzerEngine
 from presidio_analyzer.nlp_engine import NlpEngineProvider
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.operators.operators_factory import ANONYMIZERS
-from presidio_structured import StructuredEngine
-from presidio_structured.data.data_processors import DataProcessorBase
+from presidio_structured.data.data_processors import (
+    DataProcessorBase,
+    JsonDataProcessor,
+)
 
+from data_deidentifier.adapters.presidio.anonymizer.engines.default import (
+    DefaultStructuredEngine,
+)
+from data_deidentifier.adapters.presidio.anonymizer.engines.engine_with_spans import (
+    StructuredEngineWithSpans,
+)
 from data_deidentifier.domain.contracts.engine_factory import EngineFactoryContract
 from data_deidentifier.domain.types.language import SupportedLanguage
 
-from .analyzer.structured_types.factory import (
-    StructuredDataAnalyzerFactory,
-)
-from .pseudonymizer.custom_operator import (
-    PseudonymizeOperator,
-)
+from .analyzer.structured_types.factory import StructuredDataAnalyzerFactory
+from .anonymizer.engines.contract import StructuredAnonymizationEngineContract
+from .pseudonymizer.custom_operator import PseudonymizeOperator
 
 
 class PresidioEngineFactory(EngineFactoryContract):
@@ -41,7 +46,9 @@ class PresidioEngineFactory(EngineFactoryContract):
     _analyzer_engine: ClassVar[AnalyzerEngine | None] = None
     _text_anonymizer_engine: ClassVar[AnonymizerEngine | None] = None
     _structured_data_factory: ClassVar[StructuredDataAnalyzerFactory | None] = None
-    _structured_data_engines: ClassVar[dict[str, StructuredEngine]] = {}
+    _structured_data_engines: ClassVar[
+        dict[str, StructuredAnonymizationEngineContract]
+    ] = {}
 
     @classmethod
     def get_analyzer_engine(cls) -> AnalyzerEngine:
@@ -124,7 +131,7 @@ class PresidioEngineFactory(EngineFactoryContract):
     def get_structured_data_anonymizer_engine(
         cls,
         processor: DataProcessorBase,
-    ) -> StructuredEngine:
+    ) -> StructuredAnonymizationEngineContract:
         """Get a cached structured data anonymizer engine for a given data processor.
 
         Returns a StructuredEngine instance based on the processor's type.
@@ -150,9 +157,14 @@ class PresidioEngineFactory(EngineFactoryContract):
                     if PseudonymizeOperator not in ANONYMIZERS:
                         ANONYMIZERS.append(PseudonymizeOperator)  # ty: ignore[invalid-argument-type]
 
-                    cls._structured_data_engines[key] = StructuredEngine(
-                        data_processor=processor,
-                    )
+                    if isinstance(processor, JsonDataProcessor):
+                        cls._structured_data_engines[key] = StructuredEngineWithSpans(
+                            text_anonymizer=cls.get_text_anonymizer_engine(),
+                        )
+                    else:
+                        cls._structured_data_engines[key] = DefaultStructuredEngine(
+                            data_processor=processor,
+                        )
 
         return cls._structured_data_engines[key]
 

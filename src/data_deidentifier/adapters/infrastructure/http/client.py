@@ -97,16 +97,16 @@ class BaseHttpClient:
             msg = "HTTP error occurred"
             self.logger.exception(msg, e, logger_context)
             raise HttpClientError(msg) from e
-        else:
-            self.logger.debug(
-                "HTTP request successful",
-                {
-                    "url": url,
-                    "status_code": response.status_code,
-                    "response_size": len(response.text),
-                },
-            )
-            return response
+
+        self.logger.debug(
+            "HTTP request successful",
+            {
+                "url": url,
+                "status_code": response.status_code,
+                "response_size": len(response.text),
+            },
+        )
+        return response
 
     @classmethod
     def _should_retry(cls, exception: BaseException) -> bool:
