@@ -29,8 +29,3 @@ labels:
 patches:
   - path: patches/ddi-deployment-patch.yaml
   - path: patches/ddi-ingress-patch.yaml
-
-images:
-  - name: ddi
-    newName: rg.fr-par.scw.cloud/deidentification/ddi
-    newTag: 1.1.3
