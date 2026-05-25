@@ -6,8 +6,6 @@ metadata:
 spec:
   template:
     spec:
-      imagePullSecrets:
-        - name: ddi-scaleway-secret
       containers:
         - name: ddi
           imagePullPolicy: Always
