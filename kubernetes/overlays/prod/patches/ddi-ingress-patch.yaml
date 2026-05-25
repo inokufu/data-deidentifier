@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ddi.inokufu.com
+        - example.com
       secretName: prod-ddi-tls
   rules:
-    - host: ddi.inokufu.com
+    - host: example.com
       http:
         paths:
           - path: /
