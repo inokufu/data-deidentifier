@@ -31,4 +31,4 @@ patches:
 images:
 - name: ddi
   newName: rg.fr-par.scw.cloud/deidentification/ddi
-  newTag: 79b1c67
+  newTag: 1.4.0-202605270748
