@@ -13,7 +13,7 @@ resources:
 configMapGenerator:
   - behavior: merge
     literals:
-      - ENVIRONMENT=production
+      - ENVIRONMENT=staging
       - LOG_LEVEL=info
       - WORKERS_COUNT=2
     name: ddi-config

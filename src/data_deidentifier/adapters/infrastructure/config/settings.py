@@ -48,6 +48,8 @@ class Settings(CoreSettings, ConfigContract):
     # {"LOCATION": {"type": "http", "url": "http://geo-service/enrich"}} # noqa: ERA001
     enrichment_configurations: dict[str, dict[str, Any]] = Field(default_factory=dict)
 
+    monitoring_dsn: str | None = Field(default=None)
+
     @override
     def get_default_language(self) -> SupportedLanguage:
         return self.default_language
@@ -71,3 +73,7 @@ class Settings(CoreSettings, ConfigContract):
     @override
     def get_enrichment_configurations(self) -> dict[str, dict[str, Any]]:
         return self.enrichment_configurations
+
+    @override
+    def get_monitoring_dsn(self) -> str | None:
+        return self.monitoring_dsn
