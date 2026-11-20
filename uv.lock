@@ -609,7 +609,7 @@ wheels = [
 
 [[package]]
 name = "data-deidentifier"
-version = "1.4.1"
+version = "1.5.0"
 source = { editable = "." }
 dependencies = [
     { name = "configcore" },
@@ -619,6 +619,7 @@ dependencies = [
     { name = "gunicorn" },
     { name = "httpx" },
     { name = "logger" },
+    { name = "observability", extra = ["sentry"] },
     { name = "pip" },
     { name = "presidio-analyzer" },
     { name = "presidio-anonymizer" },
@@ -652,6 +653,7 @@ requires-dist = [
     { name = "gunicorn", specifier = ">=27.0.1,<28.0.0" },
     { name = "httpx", specifier = ">=0.28.1,<0.29.0" },
     { name = "logger", git = "https://github.com/inokufu/python-logger?tag=v0.4.0" },
+    { name = "observability", extras = ["sentry"], git = "https://github.com/inokufu/python-observability?branch=feature%2Fobservability" },
     { name = "pip", specifier = ">=26.3,<27.0" },
     { name = "presidio-analyzer", specifier = ">=2.2.366,<3.0.0" },
     { name = "presidio-anonymizer", specifier = ">=2.2.366,<3.0.0" },
@@ -1284,6 +1286,16 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/9c/50/0753655aa844c99cd9e018aacf76f130f1bd81d881bb74bc0aef5d73a8ba/numpy-2.4.6-cp314-cp314t-win32.whl", hash = "sha256:260a5d70215b61ab4fadf5c7baacd64821842975eea312125ed3c39a6391b063", size = 6156982, upload-time = "2026-05-18T23:36:40.817Z" },
     { url = "https://files.pythonhosted.org/packages/b2/d4/7c67becf668f973cb490cec3e98dfd799d866f9c989a54d355672cfa0db6/numpy-2.4.6-cp314-cp314t-win_amd64.whl", hash = "sha256:81a1cca95ed5bb92aa8b10dd2cdc9a0d3853a50fad926c28b5d7e8ea54389627", size = 12638908, upload-time = "2026-05-18T23:36:43.996Z" },
     { url = "https://files.pythonhosted.org/packages/43/bb/e1c71a4295b1b1d1393d50dbb4f2a36283c6859d9d3892e84f00ec5a91d5/numpy-2.4.6-cp314-cp314t-win_arm64.whl", hash = "sha256:0c9136e14ed34a9e343a31c533d78a9813a69a3148332bce5e9821cb2f996e66", size = 10565867, upload-time = "2026-05-18T23:36:47.114Z" },
+]
+
+[[package]]
+name = "observability"
+version = "1.0.0"
+source = { git = "https://github.com/inokufu/python-observability?branch=feature%2Fobservability#164b06f12167727defaae5196d4dafba862e810a" }
+
+[package.optional-dependencies]
+sentry = [
+    { name = "sentry-sdk" },
 ]
 
 [[package]]
@@ -1926,6 +1938,19 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/2c/a5/2e136dede2a88aaaf54498bbbdc81bc810f788ef6ef01efb97037d73cd1d/ruff-0.17.5-py3-none-win32.whl", hash = "sha256:e1546609b2ad73f1d6c5c076881b788672b7b3cc3283981182cbdbb6524ed88a", size = 9929908, upload-time = "2026-11-12T17:54:47.067Z" },
     { url = "https://files.pythonhosted.org/packages/ec/8c/e4db9ae1e0ee233c04df007ab6d0d42f799ae9abd95d352b6092ee7bc4bf/ruff-0.17.5-py3-none-win_amd64.whl", hash = "sha256:aa415d57c244299279901d776607fee3df7831c2a7435433fbfacde8632c6550", size = 10275454, upload-time = "2026-11-12T17:54:49.401Z" },
     { url = "https://files.pythonhosted.org/packages/e6/65/a1648bc1550e7683bf7bf1e2ce2485c9f8535cbca6cca9ec7b73cc12fb8e/ruff-0.17.5-py3-none-win_arm64.whl", hash = "sha256:64a6fd668a336df959c522991de33e9e3c8be463afc0c9ac8f029f9d19ef756e", size = 9849020, upload-time = "2026-11-12T17:54:52.055Z" },
+]
+
+[[package]]
+name = "sentry-sdk"
+version = "2.75.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d2/95/121b20d75e738d249a0e26e6476a2acb178673e8228002748fc0cd85ce55/sentry_sdk-2.75.0.tar.gz", hash = "sha256:c38ac2d4b2435c11da821e173bb9d9088c98f41ae92f559ce0e424170a8e1a29", size = 1092308, upload-time = "2026-11-12T13:24:13.977Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/ee/fbfe67386d64a7218013c8346b88b89d72f279b4ddb434ed5e94bea3d389/sentry_sdk-2.75.0-py3-none-any.whl", hash = "sha256:9a10e97de2cbd42ad7e4a6e02a0d5af19de9811eb02445077d41ba14c08e170c", size = 555165, upload-time = "2026-11-12T13:24:11.923Z" },
 ]
 
 [[package]]

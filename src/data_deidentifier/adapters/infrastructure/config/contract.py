@@ -79,3 +79,12 @@ class ConfigContract(CoreConfigContract, ABC):
             }
         """
         raise NotImplementedError
+
+    @abstractmethod
+    def get_monitoring_dsn(self) -> str | None:
+        """Get the DSN the monitoring sends to.
+
+        Returns:
+            The DSN, or None to send nothing
+        """
+        raise NotImplementedError

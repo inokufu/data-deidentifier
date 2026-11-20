@@ -382,8 +382,9 @@ make docs-serve        # Serve project documentation locally
 | `DEFAULT_PSEUDONYMIZATION_METHOD`      | Default pseudonymization method                               | No       | `random_number`    | `random_number`, `counter`, `crypto_hash`       |
 | `ENRICHMENT_CONFIGURATIONS`            | Entity enrichment service configs                             | No       | `{}`               | JSON object                                     |
 | **Environment Configuration**          |                                                               |          |                    |                                                 |
-| `ENVIRONMENT`                          | Affects error handling and logging throughout the application | No       | `development`      | `development`, `production`                     |
+| `ENVIRONMENT`                          | Affects error handling and logging throughout the application | No       | `development`      | `development`, `staging`, `production`          |
 | `LOG_LEVEL`                            | Minimum logging level                                         | No       | `info`             | `debug`, `info`, `warning`, `error`, `critical` |
+| `MONITORING_DSN`                       | Where errors and traces are sent; empty sends nothing         | No       |                    | A Sentry-protocol DSN                           |
 | **Internal Application Configuration** |                                                               |          |                    |                                                 |
 | `APP_INTERNAL_HOST`                    | Host for internal application binding                         | No       | `0.0.0.0`          | Valid host/IP                                   |
 | `APP_INTERNAL_PORT`                    | Port for internal application binding                         | No       | `8005`             | Any valid port                                  |
