@@ -45,13 +45,15 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[dict[str, Any]]:
         },
     )
 
-    # Pre-load Nlp models to avoid cold-start latency
-    get_engine_factory().warmup(logger=logger)
+    try:
+        # Pre-load Nlp models to avoid cold-start latency
+        get_engine_factory().warmup(logger=logger)
 
-    yield {"config": config, "logger": logger, "monitoring": monitoring}
+        yield {"config": config, "logger": logger, "monitoring": monitoring}
 
-    logger.info("Application shutting down")
-    monitoring.shutdown()
+        logger.info("Application shutting down")
+    finally:
+        monitoring.shutdown()
 
 
 app = FastAPI(
