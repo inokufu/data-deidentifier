@@ -28,6 +28,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: ddi-config
+            - secretRef:
+                name: ddi-monitoring
+                optional: true
           ports:
             - containerPort: 8005
               name: http

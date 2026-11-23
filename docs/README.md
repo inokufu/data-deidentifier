@@ -161,6 +161,14 @@ The application can be deployed on Kubernetes using Kustomize, with a `base` lay
 
 Deployment-specific values are **not committed to git** and must be set manually when applying the overlay, or injected at build or runtime.
 
+`MONITORING_DSN` comes from an optional Secret, `ddi-monitoring`, created by hand in the
+namespace. Without it, nothing is sent.
+
+```
+kubectl -n <namespace> create secret generic ddi-monitoring \
+  --from-literal=MONITORING_DSN=<dsn>
+```
+
 ### With uv
 
 #### Prerequisites
