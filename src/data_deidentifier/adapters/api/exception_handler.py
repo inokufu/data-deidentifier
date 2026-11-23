@@ -75,6 +75,7 @@ class ExceptionHandler:
             type(exc),
             status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
+        request.state.monitoring.record_server_error(exc=exc, status_code=status_code)
 
         return JSONResponse(
             status_code=status_code,

@@ -1,9 +1,11 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from importlib.metadata import version
 from typing import Any
 
 from fastapi import FastAPI
 from logger import LogLevel, LoguruLogger
+from observability import build_sentry_monitoring
 
 from data_deidentifier.adapters.infrastructure.config.settings import Settings
 
@@ -14,6 +16,14 @@ from .infrastructure.router import router as infra_router
 from .pseudonymize.router import router as pseudonymize_router
 
 config = Settings()
+release = version("data_deidentifier")
+monitoring = build_sentry_monitoring(
+    service_name="data-deidentifier",
+    environment=config.get_environment().name.lower(),
+    release=release,
+    dsn=config.get_monitoring_dsn(),
+    untraced_paths=["/health", "/health/ready"],
+)
 
 
 @asynccontextmanager
@@ -24,7 +34,7 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[dict[str, Any]]:
         _app: The FastAPI application instance
 
     Yields:
-        A dictionary containing logger and config objects
+        A dictionary containing logger, config and monitoring objects
     """
     logger = LoguruLogger(level=LogLevel[config.get_log_level().name])
     logger.info(
@@ -35,20 +45,25 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[dict[str, Any]]:
         },
     )
 
-    # Pre-load Nlp models to avoid cold-start latency
-    get_engine_factory().warmup(logger=logger)
+    try:
+        # Pre-load Nlp models to avoid cold-start latency
+        get_engine_factory().warmup(logger=logger)
 
-    yield {"config": config, "logger": logger}
+        yield {"config": config, "logger": logger, "monitoring": monitoring}
 
-    logger.info("Application shutting down")
+        logger.info("Application shutting down")
+    finally:
+        monitoring.shutdown()
 
 
 app = FastAPI(
     title="Data deidentification API",
-    version="0.0.1",
+    version=release,
     debug=config.get_log_level() == LogLevel.DEBUG and not config.is_env_production(),
     lifespan=lifespan,
 )
+
+monitoring.instrument_app(app=app)
 
 exception_handler = ExceptionHandler()
 exception_handler.configure(app=app)
